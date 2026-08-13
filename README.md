@@ -62,7 +62,7 @@ npm run build         # Next.js 生产构建
 
 ## 内容与迭代
 
-首版内容主要维护在 [`content/site-data.json`](content/site-data.json)，类型定义和内容读取层位于 [`lib/content.ts`](lib/content.ts)，站点级配置位于 [`lib/site-config.ts`](lib/site-config.ts)。新增或更新内容时应优先扩展内容模型和关系字段，不在页面组件中复制专业名称、版本、数量或颜色规则。
+首版内容主要维护在 [`content/site-data.json`](content/site-data.json)，类型定义和内容读取层位于 [`lib/content/`](lib/content/)，站点级配置位于 [`lib/site-config.ts`](lib/site-config.ts)。新增或更新内容时应优先扩展内容模型和关系字段，不在页面组件中复制专业名称、版本、数量或颜色规则。
 
 每次内容变更至少检查：
 
@@ -75,6 +75,7 @@ npm run build         # Next.js 生产构建
 ## 规划与质量门禁
 
 - [网站架构与产品规划](docs/HseeHub-website-architecture-spec.md)
+- [Phase 1.5：体验压缩、关系闭环与发布验证 Spec](docs/HseeHub-phase-1.5-experience-spec.md)
 - [HseeHub 第一版质量检查点](docs/HseeHub-v1-quality-checkpoints.md)
 
 当前仓库对应首版开发验收阶段。学生/教师语言评审、200% 缩放与屏幕阅读器完整验收、外链人工复核、CI 预览和正式部署回滚仍属于后续交付收口项。

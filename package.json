@@ -9,21 +9,34 @@
     "start": "next start",
     "lint": "node scripts/lint-source.mjs",
     "typecheck": "tsc --noEmit",
-    "validate:content": "node scripts/validate-content.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "validate:content": "vitest run tests/content-validation.test.ts --reporter=dot",
     "content:check": "npm run validate:content",
-    "links:check": "node scripts/check-links.mjs",
-    "check": "npm run lint && npm run content:check && npm run links:check && npm run typecheck && npm run build"
+    "links:check": "vitest run tests/link-validation.test.ts --reporter=dot",
+    "resources:check": "node scripts/check-resource-health.mjs",
+    "resources:probe": "node scripts/check-resource-health.mjs --probe",
+    "e2e:smoke": "node scripts/e2e-smoke.mjs",
+    "a11y:smoke": "node scripts/a11y-smoke.mjs",
+    "e2e:playwright": "playwright test",
+    "release:check": "node scripts/check-release-config.mjs",
+    "check": "npm run lint && npm run content:check && npm run links:check && npm run resources:check && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
     "next": "14.2.35",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "server-only": "^0.0.1",
     "zod": "3.24.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.51.1",
     "@types/node": "22.13.4",
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
-    "typescript": "5.7.3"
+    "tsx": "^4.23.10",
+    "typescript": "5.7.3",
+    "vitest": "^3.2.7"
   }
 }
