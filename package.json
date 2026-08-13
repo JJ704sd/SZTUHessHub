@@ -1,0 +1,29 @@
+{
+  "name": "hseehub",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "prebuild": "npm run content:check && npm run links:check",
+    "build": "next build",
+    "start": "next start",
+    "lint": "node scripts/lint-source.mjs",
+    "typecheck": "tsc --noEmit",
+    "validate:content": "node scripts/validate-content.mjs",
+    "content:check": "npm run validate:content",
+    "links:check": "node scripts/check-links.mjs",
+    "check": "npm run lint && npm run content:check && npm run links:check && npm run typecheck && npm run build"
+  },
+  "dependencies": {
+    "next": "14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "zod": "3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "22.13.4",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
+    "typescript": "5.7.3"
+  }
+}
