@@ -9,4 +9,5 @@ tmp/
 !.env.example
 .vercel/
 coverage/
+test-results/
 .DS_Store

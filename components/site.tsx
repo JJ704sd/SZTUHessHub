@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { siteData, type Capability, type DualLensCase, type Major, type Project, type Scenario, type Source } from '@/lib/content';
+import type { Capability, DualLensCase, Major, Project, Scenario, Source } from '@/lib/content/schema';
 import { siteConfig } from '@/lib/site-config';
+import { Badge } from '@/components/ui/primitives';
+
+export { Badge } from '@/components/ui/primitives';
 
 export function SectionHeading({ eyebrow, title, description, action }: { eyebrow?: string; title: string; description?: string; action?: ReactNode }) {
   return (
@@ -18,10 +21,6 @@ export function SectionHeading({ eyebrow, title, description, action }: { eyebro
 
 export function ArrowLink({ href, children, subtle = false }: { href: string; children: ReactNode; subtle?: boolean }) {
   return <Link className={subtle ? 'text-link subtle-link' : 'text-link'} href={href}>{children}<span aria-hidden="true">↗</span></Link>;
-}
-
-export function Badge({ children, tone = 'blue' }: { children: ReactNode; tone?: 'blue' | 'teal' | 'amber' | 'muted' | 'dark' }) {
-  return <span className={`badge badge-${tone}`}>{children}</span>;
 }
 
 export function SourceLine({ source, label = '来源' }: { source?: Source; label?: string }) {
@@ -53,7 +52,8 @@ export function MajorProfileCard({ major }: { major: Major }) {
   );
 }
 
-export function DualLensCard({ item, majorMap }: { item: DualLensCase; majorMap: Map<string, Major> }) {
+export function DualLensCard({ item, majorLinks = [] }: { item: DualLensCase; majorLinks?: Array<{ id: string; slug: string }> }) {
+  const majorSlugById = new Map(majorLinks.map((major) => [major.id, major.slug]));
   return (
     <article className="dual-card">
       <div className="card-topline"><Badge tone="amber">同题双解</Badge><span className="card-kicker">{item.sharedGoal}</span></div>
@@ -61,31 +61,30 @@ export function DualLensCard({ item, majorMap }: { item: DualLensCase; majorMap:
       <p className="card-summary">{item.problem}</p>
       <div className="lens-grid">
         {item.lenses.map((lens) => <div className="lens" key={lens.majorId}>
-          <div className="lens-heading"><span className="lens-dot" aria-hidden="true" /><strong>{lens.label}</strong></div>
+          <div className="lens-heading"><span className="lens-dot" aria-hidden="true" />{majorSlugById.has(lens.majorId) ? <Link href={`/majors/${majorSlugById.get(lens.majorId)}`}>{lens.label}</Link> : <strong>{lens.label}</strong>}</div>
           <p>{lens.contribution}</p>
           <span className="lens-role">角色：{lens.role}</span>
-          <dl className="lens-facts"><div><dt>输入</dt><dd>{lens.input}</dd></div><div><dt>输出</dt><dd>{lens.output}</dd></div><div><dt>接口</dt><dd>{lens.interface}</dd></div></dl>
+          <details className="lens-disclosure"><summary>展开输入、输出与接口 <span aria-hidden="true">＋</span></summary><dl className="lens-facts"><div><dt>输入</dt><dd>{lens.input}</dd></div><div><dt>输出</dt><dd>{lens.output}</dd></div><div><dt>接口</dt><dd>{lens.interface}</dd></div></dl></details>
         </div>)}
       </div>
-      <div className="dual-footer"><div><span>共同产物：{item.sharedArtifact}</span><span>验收：{item.validation}</span><span>风险边界：{item.riskBoundary}</span></div><ArrowLink href={`/majors/compare#${item.slug}`}>查看接口与验收</ArrowLink></div>
+      <div className="dual-footer"><div><span>共同产物：{item.sharedArtifact}</span><span>验收：{item.validation}</span></div><details className="risk-disclosure"><summary>查看风险边界</summary><p>{item.riskBoundary}</p></details><ArrowLink href={`/majors/compare#${item.slug}`}>查看接口与验收</ArrowLink></div>
     </article>
   );
 }
 
-export function CapabilityCard({ capability, index, majorMap }: { capability: Capability; index: number; majorMap: Map<string, Major> }) {
+export function CapabilityCard({ capability, index }: { capability: Capability; index: number }) {
   return (
     <article className="capability-card">
       <div className="capability-number">0{index + 1}</div>
-      <h3>{capability.name}</h3>
-      <p>{capability.summary}</p>
-      <div className="capability-task"><span>典型任务</span><strong>{capability.task}</strong></div>
-      <div className="card-footer"><span>{capability.transferExample}</span><ArrowLink href={`/capabilities/${capability.slug}`}>看课程与场景</ArrowLink></div>
+      <h3><Link href={`/capabilities/${capability.slug}`}>{capability.navigationLabel}</Link></h3>
+      <p>{capability.cardSummary}</p>
+      <div className="capability-task"><span>典型任务</span><strong>{capability.taskSummary}</strong></div>
+      <div className="card-footer"><span>课程证据、项目和场景</span><ArrowLink href={`/capabilities/${capability.slug}`}>看课程与场景</ArrowLink></div>
     </article>
   );
 }
 
-export function ProjectCapsuleCard({ project, majorMap }: { project: Project; majorMap: Map<string, Major> }) {
-  const majorLabels = project.majorIds.map((id) => majorMap.get(id)?.shortName).filter(Boolean);
+export function ProjectCapsuleCard({ project, majorLabels }: { project: Project; majorLabels: string[] }) {
   return (
     <article className="project-card">
       <div className="project-visual" aria-hidden="true"><span>{project.viewpoint.slice(0, 2)}</span><i /><i /><i /></div>
@@ -101,12 +100,13 @@ export function ProjectCapsuleCard({ project, majorMap }: { project: Project; ma
   );
 }
 
-export function ScenarioCard({ scenario, index }: { scenario: Scenario; index: number }) {
+export function ScenarioCard({ scenario, index, capabilityLinks = [] }: { scenario: Scenario; index: number; capabilityLinks?: Array<{ id: string; slug: string; name: string }> }) {
   return (
     <article className="scenario-card">
       <div className="scenario-index">{String(index + 1).padStart(2, '0')}</div>
       <h3><Link href={`/scenarios/${scenario.slug}`}>{scenario.name}</Link></h3>
-      <p>{scenario.summary}</p>
+      <p>{scenario.cardSummary}</p>
+      <div className="scenario-boundary"><strong>可迁移</strong><span>{capabilityLinks.slice(0, 1).map((item) => <Link key={item.id} href={`/capabilities/${item.slug}`}>{item.name}</Link>)}</span><strong>需补门槛</strong><span>{scenario.taskSummary}</span></div>
       <div className="scenario-bottom"><span>共用能力 {scenario.sharedCapabilities.length} 项</span><ArrowLink href={`/scenarios/${scenario.slug}`} subtle>看额外门槛</ArrowLink></div>
     </article>
   );
@@ -142,7 +142,7 @@ export function FilterPill({ children, active = false }: { children: ReactNode; 
   return <span className={active ? 'filter-pill is-active' : 'filter-pill'}>{children}</span>;
 }
 
-export function SiteFooter() {
+export function SiteFooter({ capabilityCount = 8 }: { capabilityCount?: number }) {
   return (
     <footer className="site-footer">
       <div className="page-container footer-inner">
@@ -150,7 +150,7 @@ export function SiteFooter() {
           <Link className="brand" href="/" aria-label="HseeHub 首页"><span className="brand-mark" aria-hidden="true">H</span><span className="brand-copy"><strong>HseeHub</strong><span>健康工程探索站</span></span></Link>
           <p>帮助学生看懂同院两个工程专业的共同底座、不同侧重和跨行业能力。内容是解释性导览，不替代正式培养方案或教务通知。</p>
         </div>
-        <div className="footer-col"><strong>从这里开始</strong><Link href="/majors/compare">5 分钟看懂两个专业</Link><Link href="/capabilities">{siteData.capabilities.length} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
+        <div className="footer-col"><strong>从这里开始</strong><Link href="/majors/compare">5 分钟看懂两个专业</Link><Link href="/capabilities">{capabilityCount} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
         <div className="footer-col"><strong>内容边界</strong><Link href="/sources">来源与版本</Link><Link href="/majors/faq">学生常问</Link><Link href="/about">关于本站</Link></div>
       </div>
       <div className="page-container footer-bottom"><span>默认内容版本：{siteConfig.currentCohort} 级 · 首版只读公开浏览</span><span>医疗内容仅供专业学习，不构成医疗建议</span></div>

@@ -1,0 +1,62 @@
+name: HseeHub quality gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Start production server
+        shell: bash
+        run: |
+          npm run start > .next/server.log 2>&1 &
+          echo $! > .next/server.pid
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3000/ > /dev/null; then break; fi
+            sleep 1
+          done
+      - run: npm run e2e:smoke
+      - run: npm run a11y:smoke
+      - run: npm run resources:probe
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e:playwright
+      - name: Upload quality artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-1.5-quality-artifacts
+          path: |
+            .next/server.log
+            test-results/**
+          if-no-files-found: ignore
+
+  release-config:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run release:check
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+          RELEASE_VERSION: ${{ vars.RELEASE_VERSION }}
+          ROLLBACK_VERSION: ${{ vars.ROLLBACK_VERSION }}
