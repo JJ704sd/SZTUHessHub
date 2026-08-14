@@ -98,7 +98,6 @@ export function getHomePageModel(): HomePageModel {
     modules: [
       { id: 'tasks', title: '任务入口' },
       { id: 'compare', title: '双专业一屏对照' },
-      { id: 'capabilities', title: '能力捷径' },
       { id: 'projects', title: '今天先试一个' },
       { id: 'explore', title: '场景与继续探索' },
     ],

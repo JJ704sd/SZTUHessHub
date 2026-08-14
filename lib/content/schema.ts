@@ -141,6 +141,8 @@ export const projectSchema = z.object({
   taskSummary: z.string().trim().min(1).max(48),
   outputSummary: z.string().trim().min(1).max(48),
   primaryAction: z.object({ label: nonEmptyString, href: nonEmptyString }),
+  primaryResourceId: nonEmptyString.optional(),
+  launch: z.object({ primaryResourceId: nonEmptyString, maxStartSeconds: z.number().int().positive(), tenMinuteOutput: nonEmptyString }).optional(),
   visualAssetId: nonEmptyString,
   viewpoint: nonEmptyString,
   level: z.enum(['glimpse', 'try', 'mini-project']),

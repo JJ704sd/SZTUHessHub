@@ -1,0 +1,7 @@
+[
+  {"id":"claim-major-shared-foundation","claimType":"official","subjectId":"major-ime","text":"两个专业共享数学自然科学、生命健康、编程电子、信号系统、实验研究和工程责任底座。","sourceId":"source-college-profile","sourceLocator":"专业介绍与学院概况","ownerId":"owner-pending-confirmation","reviewStatus":"draft","reviewDueAt":"2026-09-01"},
+  {"id":"claim-ime-credit-2025","claimType":"official","subjectId":"major-ime","text":"智能医学工程 2025 级学分与培养结构以正式培养方案为准。","sourceId":"source-ime-2025","sourceLocator":"2025 级培养方案事实登记","ownerId":"owner-pending-confirmation","reviewStatus":"draft","reviewDueAt":"2026-09-01"},
+  {"id":"claim-bme-credit-2025","claimType":"official","subjectId":"major-bme","text":"生物医学工程 2025 级学分与培养结构以正式培养方案为准。","sourceId":"source-bme-2025","sourceLocator":"2025 级培养方案事实登记","ownerId":"owner-pending-confirmation","reviewStatus":"draft","reviewDueAt":"2026-09-01"},
+  {"id":"claim-hsee-translation","claimType":"translated","subjectId":"site","text":"HseeHub 将课程与培养方案事实转译为任务、能力和协作接口，不代表岗位胜任。","sourceId":"source-college-profile","sourceLocator":"HseeHub 解释性导览边界","ownerId":"owner-pending-confirmation","reviewStatus":"draft","reviewDueAt":"2026-09-01"},
+  {"id":"claim-signal-example","claimType":"example","subjectId":"project-signal-feature-notebook","text":"signal-feature-notebook 使用合成信号练习观察、特征和局限记录，不使用真实患者数据。","sourceId":"source-physionet","sourceLocator":"项目边界与合成数据说明","ownerId":"owner-pending-confirmation","reviewStatus":"draft","reviewDueAt":"2026-09-01"}
+]

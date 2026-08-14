@@ -257,6 +257,8 @@
       "taskSummary": "从波形到特征表，再看分类结果",
       "outputSummary": "曲线、特征表、分类结果和局限说明",
       "primaryAction": {"label": "查看体验卡", "href": "/projects/signal-feature-notebook"},
+      "primaryResourceId": "resource-signal-feature-starter",
+      "launch": {"primaryResourceId": "resource-signal-feature-starter", "maxStartSeconds": 120, "tenMinuteOutput": "保存一张曲线截图和三行观察"},
       "visualAssetId": "visual-signal-feature",
       "viewpoint": "数据/AI",
       "level": "try",

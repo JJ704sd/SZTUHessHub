@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import type { Capability, DualLensCase, Major, Project, Scenario, Source } from '@/lib/content/schema';
 import { siteConfig } from '@/lib/site-config';
 import { Badge } from '@/components/ui/primitives';
+import { TrackedLink } from '@/components/tracked-link';
 
 export { Badge } from '@/components/ui/primitives';
 
@@ -20,7 +21,8 @@ export function SectionHeading({ eyebrow, title, description, action }: { eyebro
 }
 
 export function ArrowLink({ href, children, subtle = false }: { href: string; children: ReactNode; subtle?: boolean }) {
-  return <Link className={subtle ? 'text-link subtle-link' : 'text-link'} href={href}>{children}<span aria-hidden="true">↗</span></Link>;
+  const external = /^https?:\/\//i.test(href);
+  return <Link className={subtle ? 'text-link subtle-link' : 'text-link'} href={href}>{children}<span aria-hidden="true">{external ? '↗' : '→'}</span></Link>;
 }
 
 export function SourceLine({ source, label = '来源' }: { source?: Source; label?: string }) {
@@ -55,7 +57,7 @@ export function MajorProfileCard({ major }: { major: Major }) {
 export function DualLensCard({ item, majorLinks = [] }: { item: DualLensCase; majorLinks?: Array<{ id: string; slug: string }> }) {
   const majorSlugById = new Map(majorLinks.map((major) => [major.id, major.slug]));
   return (
-    <article className="dual-card">
+    <article className="dual-card" id={item.slug}>
       <div className="card-topline"><Badge tone="amber">同题双解</Badge><span className="card-kicker">{item.sharedGoal}</span></div>
       <h3>{item.title}</h3>
       <p className="card-summary">{item.problem}</p>
@@ -67,7 +69,7 @@ export function DualLensCard({ item, majorLinks = [] }: { item: DualLensCase; ma
           <details className="lens-disclosure"><summary>展开输入、输出与接口 <span aria-hidden="true">＋</span></summary><dl className="lens-facts"><div><dt>输入</dt><dd>{lens.input}</dd></div><div><dt>输出</dt><dd>{lens.output}</dd></div><div><dt>接口</dt><dd>{lens.interface}</dd></div></dl></details>
         </div>)}
       </div>
-      <div className="dual-footer"><div><span>共同产物：{item.sharedArtifact}</span><span>验收：{item.validation}</span></div><details className="risk-disclosure"><summary>查看风险边界</summary><p>{item.riskBoundary}</p></details><ArrowLink href={`/majors/compare#${item.slug}`}>查看接口与验收</ArrowLink></div>
+      <div className="dual-footer"><div><span>共同产物：{item.sharedArtifact}</span><span>验收：{item.validation}</span></div><details className="risk-disclosure"><summary>查看风险边界</summary><p>{item.riskBoundary}</p></details><TrackedLink className="text-link" href={`/majors/compare#${item.slug}`} event={{ name: 'dual_lens_open', caseId: item.id, source: 'compare' }}>查看接口与验收 <span aria-hidden="true">→</span></TrackedLink></div>
     </article>
   );
 }
@@ -76,7 +78,7 @@ export function CapabilityCard({ capability, index }: { capability: Capability; 
   return (
     <article className="capability-card">
       <div className="capability-number">0{index + 1}</div>
-      <h3><Link href={`/capabilities/${capability.slug}`}>{capability.navigationLabel}</Link></h3>
+      <h3><TrackedLink href={`/capabilities/${capability.slug}`} event={{ name: 'capability_open', capabilityId: capability.id, source: 'capabilities' }}>{capability.navigationLabel}</TrackedLink></h3>
       <p>{capability.cardSummary}</p>
       <div className="capability-task"><span>典型任务</span><strong>{capability.taskSummary}</strong></div>
       <div className="card-footer"><span>课程证据、项目和场景</span><ArrowLink href={`/capabilities/${capability.slug}`}>看课程与场景</ArrowLink></div>

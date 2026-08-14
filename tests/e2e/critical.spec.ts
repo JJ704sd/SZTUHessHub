@@ -19,17 +19,32 @@ test('comparison exposes navigable professional relations', async ({ page }) => 
   await expect(page.locator('a[href="/majors/biomedical-engineering"]')).toHaveCount(2);
 });
 
-test('project filters preserve URL state and recover from no results', async ({ page }) => {
+test('capability intent path reaches a related project or scenario', async ({ page }) => {
+  await page.goto('/capabilities');
+  const capabilityLink = page.locator('.capability-card h3 a').first();
+  await expect(capabilityLink).toHaveAttribute('href', /\/capabilities\//);
+  await capabilityLink.click();
+  await expect(page).toHaveURL(/\/capabilities\/[^/]+$/);
+  await expect(page.locator('h1')).toHaveCount(1);
+  expect(await page.locator('a[href^="/projects/"], a[href^="/scenarios/"]').count()).toBeGreaterThan(0);
+});
+
+test('legacy project URLs remain readable without P0 filter controls', async ({ page }) => {
   await page.goto('/projects');
-  const duration = await page.locator('#filter-duration option:not([value="all"])').first().getAttribute('value');
-  expect(duration).toBeTruthy();
-  await page.locator('#filter-duration').selectOption(duration as string);
-  await expect(page).toHaveURL(/duration=/);
+  await expect(page.locator('select')).toHaveCount(0);
 
   await page.goto('/projects?major=missing-major');
+  await expect(page.locator('.project-list-card')).toHaveCount(3);
+  await expect(page.locator('.invalid-condition-message')).toBeVisible();
+
+  await page.goto('/projects?major=major-ime&duration=invalid-duration');
+  await expect(page.locator('.condition-pill')).toHaveCount(1);
+  await expect(page.locator('.invalid-condition-message')).toBeVisible();
+
+  await page.goto('/projects?major=major-bme&duration=10%20%E5%88%86%E9%92%9F');
   await expect(page.locator('.empty-state')).toBeVisible();
-  await page.locator('.empty-state button').click();
-  await expect(page).toHaveURL(/\/projects$/);
+  await page.locator('.empty-state a').click();
+  await expect(page).toHaveURL(/\/projects#project-list$/);
   await expect(page.locator('.project-list-card')).toHaveCount(3);
 });
 
@@ -43,6 +58,63 @@ test('mobile navigation supports focus entry and Escape return', async ({ page }
   await page.keyboard.press('Escape');
   await expect(button).toHaveAttribute('aria-expanded', 'false');
   await expect(button).toBeFocused();
+});
+
+test('dual cards stay inside the viewport across the responsive matrix', async ({ page }) => {
+  for (const width of [320, 390, 768, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/majors/compare');
+    const result = await page.evaluate(() => {
+      const viewport = document.documentElement.clientWidth;
+      const cards = Array.from(document.querySelectorAll<HTMLElement>('.dual-card, .dual-case-disclosure')).filter((card) => {
+        const rect = card.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
+      });
+      const overflowAncestors: string[] = [];
+      for (const card of cards) {
+        for (let node: HTMLElement | null = card; node; node = node.parentElement) {
+          const overflowX = getComputedStyle(node).overflowX;
+          if (overflowX === 'hidden' || overflowX === 'clip') overflowAncestors.push(`${node.tagName}.${node.className}`);
+        }
+      }
+      const horizontalScrollers = Array.from(document.querySelectorAll<HTMLElement>('*'))
+        .filter((node) => node.scrollWidth > node.clientWidth + 1 && ['auto', 'scroll'].includes(getComputedStyle(node).overflowX))
+        .map((node) => node.className || node.tagName);
+      return {
+        viewport,
+        documentWidth: document.documentElement.scrollWidth,
+        cards: cards.map((card) => { const rect = card.getBoundingClientRect(); return { left: rect.left, right: rect.right, width: rect.width }; }),
+        overflowAncestors,
+        horizontalScrollers,
+      };
+    });
+    expect(result.documentWidth, `document overflows at ${width}px`).toBeLessThanOrEqual(result.viewport + 1);
+    expect(result.cards.length).toBeGreaterThanOrEqual(2);
+    for (const card of result.cards) {
+      expect(card.width, `card has no width at ${width}px`).toBeGreaterThan(0);
+      expect(card.left, `card starts outside viewport at ${width}px`).toBeGreaterThanOrEqual(-1);
+      expect(card.right, `card ends outside viewport at ${width}px`).toBeLessThanOrEqual(result.viewport + 1);
+    }
+    expect(result.overflowAncestors, `dual-card ancestor clips at ${width}px`).toEqual([]);
+    expect(result.horizontalScrollers.every((selector) => selector === 'comparison-table-wrap'), `unexpected horizontal scroller at ${width}px`).toBe(true);
+  }
+});
+
+test('keyboard focus, 200% zoom and reduced motion remain usable', async ({ page }) => {
+  // A 640 CSS-pixel viewport with a 2x page scale exercises the 200% zoom layout.
+  await page.setViewportSize({ width: 640, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  await expect(page.locator('.skip-link')).toBeFocused();
+  await page.evaluate(() => { document.documentElement.style.zoom = '2'; });
+  const result = await page.evaluate(() => ({
+    width: document.documentElement.clientWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+    scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
+  }));
+  expect(result.scrollWidth).toBeLessThanOrEqual(result.width + 1);
+  expect(result.scrollBehavior).toBe('auto');
 });
 
 test('FAQ and 404 remain usable', async ({ page }) => {
