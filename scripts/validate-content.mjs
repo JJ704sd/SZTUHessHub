@@ -147,6 +147,9 @@ function buildCollectionTargets(data) {
 
 function findRelationTarget(propertyName, targets) {
   const normalizedProperty = normalizeName(propertyName);
+  if (normalizedProperty === 'primaryresourceid' || normalizedProperty === 'replacementresourceid') {
+    return null;
+  }
   const suffixMatch = normalizedProperty.match(RELATION_SUFFIX_PATTERN);
 
   if (!suffixMatch) {

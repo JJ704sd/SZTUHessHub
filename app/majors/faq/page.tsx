@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { siteData } from '@/lib/content';
 import { FAQList, PageIntro, SourceLine } from '@/components/site';
+import { siteConfig } from '@/lib/site-config';
 
 export const metadata: Metadata = {
   title: '学生常问',
   description: '用通俗语言回答两个专业的共同底座、差异、学习方式与跨行业能力迁移问题。',
-  alternates: { canonical: '/majors/faq' },
+  alternates: siteConfig.isProduction ? { canonical: '/majors/faq' } : undefined,
 };
 
 export default function MajorsFaqPage() {

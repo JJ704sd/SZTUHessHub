@@ -1,4 +1,6 @@
 import rawSiteData from "../content/site-data.json";
+import rawClaims from "../content/claims.json";
+import rawSignalResourceManifest from "../content/resources/signal-feature-notebook.json";
 
 export type SiteMeta = {
   title: string;
@@ -133,6 +135,59 @@ export type Project = {
   sourceUrl: string;
   sourceId: string;
   lastVerified: string;
+  primaryResourceId?: string;
+  launch?: ProjectLaunch;
+};
+
+export type AutomatedAvailability = 'unknown' | 'reachable' | 'unreachable';
+export type HumanReviewStatus = 'pending' | 'verified' | 'stale';
+export type ResourceKind = 'starter' | 'data' | 'tool' | 'guide' | 'reference';
+
+export type ResourceLink = {
+  id: string;
+  title: string;
+  url: string;
+  kind: ResourceKind;
+  version: string;
+  license: string;
+  licenseEvidenceUrl?: string;
+  ownerId: string;
+  availability: AutomatedAvailability;
+  lastAutomatedCheckAt?: string;
+  lastSuccessfulAt?: string;
+  automatedStatusCode?: number;
+  finalUrl?: string;
+  reviewStatus: HumanReviewStatus;
+  lastHumanWalkthroughAt?: string;
+  reviewedBy?: string;
+  walkthroughEvidence?: string;
+  failureReason?: string;
+  replacementResourceId?: string;
+  internalFallbackPath?: string;
+};
+
+export type ProjectLaunch = {
+  primaryResourceId: string;
+  tenMinuteOutput: string;
+  maxStartSeconds: 120;
+};
+
+export type ResourceManifest = {
+  projectId: string;
+  primaryResourceId: string;
+  resources: ResourceLink[];
+};
+
+export type ContentClaim = {
+  id: string;
+  claimType: 'official' | 'translated' | 'example';
+  sourceId: string;
+  sourceLocator?: string;
+  ownerId: string;
+  reviewStatus: 'draft' | 'reviewed' | 'expired';
+  reviewedAt?: string;
+  reviewedBy?: string;
+  reviewDueAt: string;
 };
 
 export type Scenario = {
@@ -226,4 +281,23 @@ function parseSiteData(input: unknown): SiteData {
   return input as SiteData;
 }
 
+function parseResourceManifest(input: unknown): ResourceManifest {
+  assertRecord(input, 'resourceManifest');
+  assertString(input.projectId, 'resourceManifest.projectId');
+  assertString(input.primaryResourceId, 'resourceManifest.primaryResourceId');
+  assertArray(input.resources, 'resourceManifest.resources');
+  return input as ResourceManifest;
+}
+
+function parseClaims(input: unknown): ContentClaim[] {
+  assertArray(input, 'claims');
+  input.forEach((item, index) => {
+    assertRecord(item, `claims[${index}]`);
+    for (const field of ['id', 'claimType', 'sourceId', 'ownerId', 'reviewStatus', 'reviewDueAt']) assertString(item[field], `claims[${index}].${field}`);
+  });
+  return input as ContentClaim[];
+}
+
 export const siteData: SiteData = parseSiteData(rawSiteData);
+export const resourceManifests: ResourceManifest[] = [parseResourceManifest(rawSignalResourceManifest)];
+export const contentClaims = parseClaims(rawClaims);

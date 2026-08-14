@@ -241,7 +241,13 @@
       "boundary": "这是数据流程练习，不是医学筛查、诊断或健康建议；不使用真实患者数据，不把一次高指标写成临床有效性。",
       "sourceUrl": "https://physionet.org/about/",
       "sourceId": "source-physionet",
-      "lastVerified": "2026-08-13"
+      "lastVerified": "2026-08-13",
+      "primaryResourceId": "resource-signal-feature-starter",
+      "launch": {
+        "primaryResourceId": "resource-signal-feature-starter",
+        "tenMinuteOutput": "保存一张合成信号曲线截图，并写下三行观察：信号形状、一个特征变化、一个不能外推的结论。",
+        "maxStartSeconds": 120
+      }
     },
     {
       "id": "project-sensor-alarm-prototype",

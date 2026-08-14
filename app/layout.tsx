@@ -9,7 +9,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: { default: siteData.siteMeta.title, template: '%s｜HseeHub' },
   description: siteData.siteMeta.description,
-  alternates: { canonical: '/' },
+  alternates: siteConfig.isProduction ? { canonical: '/' } : undefined,
+  robots: siteConfig.isProduction ? undefined : { index: false, follow: false },
   openGraph: { title: 'HseeHub｜健康工程双专业与跨行业能力探索站', description: '先看懂两个专业，再找到一个可以继续尝试的小项目。', type: 'website' },
 };
 
@@ -19,7 +20,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
-      <body><GlobalHeader /><main>{children}</main><SiteFooter /></body>
+      <body><a className="skip-link" href="#main-content">跳到主要内容</a><GlobalHeader /><main id="main-content" tabIndex={-1}>{children}</main><SiteFooter /></body>
     </html>
   );
 }

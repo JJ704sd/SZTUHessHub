@@ -2,13 +2,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { siteData } from '@/lib/content';
+import { siteConfig } from '@/lib/site-config';
 import { ArrowLink, Badge, PageIntro, SectionHeading, SourceLine } from '@/components/site';
 
 export function generateStaticParams() { return siteData.scenarios.map((scenario) => ({ scenarioSlug: scenario.slug })); }
 
 export function generateMetadata({ params }: { params: { scenarioSlug: string } }): Metadata {
   const scenario = siteData.scenarios.find((item) => item.slug === params.scenarioSlug);
-  return { title: scenario?.name ?? '发展场景', description: scenario?.summary ?? 'HseeHub 能力迁移场景导览', alternates: { canonical: `/scenarios/${params.scenarioSlug}` } };
+  return { title: scenario?.name ?? '发展场景', description: scenario?.summary ?? 'HseeHub 能力迁移场景导览', alternates: siteConfig.isProduction ? { canonical: `/scenarios/${params.scenarioSlug}` } : undefined };
 }
 
 export default function ScenarioDetailPage({ params }: { params: { scenarioSlug: string } }) {

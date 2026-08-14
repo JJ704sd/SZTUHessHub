@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const content = readFileSync(resolve(root, 'content/site-data.json'), 'utf8');
 const data = JSON.parse(content);
+const resourceManifest = JSON.parse(readFileSync(resolve(root, 'content/resources/signal-feature-notebook.json'), 'utf8'));
 const failures = [];
 
 function checkUrl(value, label) {
@@ -20,6 +21,10 @@ for (const source of data.sources ?? []) checkUrl(source.url, `sources.${source.
 for (const project of data.projects ?? []) {
   checkUrl(project.sourceUrl, `projects.${project.id}.sourceUrl`);
   for (const tool of project.tools ?? []) checkUrl(tool.officialUrl, `projects.${project.id}.tools.${tool.name}`);
+}
+for (const resource of resourceManifest.resources ?? []) {
+  if (!resource.url.startsWith('/')) checkUrl(resource.url, `resources.${resource.id}.url`);
+  if (resource.internalFallbackPath && !resource.internalFallbackPath.startsWith('/')) failures.push(`resources.${resource.id}.internalFallbackPath 必须是站内路径：${resource.internalFallbackPath}`);
 }
 
 const routeSources = [
@@ -37,4 +42,5 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`Link check passed (${data.sources.length} sources, ${data.projects.length} projects).`);
+const resourceStatus = (resourceManifest.resources ?? []).map((resource) => `${resource.id}:${resource.availability}/${resource.reviewStatus}`).join(', ');
+console.log(`Link check passed (${data.sources.length} sources, ${data.projects.length} projects; resource status ${resourceStatus}).`);

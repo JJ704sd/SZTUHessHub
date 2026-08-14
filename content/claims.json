@@ -1,0 +1,47 @@
+[
+  {
+    "id": "claim-major-ime-credits-2025",
+    "claimType": "official",
+    "sourceId": "source-ime-2025",
+    "sourceLocator": "2025 级培养方案学分结构",
+    "ownerId": "owner-pending-confirmation",
+    "reviewStatus": "draft",
+    "reviewDueAt": "2026-09-01"
+  },
+  {
+    "id": "claim-major-bme-credits-2025",
+    "claimType": "official",
+    "sourceId": "source-bme-2025",
+    "sourceLocator": "2025 级培养方案学分结构",
+    "ownerId": "owner-pending-confirmation",
+    "reviewStatus": "draft",
+    "reviewDueAt": "2026-09-01"
+  },
+  {
+    "id": "claim-major-ime-focus-translation",
+    "claimType": "translated",
+    "sourceId": "source-ime-2025",
+    "sourceLocator": "专业定位、课程体系与选修模块",
+    "ownerId": "owner-pending-confirmation",
+    "reviewStatus": "draft",
+    "reviewDueAt": "2026-09-01"
+  },
+  {
+    "id": "claim-major-bme-focus-translation",
+    "claimType": "translated",
+    "sourceId": "source-bme-2025",
+    "sourceLocator": "专业定位、课程体系与选修模块",
+    "ownerId": "owner-pending-confirmation",
+    "reviewStatus": "draft",
+    "reviewDueAt": "2026-09-01"
+  },
+  {
+    "id": "claim-signal-starter-output-example",
+    "claimType": "example",
+    "sourceId": "source-physionet",
+    "sourceLocator": "站内合成信号 starter 记录",
+    "ownerId": "owner-pending-confirmation",
+    "reviewStatus": "draft",
+    "reviewDueAt": "2026-09-01"
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "projectId": "project-signal-feature-notebook",
+  "primaryResourceId": "resource-signal-feature-starter",
+  "resources": [
+    {
+      "id": "resource-signal-feature-starter",
+      "title": "站内合成信号 10 分钟 starter",
+      "url": "/projects/signal-feature-notebook/starter",
+      "kind": "starter",
+      "version": "0.1.0",
+      "license": "NOASSERTION（等待内容 owner 和许可证证据确认）",
+      "ownerId": "owner-pending-confirmation",
+      "availability": "reachable",
+      "automatedStatusCode": 200,
+      "lastAutomatedCheckAt": "2026-08-14",
+      "lastSuccessfulAt": "2026-08-14",
+      "finalUrl": "/projects/signal-feature-notebook/starter",
+      "reviewStatus": "pending",
+      "failureReason": "尚未完成内容 owner、许可证证据和人工走通登记；暂不升级为主 CTA。",
+      "internalFallbackPath": "/projects/signal-feature-notebook/starter"
+    },
+    {
+      "id": "resource-signal-physionet-reference",
+      "title": "PhysioNet 数据平台说明（参考）",
+      "url": "https://physionet.org/about/",
+      "kind": "reference",
+      "version": "current",
+      "license": "以具体数据集许可为准",
+      "ownerId": "physionet",
+      "availability": "unknown",
+      "reviewStatus": "pending",
+      "failureReason": "平台说明不是 signal-feature-notebook starter，不能替代样板入口。",
+      "internalFallbackPath": "/projects/signal-feature-notebook/starter"
+    }
+  ]
+}

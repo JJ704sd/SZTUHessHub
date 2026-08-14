@@ -1,0 +1,68 @@
+name: HseeHub CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      HSEEHUB_ENV: preview
+      NEXT_PUBLIC_HSEEHUB_ENV: preview
+      NEXT_PUBLIC_SITE_URL: https://preview.example.invalid
+      HSEEHUB_RELEASE_ID: ci-${{ github.sha }}
+      NEXT_DIST_DIR: .next-ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Start preview candidate
+        run: npm run start -- -p 3101 > /tmp/hsee-preview.log 2>&1 &
+      - name: Check preview metadata
+        env:
+          HSEEHUB_CHECK_ORIGIN: http://127.0.0.1:3101
+        run: |
+          for attempt in {1..30}; do curl --fail --silent "$HSEEHUB_CHECK_ORIGIN/" >/dev/null && break; sleep 1; done
+          npm run metadata:check
+          npm run runtime:check
+      - name: Build production candidate when origin is configured
+        if: ${{ vars.HSEEHUB_PRODUCTION_ORIGIN != '' }}
+        env:
+          HSEEHUB_ENV: production
+          NEXT_PUBLIC_HSEEHUB_ENV: production
+          NEXT_PUBLIC_SITE_URL: ${{ vars.HSEEHUB_PRODUCTION_ORIGIN }}
+          HSEEHUB_RELEASE_ID: ci-production-${{ github.sha }}
+          NEXT_DIST_DIR: .next-ci-production
+        run: npm run build
+      - name: Start production candidate
+        if: ${{ vars.HSEEHUB_PRODUCTION_ORIGIN != '' }}
+        env:
+          HSEEHUB_ENV: production
+          NEXT_PUBLIC_HSEEHUB_ENV: production
+          NEXT_PUBLIC_SITE_URL: ${{ vars.HSEEHUB_PRODUCTION_ORIGIN }}
+          HSEEHUB_RELEASE_ID: ci-production-${{ github.sha }}
+          NEXT_DIST_DIR: .next-ci-production
+        run: npm run start -- -p 3102 > /tmp/hsee-production.log 2>&1 &
+      - name: Check production metadata when origin is configured
+        if: ${{ vars.HSEEHUB_PRODUCTION_ORIGIN != '' }}
+        env:
+          HSEEHUB_ENV: production
+          NEXT_PUBLIC_HSEEHUB_ENV: production
+          NEXT_PUBLIC_SITE_URL: ${{ vars.HSEEHUB_PRODUCTION_ORIGIN }}
+          HSEEHUB_RELEASE_ID: ci-production-${{ github.sha }}
+          NEXT_DIST_DIR: .next-ci-production
+          HSEEHUB_CHECK_ORIGIN: http://127.0.0.1:3102
+        run: |
+          for attempt in {1..30}; do curl --fail --silent "$HSEEHUB_CHECK_ORIGIN/" >/dev/null && break; sleep 1; done
+          npm run metadata:check
+          npm run runtime:check
+          npm run production:check

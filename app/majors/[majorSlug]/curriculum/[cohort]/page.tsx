@@ -9,7 +9,7 @@ export function generateStaticParams() { return siteData.majors.map((major) => (
 
 export function generateMetadata({ params }: { params: { majorSlug: string; cohort: string } }): Metadata {
   const major = siteData.majors.find((item) => item.slug === params.majorSlug);
-  return { title: `${major?.shortName ?? '专业'} · ${params.cohort} 级课程入口`, description: 'HseeHub 版本化培养方案导览', alternates: { canonical: `/majors/${params.majorSlug}/curriculum/${params.cohort}` } };
+  return { title: `${major?.shortName ?? '专业'} · ${params.cohort} 级课程入口`, description: 'HseeHub 版本化培养方案导览', alternates: siteConfig.isProduction ? { canonical: `/majors/${params.majorSlug}/curriculum/${params.cohort}` } : undefined };
 }
 
 export default function CurriculumPage({ params }: { params: { majorSlug: string; cohort: string } }) {

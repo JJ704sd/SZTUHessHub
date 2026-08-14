@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { siteConfig } from '@/lib/site-config';
 
 type Theme = 'light' | 'dark';
@@ -11,6 +11,8 @@ export function GlobalHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>('light');
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const firstMobileLinkRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     const stored = window.localStorage.getItem('hseehub-theme') as Theme | null;
@@ -22,6 +24,22 @@ export function GlobalHeader() {
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape' && menuOpen) {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (menuOpen) firstMobileLinkRef.current?.focus();
+  }, [menuOpen]);
 
   function toggleTheme() {
     const next = theme === 'dark' ? 'light' : 'dark';
@@ -47,7 +65,7 @@ export function GlobalHeader() {
 
         <nav className="desktop-nav" aria-label="主导航">
           {siteConfig.navItems.map((item) => (
-            <Link key={item.href} className={isActive(item.href) ? 'nav-link is-active' : 'nav-link'} href={item.href}>
+            <Link key={item.href} className={isActive(item.href) ? 'nav-link is-active' : 'nav-link'} href={item.href} aria-current={pathname === item.href ? 'page' : undefined}>
               {item.label}
             </Link>
           ))}
@@ -58,7 +76,7 @@ export function GlobalHeader() {
             <span className="theme-icon" aria-hidden="true">{theme === 'dark' ? '☼' : '◐'}</span>
             <span className="theme-label">{theme === 'dark' ? '亮色' : '暗色'}</span>
           </button>
-          <button className="menu-button" type="button" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-controls="mobile-navigation">
+          <button ref={menuButtonRef} className="menu-button" type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? '关闭主导航' : '打开主导航'} aria-expanded={menuOpen} aria-controls="mobile-navigation">
             <span className="menu-icon" aria-hidden="true">{menuOpen ? '×' : '☰'}</span>
             <span>菜单</span>
           </button>
@@ -66,10 +84,10 @@ export function GlobalHeader() {
       </div>
 
       <nav id="mobile-navigation" className={menuOpen ? 'mobile-nav is-open page-container' : 'mobile-nav page-container'} aria-label="移动端主导航" aria-hidden={!menuOpen}>
-        {siteConfig.navItems.map((item) => (
-          <Link key={item.href} className={isActive(item.href) ? 'mobile-nav-link is-active' : 'mobile-nav-link'} href={item.href} tabIndex={menuOpen ? 0 : -1}>
+        {siteConfig.navItems.map((item, index) => (
+          <Link key={item.href} ref={index === 0 ? firstMobileLinkRef : undefined} className={isActive(item.href) ? 'mobile-nav-link is-active' : 'mobile-nav-link'} href={item.href} aria-current={pathname === item.href ? 'page' : undefined} tabIndex={menuOpen ? 0 : -1}>
             <span>{item.label}</span>
-            <span aria-hidden="true">↗</span>
+            <span aria-hidden="true">→</span>
           </Link>
         ))}
       </nav>

@@ -10,9 +10,20 @@
     "lint": "node scripts/lint-source.mjs",
     "typecheck": "tsc --noEmit",
     "validate:content": "node scripts/validate-content.mjs",
-    "content:check": "npm run validate:content",
+    "content:check": "npm run validate:content && npm run resources:check",
+    "resources:check": "node scripts/validate-phase-1-1-content.mjs",
+    "env:check": "node scripts/check-environment.mjs",
+    "metadata:check": "node scripts/check-metadata.mjs",
+    "runtime:check": "node scripts/check-runtime-acceptance.mjs",
     "links:check": "node scripts/check-links.mjs",
-    "check": "npm run lint && npm run content:check && npm run links:check && npm run typecheck && npm run build"
+    "test:structure": "node scripts/check-phase-1-1-structure.mjs",
+    "a11y:check": "node scripts/check-accessibility-contract.mjs",
+    "events:check": "node scripts/check-analytics-contract.mjs",
+    "filters:check": "node scripts/check-project-filters.mjs",
+    "rollback:check": "node scripts/check-rollback-rehearsal.mjs",
+    "production:check": "node scripts/check-production-release.mjs",
+    "performance:check": "node scripts/check-performance.mjs",
+    "check": "npm run lint && npm run content:check && npm run links:check && npm run test:structure && npm run a11y:check && npm run events:check && npm run filters:check && npm run env:check && npm run rollback:check && npm run typecheck && npm run build && npm run performance:check"
   },
   "dependencies": {
     "next": "14.2.35",

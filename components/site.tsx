@@ -2,6 +2,8 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { siteData, type Capability, type DualLensCase, type Major, type Project, type Scenario, type Source } from '@/lib/content';
 import { siteConfig } from '@/lib/site-config';
+import { TrackedLink } from '@/components/tracked-link';
+import type { AnalyticsEvent } from '@/lib/analytics';
 
 export function SectionHeading({ eyebrow, title, description, action }: { eyebrow?: string; title: string; description?: string; action?: ReactNode }) {
   return (
@@ -16,8 +18,21 @@ export function SectionHeading({ eyebrow, title, description, action }: { eyebro
   );
 }
 
+export function TaskEntry({ href, title, description, primary = false, event }: { href: string; title: string; description: string; primary?: boolean; event?: AnalyticsEvent }) {
+  return <TrackedLink className={primary ? 'task-entry task-entry-primary' : 'task-entry'} href={href} event={event}><span><strong>{title}</strong><span>{description}</span></span><span className="task-entry-arrow" aria-hidden="true">→</span></TrackedLink>;
+}
+
+export function MajorQuickCompare({ major, input, task, output }: { major: Major; input: string; task: string; output: string }) {
+  return <article className={`quick-compare-card quick-compare-${major.slug}`}><div className="card-topline"><Badge tone={major.slug.includes('biomedical') ? 'teal' : 'blue'}>{major.shortName}</Badge><span className="card-kicker">{siteConfig.currentCohort} 级</span></div><h3>{major.name}</h3><dl className="quick-compare-facts"><div><dt>输入</dt><dd>{input}</dd></div><div><dt>侧重</dt><dd>{task}</dd></div><div><dt>产出</dt><dd>{output}</dd></div></dl></article>;
+}
+
+export function ExplorationLink({ href, title, description }: { href: string; title: string; description: string }) {
+  return <Link className="exploration-link" href={href}><span><strong>{title}</strong><span>{description}</span></span><span aria-hidden="true">→</span></Link>;
+}
+
 export function ArrowLink({ href, children, subtle = false }: { href: string; children: ReactNode; subtle?: boolean }) {
-  return <Link className={subtle ? 'text-link subtle-link' : 'text-link'} href={href}>{children}<span aria-hidden="true">↗</span></Link>;
+  const external = /^https?:\/\//i.test(href);
+  return <Link className={subtle ? 'text-link subtle-link' : 'text-link'} href={href}>{children}<span aria-hidden="true">{external ? '↗' : '→'}</span></Link>;
 }
 
 export function Badge({ children, tone = 'blue' }: { children: ReactNode; tone?: 'blue' | 'teal' | 'amber' | 'muted' | 'dark' }) {
@@ -53,9 +68,9 @@ export function MajorProfileCard({ major }: { major: Major }) {
   );
 }
 
-export function DualLensCard({ item, majorMap }: { item: DualLensCase; majorMap: Map<string, Major> }) {
+export function DualLensCard({ item, source = 'compare' }: { item: DualLensCase; source?: 'home' | 'compare' }) {
   return (
-    <article className="dual-card">
+    <article className="dual-card" id={item.slug}>
       <div className="card-topline"><Badge tone="amber">同题双解</Badge><span className="card-kicker">{item.sharedGoal}</span></div>
       <h3>{item.title}</h3>
       <p className="card-summary">{item.problem}</p>
@@ -67,7 +82,7 @@ export function DualLensCard({ item, majorMap }: { item: DualLensCase; majorMap:
           <dl className="lens-facts"><div><dt>输入</dt><dd>{lens.input}</dd></div><div><dt>输出</dt><dd>{lens.output}</dd></div><div><dt>接口</dt><dd>{lens.interface}</dd></div></dl>
         </div>)}
       </div>
-      <div className="dual-footer"><div><span>共同产物：{item.sharedArtifact}</span><span>验收：{item.validation}</span><span>风险边界：{item.riskBoundary}</span></div><ArrowLink href={`/majors/compare#${item.slug}`}>查看接口与验收</ArrowLink></div>
+      <div className="dual-footer"><div><span>共同产物：{item.sharedArtifact}</span><span>验收：{item.validation}</span><span>风险/边界：{item.riskBoundary}</span></div><TrackedLink className="text-link" href={`/majors/compare#${item.slug}`} event={{ name: 'dual_lens_open', caseId: item.id, source }}>查看接口与验收 <span aria-hidden="true">→</span></TrackedLink></div>
     </article>
   );
 }
@@ -79,7 +94,7 @@ export function CapabilityCard({ capability, index, majorMap }: { capability: Ca
       <h3>{capability.name}</h3>
       <p>{capability.summary}</p>
       <div className="capability-task"><span>典型任务</span><strong>{capability.task}</strong></div>
-      <div className="card-footer"><span>{capability.transferExample}</span><ArrowLink href={`/capabilities/${capability.slug}`}>看课程与场景</ArrowLink></div>
+      <div className="card-footer"><span>{capability.transferExample}</span><TrackedLink className="text-link" href={`/capabilities/${capability.slug}`} event={{ name: 'capability_open', capabilityId: capability.id, source: 'capabilities' }}>看课程与场景 <span aria-hidden="true">→</span></TrackedLink></div>
     </article>
   );
 }
@@ -94,8 +109,8 @@ export function ProjectCapsuleCard({ project, majorMap }: { project: Project; ma
         <h3>{project.title}</h3>
         <p className="card-summary">{project.summary}</p>
         <div className="tag-row">{majorLabels.map((label) => <Badge key={label} tone="muted">{label}</Badge>)}<Badge tone="muted">{project.viewpoint}</Badge></div>
-        <div className="project-meta"><span>适合：{project.suitableFor}</span><span>产出：{project.expectedOutput}</span></div>
-        <div className="card-footer"><span className="status-ready">● 可先看清成本与边界</span><ArrowLink href={`/projects/${project.slug}`}>打开体验卡</ArrowLink></div>
+        <div className="project-meta"><span>适合：{project.suitableFor}</span><span>产出：{project.expectedOutput}</span><span>数据边界：{project.dataAccess}</span></div>
+        <div className="card-footer"><span className="status-ready">● 可先看清成本与边界</span><TrackedLink className="text-link" href={`/projects/${project.slug}`} event={{ name: 'project_open', projectId: project.id, source: 'home' }}>打开体验卡 <span aria-hidden="true">→</span></TrackedLink></div>
       </div>
     </article>
   );
@@ -131,7 +146,7 @@ export function LearningStory({ major }: { major: Major }) {
 }
 
 export function TextEquivalentList({ capabilities }: { capabilities: Capability[] }) {
-  return <ol className="text-equivalent-list">{capabilities.map((capability) => <li key={capability.id}><Link href={`/capabilities/${capability.slug}`}><strong>{capability.name}</strong><span>{capability.task}</span></Link></li>)}</ol>;
+  return <ol className="text-equivalent-list">{capabilities.map((capability) => <li key={capability.id}><TrackedLink href={`/capabilities/${capability.slug}`} event={{ name: 'capability_open', capabilityId: capability.id, source: 'capabilities' }}><strong>{capability.name}</strong><span>{capability.task}</span></TrackedLink></li>)}</ol>;
 }
 
 export function PageIntro({ eyebrow, title, description, children }: { eyebrow: string; title: string; description: string; children?: ReactNode }) {
