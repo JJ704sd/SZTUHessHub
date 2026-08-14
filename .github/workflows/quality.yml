@@ -19,9 +19,21 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npm run env:check
+      - run: npm run rollback:check
       - run: npm run check
-      - name: Start production server
+      - name: Build preview artifact
+        env:
+          HSEEHUB_ENV: preview
+          NEXT_PUBLIC_HSEEHUB_ENV: preview
+          NEXT_PUBLIC_SITE_URL: https://preview.hseehub.invalid
+        run: npm run build
+      - name: Start preview server
         shell: bash
+        env:
+          HSEEHUB_ENV: preview
+          NEXT_PUBLIC_HSEEHUB_ENV: preview
+          NEXT_PUBLIC_SITE_URL: https://preview.hseehub.invalid
         run: |
           npm run start > .next/server.log 2>&1 &
           echo $! > .next/server.pid
@@ -29,11 +41,26 @@ jobs:
             if curl --fail --silent http://127.0.0.1:3000/ > /dev/null; then break; fi
             sleep 1
           done
+      - name: Check preview metadata contract
+        env:
+          HSEEHUB_ENV: preview
+          HSEEHUB_CHECK_ORIGIN: http://127.0.0.1:3000
+        run: npm run metadata:check
+      - name: Check preview runtime contract
+        env:
+          HSEEHUB_CHECK_ORIGIN: http://127.0.0.1:3000
+        run: npm run runtime:check
       - run: npm run e2e:smoke
+        env:
+          BASE_URL: http://127.0.0.1:3000
       - run: npm run a11y:smoke
+        env:
+          BASE_URL: http://127.0.0.1:3000
       - run: npm run resources:probe
       - run: npx playwright install --with-deps chromium
       - run: npm run e2e:playwright
+        env:
+          BASE_URL: http://127.0.0.1:3000
       - name: Upload quality artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -55,8 +82,41 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npm run env:check
+        env:
+          HSEEHUB_ENV: production
+          NEXT_PUBLIC_HSEEHUB_ENV: production
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+          HSEEHUB_RELEASE_ID: ${{ vars.RELEASE_VERSION }}
+      - run: npm run rollback:check
       - run: npm run release:check
         env:
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
           RELEASE_VERSION: ${{ vars.RELEASE_VERSION }}
           ROLLBACK_VERSION: ${{ vars.ROLLBACK_VERSION }}
+      - name: Build production candidate
+        env:
+          HSEEHUB_ENV: production
+          NEXT_PUBLIC_HSEEHUB_ENV: production
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+          HSEEHUB_RELEASE_ID: ${{ vars.RELEASE_VERSION }}
+        run: npm run build
+      - name: Start production candidate
+        shell: bash
+        env:
+          HSEEHUB_ENV: production
+          NEXT_PUBLIC_HSEEHUB_ENV: production
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+          HSEEHUB_RELEASE_ID: ${{ vars.RELEASE_VERSION }}
+        run: |
+          npm run start > .next/production-server.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3000/ > /dev/null; then break; fi
+            sleep 1
+          done
+      - name: Check production metadata contract
+        env:
+          HSEEHUB_ENV: production
+          HSEEHUB_CHECK_ORIGIN: http://127.0.0.1:3000
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+        run: npm run metadata:check

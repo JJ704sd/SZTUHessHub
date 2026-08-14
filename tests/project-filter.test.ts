@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getProjectCatalog } from '@/lib/content/view-models';
-import { filterProjectCatalog } from '@/lib/content/filters';
+import { filterProjectCatalog, parseLegacyProjectFilters } from '@/lib/content/filters';
 
 describe('project catalog filtering', () => {
   it('keeps the default catalog result-first and applies quick filters predictably', () => {
@@ -18,5 +18,13 @@ describe('project catalog filtering', () => {
     const catalog = getProjectCatalog();
 
     expect(filterProjectCatalog(catalog.items, { major: 'missing-major', capability: 'all', scenario: 'all', viewpoint: 'all', duration: 'all' })).toEqual([]);
+  });
+
+  it('keeps valid conditions and ignores invalid legacy values', () => {
+    const catalog = getProjectCatalog();
+    const parsed = parseLegacyProjectFilters({ major: catalog.items[0].majorIds[0], duration: 'invalid-duration' }, catalog.filters);
+    expect(parsed.valid).toHaveLength(1);
+    expect(parsed.invalid).toEqual([{ key: 'duration', value: 'invalid-duration' }]);
+    expect(filterProjectCatalog(catalog.items, parsed.values).length).toBeGreaterThan(0);
   });
 });

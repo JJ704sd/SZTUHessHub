@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { siteData } from '@/lib/content';
 import { PageIntro, ScenarioCard, SectionHeading } from '@/components/site';
+import { siteConfig } from '@/lib/site-config';
 
 export const metadata: Metadata = {
   title: '发展场景',
   description: '比较健康、AI、软件、电子物联、机器人制造与环境城市等场景的共用能力和新增门槛。',
-  alternates: { canonical: '/scenarios' },
+  alternates: siteConfig.isProduction ? { canonical: '/scenarios' } : undefined,
 };
 
 export default function ScenariosPage() {

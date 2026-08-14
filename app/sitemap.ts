@@ -3,6 +3,7 @@ import { siteData } from '@/lib/content';
 import { siteConfig } from '@/lib/site-config';
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  if (!siteConfig.isProduction) return [];
   const base = siteConfig.siteUrl;
   const staticRoutes = ['/', '/majors', '/majors/compare', '/majors/faq', '/capabilities', '/projects', '/scenarios', '/sources', '/about'];
   return [
