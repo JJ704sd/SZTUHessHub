@@ -43,19 +43,19 @@ test('visual state home mobile menu open', async ({ page }) => {
   await expect(page).toHaveScreenshot('home-390x844-light-menu-open.png', { fullPage: true, animations: 'disabled', caret: 'hide' });
 });
 
-test('visual state projects advanced filters expanded', async ({ page }) => {
+test('project state keeps legacy conditions visible without filter controls', async ({ page }) => {
   await page.setViewportSize({ width: 768, height: 1024 });
   await page.addInitScript(() => window.localStorage.setItem('hseehub-theme', 'light'));
-  await page.goto('/projects');
-  await page.locator('.advanced-filters summary').click();
-  await expect(page.locator('.advanced-filters')).toHaveAttribute('open', '');
-  await expect(page).toHaveScreenshot('projects-768x1024-light-filters-open.png', { fullPage: true, animations: 'disabled', caret: 'hide' });
+  await page.goto('/projects?major=major-ime&duration=invalid-duration');
+  await expect(page.locator('select')).toHaveCount(0);
+  await expect(page.locator('.condition-pill')).toHaveCount(1);
+  await expect(page.locator('.invalid-condition-message')).toBeVisible();
 });
 
-test('visual state projects no results recovery', async ({ page }) => {
+test('project state recovers invalid legacy conditions to the full catalog', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(() => window.localStorage.setItem('hseehub-theme', 'dark'));
   await page.goto('/projects?major=missing-major');
-  await expect(page.locator('.empty-state')).toBeVisible();
-  await expect(page).toHaveScreenshot('projects-390x844-dark-empty.png', { fullPage: true, animations: 'disabled', caret: 'hide' });
+  await expect(page.locator('.invalid-condition-message')).toBeVisible();
+  await expect(page.locator('.project-list-card')).toHaveCount(3);
 });
