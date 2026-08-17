@@ -16,7 +16,7 @@ async function check(path) {
 }
 
 try {
-  for (const path of ['/', '/projects', '/majors/compare', '/capabilities', '/scenarios']) await check(path);
+  for (const path of ['/', '/projects', '/majors', '/capabilities', '/scenarios']) await check(path);
   console.log(`Accessibility smoke passed (${baseUrl}); axe and manual keyboard review remain release checks.`);
 } catch (error) {
   console.error('Accessibility smoke failed.');

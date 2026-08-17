@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run content:check && npm run links:check",
+    "prebuild": "npm run content:check && npm run links:check && npm run evidence:check",
     "build": "next build",
     "start": "next start",
     "lint": "node scripts/lint-source.mjs",
@@ -16,11 +16,15 @@
     "links:check": "vitest run tests/link-validation.test.ts --reporter=dot",
     "resources:check": "node scripts/check-resource-health.mjs",
     "resources:probe": "node scripts/check-resource-health.mjs --probe",
+    "resources:snapshot": "node scripts/resources-snapshot.mjs",
+    "evidence:check": "node scripts/check-evidence.mjs",
     "e2e:smoke": "node scripts/e2e-smoke.mjs",
     "a11y:smoke": "node scripts/a11y-smoke.mjs",
     "e2e:playwright": "playwright test",
+    "test:visual": "playwright test tests/e2e/visual.spec.ts",
+    "perf:ci": "node scripts/perf-ci.mjs",
     "release:check": "node scripts/check-release-config.mjs",
-    "check": "npm run lint && npm run content:check && npm run links:check && npm run resources:check && npm run typecheck && npm run test && npm run build"
+    "check": "npm run lint && npm run content:check && npm run links:check && npm run resources:check && npm run evidence:check && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
     "next": "14.2.35",

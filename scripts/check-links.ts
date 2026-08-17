@@ -12,7 +12,7 @@ function checkUrl(value: string, label: string) {
     failures.push(`${label} 不是有效 HTTPS URL：${value}`);
   }
 }
-for (const source of data.sources) checkUrl(source.url, `sources.${source.id}.url`);
+for (const source of data.sources) if (source.accessType === 'public_url' && source.url) checkUrl(source.url, `sources.${source.id}.url`);
 for (const project of data.projects) {
   checkUrl(project.sourceUrl, `projects.${project.id}.sourceUrl`);
   for (const tool of project.tools) checkUrl(tool.officialUrl, `projects.${project.id}.tools.${tool.name}`);

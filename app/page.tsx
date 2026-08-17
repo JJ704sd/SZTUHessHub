@@ -8,6 +8,6 @@ export default function HomePage() {
     <HomeMajorCompare model={model} />
     <HomeCapabilityShortcuts model={model} />
     <HomeProjectPreviews model={model} />
-    <HomeExplore model={model} />
+    {model.showExploreSection ? <HomeExplore model={model} /> : null}
   </>;
 }

@@ -75,7 +75,7 @@ export function GlobalHeader() {
             <span className="theme-icon" aria-hidden="true">{theme === 'dark' ? '☼' : '◐'}</span>
             <span className="theme-label">{theme === 'dark' ? '亮色' : '暗色'}</span>
           </button>
-          <button ref={menuButtonRef} className="menu-button" type="button" onClick={() => setMenuOpen((open) => !open)} aria-label="鎵撳紑鎴栧叧闂Щ鍔ㄧ鍗曡" aria-expanded={menuOpen} aria-controls="mobile-navigation">
+          <button ref={menuButtonRef} className="menu-button" type="button" onClick={() => setMenuOpen((open) => !open)} aria-label="打开或关闭移动端菜单" aria-expanded={menuOpen} aria-controls="mobile-navigation">
             <span className="menu-icon" aria-hidden="true">{menuOpen ? '×' : '☰'}</span>
             <span>菜单</span>
           </button>

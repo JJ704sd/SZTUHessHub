@@ -29,7 +29,7 @@ export function SourceLine({ source, label = '来源' }: { source?: Source; labe
     <div className="source-line">
       <span className="source-dot" aria-hidden="true" />
       <span>{label}：{source.title}</span>
-      <span className="source-meta">{source.version} · 核验于 {source.lastVerified}</span>
+      <span className="source-meta">{source.version} · {source.accessType === 'public_url' ? '公开入口' : '校内正式文件 · 无公开入口'} · 核验于 {source.lastVerified}</span>
     </div>
   );
 }
@@ -67,7 +67,7 @@ export function DualLensCard({ item, majorLinks = [] }: { item: DualLensCase; ma
           <details className="lens-disclosure"><summary>展开输入、输出与接口 <span aria-hidden="true">＋</span></summary><dl className="lens-facts"><div><dt>输入</dt><dd>{lens.input}</dd></div><div><dt>输出</dt><dd>{lens.output}</dd></div><div><dt>接口</dt><dd>{lens.interface}</dd></div></dl></details>
         </div>)}
       </div>
-      <div className="dual-footer"><div><span>共同产物：{item.sharedArtifact}</span><span>验收：{item.validation}</span></div><details className="risk-disclosure"><summary>查看风险边界</summary><p>{item.riskBoundary}</p></details><ArrowLink href={`/majors/compare#${item.slug}`}>查看接口与验收</ArrowLink></div>
+      <div className="dual-footer"><div><span>共同产物：{item.sharedArtifact}</span><span>验收：{item.validation}</span></div><details className="risk-disclosure"><summary>查看风险边界</summary><p>{item.riskBoundary}</p></details><ArrowLink href={`/majors#${item.slug}`}>查看接口与验收</ArrowLink></div>
     </article>
   );
 }
@@ -150,7 +150,7 @@ export function SiteFooter({ capabilityCount = 8 }: { capabilityCount?: number }
           <Link className="brand" href="/" aria-label="HseeHub 首页"><span className="brand-mark" aria-hidden="true">H</span><span className="brand-copy"><strong>HseeHub</strong><span>健康工程探索站</span></span></Link>
           <p>帮助学生看懂同院两个工程专业的共同底座、不同侧重和跨行业能力。内容是解释性导览，不替代正式培养方案或教务通知。</p>
         </div>
-        <div className="footer-col"><strong>从这里开始</strong><Link href="/majors/compare">5 分钟看懂两个专业</Link><Link href="/capabilities">{capabilityCount} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
+        <div className="footer-col"><strong>从这里开始</strong><Link href="/majors">5 分钟看懂两个专业</Link><Link href="/capabilities">{capabilityCount} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
         <div className="footer-col"><strong>内容边界</strong><Link href="/sources">来源与版本</Link><Link href="/majors/faq">学生常问</Link><Link href="/about">关于本站</Link></div>
       </div>
       <div className="page-container footer-bottom"><span>默认内容版本：{siteConfig.currentCohort} 级 · 首版只读公开浏览</span><span>医疗内容仅供专业学习，不构成医疗建议</span></div>

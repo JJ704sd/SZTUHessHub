@@ -39,13 +39,18 @@ export function ProjectBrowser({ projects, filters, initialFilters = defaultInit
   useEffect(() => {
     if (Object.keys(initialFilters).length === 0) setSelected(filtersFromLocation());
   }, [initialFilters]);
+  useEffect(() => {
+    const handlePopState = () => setSelected(filtersFromLocation());
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
   const activeCount = Object.values(selected).filter((value) => value !== 'all').length;
   const filtered = useMemo(() => filterProjectCatalog(projects, selected), [projects, selected]);
 
   function updateUrl(next: FilterState) {
     const params = new URLSearchParams();
     Object.entries(next).forEach(([key, value]) => { if (value !== 'all') params.set(key, value); });
-    window.history.replaceState(null, '', params.toString() ? `/projects?${params.toString()}` : '/projects');
+    window.history.pushState(null, '', params.toString() ? `/projects?${params.toString()}` : '/projects');
   }
 
   function setFilter(key: FilterKey, value: string) {

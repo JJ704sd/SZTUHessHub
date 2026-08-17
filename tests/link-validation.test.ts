@@ -11,7 +11,7 @@ function isHttps(value: string) {
 
 describe('link protocol gate', () => {
   it('requires every registered external resource and replacement to use HTTPS', () => {
-    for (const source of data.sources) expect(isHttps(source.url), source.url).toBe(true);
+    for (const source of data.sources) if (source.accessType === 'public_url') expect(isHttps(source.url), source.url).toBe(true);
     for (const project of data.projects) {
       expect(isHttps(project.sourceUrl), project.sourceUrl).toBe(true);
       for (const tool of project.tools) expect(isHttps(tool.officialUrl), tool.officialUrl).toBe(true);

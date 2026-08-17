@@ -18,10 +18,16 @@ describe('Phase 1.5 content model', () => {
   it('projects a task-first home without rendering detail-only content', () => {
     const home = getHomePageModel();
 
-    expect(home.tasks.map((task) => task.href)).toEqual(['/majors/compare', '/capabilities', '/projects']);
+    expect(home.tasks.map((task) => task.id)).toEqual(['compare', 'capability', 'project']);
+    expect(home.tasks.map((task) => task.href)).toEqual(['/majors', '/capabilities', '/projects']);
+    expect(home.primaryJourneyId).toBe('compare');
+    expect(home.tasks.filter((task) => task.isPrimary)).toHaveLength(1);
+    expect(home.tasks.filter((task) => task.isPrimary).map((task) => task.id)).toEqual([home.primaryJourneyId]);
     expect(home.modules).toHaveLength(5);
-    expect(home.capabilities).toHaveLength(8);
+    expect(home.capabilities).toHaveLength(3);
     expect(home.projects).toHaveLength(3);
+    expect(home.scenarios).toHaveLength(6);
+    expect(home.sharedFoundation).toEqual(getSiteData().siteMeta.home.sharedFoundation);
     expect(nonWhitespaceLength(home.explanatoryText)).toBeLessThanOrEqual(140);
     expect(home.projects.every((project) => project.cardSummary.length <= 48)).toBe(true);
     expect(home.projects.every((project) => !('steps' in project))).toBe(true);
@@ -36,6 +42,11 @@ describe('Phase 1.5 content model', () => {
     expect(catalog.items.every((item) => item.cardSummary.length <= 48)).toBe(true);
     expect(catalog.items.every((item) => item.outputSummary.length > 0)).toBe(true);
     expect(catalog.items.every((item) => forbidden.every((key) => !(key in item)))).toBe(true);
+    expect(catalog.items.every((item) => !('linkAvailability' in item) && !('endpoints' in item) && !('quickTry' in item) && !('claims' in item))).toBe(true);
+    const detail = getProjectDetailModel('signal-feature-notebook')?.catalog;
+    expect(detail?.linkAvailability.length).toBeGreaterThan(0);
+    expect(detail?.endpoints.length).toBeGreaterThan(0);
+    expect(detail?.quickTry.enabled).toBe(true);
     expect(catalog.filters.major.length).toBe(2);
     expect(catalog.filters.capability.length).toBe(8);
     expect(catalog.filters.scenario.length).toBe(6);

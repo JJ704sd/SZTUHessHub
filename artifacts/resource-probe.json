@@ -1,0 +1,85 @@
+{
+  "generatedAt": "2026-08-17T04:37:58.603Z",
+  "endpoints": [
+    {
+      "endpointId": "endpoint-project-signal-source",
+      "requestedUrl": "https://physionet.org/about/",
+      "status": 200,
+      "ok": true,
+      "finalUrl": "https://physionet.org/about/",
+      "checkedAt": "2026-08-17T04:37:56.679Z"
+    },
+    {
+      "endpointId": "endpoint-project-signal-tool-jupyter",
+      "requestedUrl": "https://jupyter.org/",
+      "status": 200,
+      "ok": true,
+      "finalUrl": "https://jupyter.org/",
+      "checkedAt": "2026-08-17T04:37:56.714Z"
+    },
+    {
+      "endpointId": "endpoint-project-signal-tool-numpy",
+      "requestedUrl": "https://numpy.org/doc/stable/user/quickstart.html",
+      "status": 200,
+      "ok": true,
+      "finalUrl": "https://numpy.org/doc/stable/user/quickstart.html",
+      "checkedAt": "2026-08-17T04:37:56.715Z"
+    },
+    {
+      "endpointId": "endpoint-project-signal-tool-sklearn",
+      "requestedUrl": "https://scikit-learn.org/stable/getting_started.html",
+      "status": 200,
+      "ok": true,
+      "finalUrl": "https://scikit-learn.org/stable/getting_started.html",
+      "checkedAt": "2026-08-17T04:37:56.716Z"
+    },
+    {
+      "endpointId": "endpoint-project-sensor-source",
+      "requestedUrl": "https://docs.arduino.cc/learn/microcontrollers/analog-input/",
+      "status": 200,
+      "ok": true,
+      "finalUrl": "https://docs.arduino.cc/learn/microcontrollers/analog-input/",
+      "checkedAt": "2026-08-17T04:37:56.716Z"
+    },
+    {
+      "endpointId": "endpoint-project-sensor-tool-ide",
+      "requestedUrl": "https://www.arduino.cc/en/software/",
+      "status": 200,
+      "ok": true,
+      "finalUrl": "https://www.arduino.cc/en/software/",
+      "checkedAt": "2026-08-17T04:37:56.717Z"
+    },
+    {
+      "endpointId": "endpoint-project-sensor-tool-analog",
+      "requestedUrl": "https://docs.arduino.cc/learn/microcontrollers/analog-input/",
+      "status": 200,
+      "ok": true,
+      "finalUrl": "https://docs.arduino.cc/learn/microcontrollers/analog-input/",
+      "checkedAt": "2026-08-17T04:37:56.718Z"
+    },
+    {
+      "endpointId": "endpoint-project-material-source",
+      "requestedUrl": "https://www.nist.gov/",
+      "status": 200,
+      "ok": true,
+      "finalUrl": "https://www.nist.gov/",
+      "checkedAt": "2026-08-17T04:37:56.718Z"
+    },
+    {
+      "endpointId": "endpoint-project-material-tool-pandas",
+      "requestedUrl": "https://pandas.pydata.org/docs/",
+      "status": 200,
+      "ok": true,
+      "finalUrl": "https://pandas.pydata.org/docs/",
+      "checkedAt": "2026-08-17T04:37:56.719Z"
+    },
+    {
+      "endpointId": "endpoint-project-material-tool-nist",
+      "requestedUrl": "https://www.nist.gov/",
+      "status": 200,
+      "ok": true,
+      "finalUrl": "https://www.nist.gov/",
+      "checkedAt": "2026-08-17T04:37:56.719Z"
+    }
+  ]
+}
