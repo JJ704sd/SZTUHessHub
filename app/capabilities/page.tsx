@@ -7,7 +7,7 @@ import { CapabilityCard, PageIntro, SectionHeading } from '@/components/site';
 export const metadata: Metadata = {
   title: '能力与课程',
   description: `浏览 ${siteData.capabilities.length} 类可迁移能力，以及专业、课程、工程任务与跨行业场景之间的关系。`,
-  alternates: { canonical: '/capabilities' },
+  alternates: siteConfig.isProduction ? { canonical: '/capabilities' } : undefined,
 };
 
 export default function CapabilitiesPage() {

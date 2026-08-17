@@ -19,21 +19,25 @@ try {
   assert.match(home, /href="\/majors"/);
   assert.match(home, /href="\/capabilities"/);
   assert.match(home, /href="\/projects"/);
-  assert.equal(count(home, /class="home-section(?:\s|\")/g), 4, 'home has four follow-up modules after the task launcher');
+  assert.equal(count(home, /data-home-module=/g), 4, 'home has four convergence modules');
 
   const projects = await page('/projects');
   assert.equal(count(projects, /class="project-list-card/g), 3, 'project catalog shows all three cards by default');
-  assert.match(projects, /class="advanced-filters"/);
+  assert.doesNotMatch(projects, /<select\b/i, 'P0 project catalog has no filter controls');
   assert.match(projects, /class="status-badge/g);
 
-  const durationSelect = projects.match(/<select[^>]*id="filter-duration"[\s\S]*?<\/select>/i)?.[0] ?? '';
-  const duration = durationSelect.match(/<option value="(?!all)([^"]+)"/i)?.[1];
-  assert.ok(duration, 'project catalog exposes a duration option');
-  const filtered = await page(`/projects?duration=${encodeURIComponent(duration)}`);
-  assert.match(filtered, /class="project-list-card/g, 'a quick filter keeps a result card visible');
+  const filtered = await page(`/projects?duration=${encodeURIComponent('10 分钟')}`);
+  assert.match(filtered, /符合已应用条件/);
+  assert.match(filtered, /清除全部/);
 
   const empty = await page('/projects?major=missing-major');
-  assert.equal(count(empty, /class="project-list-card/g), 3, 'static project scheme keeps content readable before hydration');
+  assert.equal(count(empty, /class="project-list-card/g), 3, 'invalid legacy condition keeps all project cards');
+  assert.match(empty, /已忽略无效旧链接条件/);
+  const mixed = await page('/projects?major=major-ime&duration=invalid-duration');
+  assert.match(mixed, /已应用的条件/);
+  assert.match(mixed, /已忽略无效旧链接条件/);
+  const zero = await page('/projects?major=major-bme&duration=10%20%E5%88%86%E9%92%9F');
+  assert.match(zero, /当前条件没有匹配的体验卡/);
 
   for (const path of ['/majors', '/capabilities/signals-images-and-data-ai', '/projects/signal-feature-notebook']) {
     const html = await page(path);

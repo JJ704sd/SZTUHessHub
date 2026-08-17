@@ -1,0 +1,25 @@
+import { readFileSync } from 'node:fs';
+const read = (path) => readFileSync(path, 'utf8');
+const home = read('app/page.tsx');
+const homeSections = read('components/content/home-sections.tsx');
+const layout = read('app/layout.tsx');
+const skipLink = read('components/shell/skip-link.tsx');
+const header = read('components/global-header.tsx');
+const css = read('app/globals.css');
+const majors = read('app/majors/page.tsx');
+const nextConfig = read('next.config.mjs');
+const projects = read('components/project-browser.tsx');
+const projectsPage = read('app/projects/page.tsx');
+const failures = [];
+const expect = (condition, message) => { if (!condition) failures.push(message); };
+expect((homeSections.match(/data-home-module=/g) ?? []).length === 4, '首页必须有四个信息架构模块');
+expect((home.match(/<Home(?:TaskLauncher|MajorCompare|ProjectPreviews|Explore)/g) ?? []).length === 4 && !home.includes('HomeCapabilityShortcuts'), '首页不得单独输出能力第五模块');
+expect((homeSections.match(/task-card(?:\s|['"])/g) ?? []).length >= 1 && homeSections.includes('task_area_viewed') === false, '首页任务区结构必须由服务端输出');
+expect(layout.includes('<SkipLink />') && skipLink.includes('href="#main-content"') && layout.includes('id="main-content"'), '布局必须提供 skip link 和 main id');
+expect(header.includes("aria-current={pathname === item.href ? 'page' : undefined}") && header.includes('aria-hidden={!menuOpen}') && header.includes('tabIndex={menuOpen ? 0 : -1}'), 'Header 必须公开精确当前项和菜单键盘状态');
+expect(!/main\s*\{[^}]*overflow\s*:\s*(?:clip|hidden)/s.test(css), '不得用 main overflow 裁切布局');
+expect(css.includes('min-width: 0') && css.includes('overflow-wrap: anywhere'), '双卡子项必须允许收缩和换行');
+expect(majors.includes('id="dual-lens"') && majors.includes('DualLensCard') && nextConfig.includes("source: '/majors/compare'") && nextConfig.includes("destination: '/majors'") && nextConfig.includes('permanent: true'), '专业对照必须收敛到 /majors，并保留 legacy 308 重定向');
+expect(!/<select\b/i.test(projects) && projectsPage.includes('parseLegacyProjectFilters'), 'P0 项目浏览器不得输出筛选控件，必须保留旧参数解析');
+if (failures.length) { console.error('Phase 1.1 structure check failed.'); failures.forEach((failure) => console.error(`- ${failure}`)); process.exit(1); }
+console.log('Phase 1.1 structure check passed (four modules, header, dual-card, legacy projects).');

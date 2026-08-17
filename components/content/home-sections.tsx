@@ -4,7 +4,7 @@ import { TrustLine } from '@/components/content/trust-line';
 import { Badge, StatusBadge } from '@/components/ui/primitives';
 
 export function HomeTaskLauncher({ model }: { model: HomePageModel }) {
-  return <section className="home-launch">
+  return <section className="home-launch" data-home-module="task-entry">
     <div className="page-container home-launch-inner">
       <div className="home-launch-copy">
         <p className="eyebrow">健康工程 · 双专业 × 跨行业</p>
@@ -25,7 +25,7 @@ export function HomeTaskLauncher({ model }: { model: HomePageModel }) {
 }
 
 export function HomeMajorCompare({ model }: { model: HomePageModel }) {
-  return <section className="home-section home-section-compare" id="home-compare">
+  return <section className="home-section home-section-compare" data-home-module="quick-compare" id="home-compare">
     <div className="page-container">
       <SectionKicker number="01" label="30 秒专业对比" title="共同底座相同，工程侧重不同，也可以接在一起" action={{ href: '/majors', label: '进入专业对比' }} />
       <div className="foundation-strip" aria-label="共同底座">
@@ -51,26 +51,10 @@ export function HomeMajorCompare({ model }: { model: HomePageModel }) {
   </section>;
 }
 
-export function HomeCapabilityShortcuts({ model }: { model: HomePageModel }) {
-  return <section className="home-section home-section-capabilities" id="home-capabilities">
-    <div className="page-container">
-      <SectionKicker number="02" label="从能力看任务" title="三条关系线，够你继续追问" action={{ href: '/capabilities', label: '浏览全部能力' }} />
-      <div className="capability-relation-list">
-        {model.capabilities.map((capability, index) => <Link className="capability-relation-row" href={`/capabilities/${capability.slug}`} key={capability.id}>
-          <span className="shortcut-number">{String(index + 1).padStart(2, '0')}</span>
-          <strong>{capability.navigationLabel}</strong>
-          <span>{capability.taskSummary}</span>
-          <span className="relation-arrow" aria-hidden="true">↗</span>
-        </Link>)}
-      </div>
-    </div>
-  </section>;
-}
-
 export function HomeProjectPreviews({ model }: { model: HomePageModel }) {
-  return <section className="home-section home-section-projects" id="home-projects">
+  return <section className="home-section home-section-projects" data-home-module="projects" id="home-projects">
     <div className="page-container">
-      <SectionKicker number="03" label="今天先试一个" title="先看时长、基础、产出和状态，再打开外部工具" action={{ href: '/projects', label: '比较全部项目' }} />
+      <SectionKicker number="02" label="今天先试一个" title="先看时长、基础、产出和状态，再打开外部工具" action={{ href: '/projects', label: '比较全部项目' }} />
       <div className="home-project-grid">{model.projects.map((project) => <HomeProjectPreview key={project.id} project={project} />)}</div>
     </div>
   </section>;
@@ -92,10 +76,20 @@ function HomeProjectPreview({ project }: { project: ProjectCatalogItem }) {
 }
 
 export function HomeExplore({ model }: { model: HomePageModel }) {
-  return <section className="home-section home-section-explore" id="home-explore">
+  return <section className="home-section home-section-explore" data-home-module="explore" id="home-explore">
     <div className="page-container">
-      <SectionKicker number="04" label="继续探索与核验" title="场景是文本入口，来源是回查路径" action={{ href: '/scenarios', label: '浏览发展场景' }} />
-      <div className="scenario-link-list">{model.scenarios.map((scenario) => <Link className="scenario-link-row" href={`/scenarios/${scenario.slug}`} key={scenario.id}><strong>{scenario.navigationLabel}</strong><span>{scenario.taskSummary}</span><span aria-hidden="true">↗</span></Link>)}</div>
+      <SectionKicker number="03" label="能力、场景与核验" title="先用三条能力关系继续追问，再按场景核对边界" action={{ href: '/capabilities', label: '浏览能力地图' }} />
+      <div className="capability-relation-list" aria-label="首页能力入口">
+        {model.capabilities.map((capability, index) => <Link className="capability-relation-row" href={`/capabilities/${capability.slug}`} key={capability.id}>
+          <span className="shortcut-number">{String(index + 1).padStart(2, '0')}</span>
+          <strong>{capability.navigationLabel}</strong>
+          <span>{capability.taskSummary}</span>
+          <span className="relation-arrow" aria-hidden="true">↗</span>
+        </Link>)}
+      </div>
+      <div className="scenario-link-list" aria-label="首页场景入口">
+        {model.scenarios.map((scenario) => <Link className="scenario-link-row" href={`/scenarios/${scenario.slug}`} key={scenario.id}><strong>{scenario.navigationLabel}</strong><span>{scenario.taskSummary}</span><span aria-hidden="true">↗</span></Link>)}
+      </div>
       <p className="home-faq-link">常见问题、课程版本和完整证据统一从 <Link className="text-link" href="/majors/faq">FAQ</Link> 与 <Link className="text-link" href="/sources">来源登记</Link> 进入。</p>
     </div>
   </section>;

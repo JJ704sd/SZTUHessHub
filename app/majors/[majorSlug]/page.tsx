@@ -9,7 +9,7 @@ export function generateStaticParams() { return siteData.majors.map((major) => (
 
 export function generateMetadata({ params }: { params: { majorSlug: string } }): Metadata {
   const major = siteData.majors.find((item) => item.slug === params.majorSlug);
-  return { title: major?.name ?? '专业介绍', description: major?.summary ?? 'HseeHub 双专业通俗导览', alternates: { canonical: `/majors/${params.majorSlug}` } };
+  return { title: major?.name ?? '专业介绍', description: major?.summary ?? 'HseeHub 双专业通俗导览', alternates: siteConfig.isProduction ? { canonical: `/majors/${params.majorSlug}` } : undefined };
 }
 
 export default function MajorDetailPage({ params }: { params: { majorSlug: string } }) {

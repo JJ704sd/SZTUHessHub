@@ -1,0 +1,35 @@
+{
+  "projectId": "project-signal-feature-notebook",
+  "primaryResourceId": "resource-signal-feature-starter",
+  "resources": [
+    {
+      "id": "resource-signal-feature-starter",
+      "title": "HseeHub signal-feature-notebook starter",
+      "url": "/projects/signal-feature-notebook/starter",
+      "kind": "starter",
+      "version": "v0.1.0",
+      "license": "NOASSERTION（等待内容 owner 和许可证证据确认）",
+      "ownerId": "owner-pending-confirmation",
+      "availability": "reachable",
+      "reviewStatus": "pending",
+      "lastAutomatedCheckAt": "2026-08-14",
+      "lastSuccessfulAt": "2026-08-14",
+      "automatedStatusCode": 200,
+      "finalUrl": "/projects/signal-feature-notebook/starter",
+      "internalFallbackPath": "/projects/signal-feature-notebook",
+      "failureReason": "人工走通、owner 和许可证证据尚未登记。"
+    },
+    {
+      "id": "resource-signal-physionet-reference",
+      "title": "PhysioNet 参考入口",
+      "url": "https://physionet.org/about/",
+      "kind": "reference",
+      "version": "current（需人工核对）",
+      "license": "以具体数据集许可为准",
+      "ownerId": "owner-pending-confirmation",
+      "availability": "unknown",
+      "reviewStatus": "pending",
+      "internalFallbackPath": "/projects/signal-feature-notebook"
+    }
+  ]
+}

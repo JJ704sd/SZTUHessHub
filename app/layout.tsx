@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: { default: siteData.siteMeta.title, template: '%s｜HseeHub' },
   description: siteData.siteMeta.description,
-  alternates: { canonical: '/' },
+  alternates: siteConfig.isProduction ? { canonical: '/' } : undefined,
+  robots: siteConfig.isProduction ? undefined : { index: false, follow: false },
   openGraph: { title: 'HseeHub｜健康工程双专业与跨行业能力探索站', description: '先看懂两个专业，再找到一个可以继续尝试的小项目。', type: 'website' },
 };
 

@@ -8,7 +8,7 @@ import { TrustLine } from '@/components/content/trust-line';
 export const metadata: Metadata = {
   title: '学院与专业',
   description: '认识健康与环境工程学院的两个工程专业，比较共同底座、课程侧重与协作关系。',
-  alternates: { canonical: '/majors' },
+  alternates: siteConfig.isProduction ? { canonical: '/majors' } : undefined,
 };
 
 export default function MajorsPage() {

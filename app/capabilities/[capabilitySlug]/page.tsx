@@ -9,7 +9,7 @@ export function generateStaticParams() { return siteData.capabilities.map((capab
 
 export function generateMetadata({ params }: { params: { capabilitySlug: string } }): Metadata {
   const capability = siteData.capabilities.find((item) => item.slug === params.capabilitySlug);
-  return { title: capability?.name ?? '能力详情', description: capability?.summary ?? 'HseeHub 能力与课程关系导览', alternates: { canonical: `/capabilities/${params.capabilitySlug}` } };
+  return { title: capability?.name ?? '能力详情', description: capability?.summary ?? 'HseeHub 能力与课程关系导览', alternates: siteConfig.isProduction ? { canonical: `/capabilities/${params.capabilitySlug}` } : undefined };
 }
 
 export default function CapabilityDetailPage({ params }: { params: { capabilitySlug: string } }) {

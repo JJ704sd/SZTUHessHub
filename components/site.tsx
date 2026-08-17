@@ -20,7 +20,8 @@ export function SectionHeading({ eyebrow, title, description, action }: { eyebro
 }
 
 export function ArrowLink({ href, children, subtle = false }: { href: string; children: ReactNode; subtle?: boolean }) {
-  return <Link className={subtle ? 'text-link subtle-link' : 'text-link'} href={href}>{children}<span aria-hidden="true">↗</span></Link>;
+  const external = /^https?:\/\//i.test(href);
+  return <Link className={subtle ? 'text-link subtle-link' : 'text-link'} href={href}>{children}<span aria-hidden="true">{external ? '↗' : '→'}</span></Link>;
 }
 
 export function SourceLine({ source, label = '来源' }: { source?: Source; label?: string }) {
@@ -55,7 +56,7 @@ export function MajorProfileCard({ major }: { major: Major }) {
 export function DualLensCard({ item, majorLinks = [] }: { item: DualLensCase; majorLinks?: Array<{ id: string; slug: string }> }) {
   const majorSlugById = new Map(majorLinks.map((major) => [major.id, major.slug]));
   return (
-    <article className="dual-card">
+    <article className="dual-card" id={item.slug}>
       <div className="card-topline"><Badge tone="amber">同题双解</Badge><span className="card-kicker">{item.sharedGoal}</span></div>
       <h3>{item.title}</h3>
       <p className="card-summary">{item.problem}</p>

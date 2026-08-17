@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "validate:content": "vitest run tests/content-validation.test.ts --reporter=dot",
-    "content:check": "npm run validate:content",
+    "content:check": "npm run validate:content && npm run phase11:content && npm run resources:check",
+    "phase11:content": "node scripts/validate-phase-1-1-content.mjs",
     "links:check": "vitest run tests/link-validation.test.ts --reporter=dot",
     "resources:check": "node scripts/check-resource-health.mjs",
     "resources:probe": "node scripts/check-resource-health.mjs --probe",
@@ -24,7 +25,14 @@
     "test:visual": "playwright test tests/e2e/visual.spec.ts",
     "perf:ci": "node scripts/perf-ci.mjs",
     "release:check": "node scripts/check-release-config.mjs",
-    "check": "npm run lint && npm run content:check && npm run links:check && npm run resources:check && npm run evidence:check && npm run typecheck && npm run test && npm run build"
+    "structure:check": "node scripts/check-phase-1-1-structure.mjs",
+    "events:check": "node scripts/check-analytics-contract.mjs",
+    "env:check": "node scripts/check-environment.mjs",
+    "metadata:check": "node scripts/check-metadata.mjs",
+    "runtime:check": "node scripts/check-runtime-acceptance.mjs",
+    "performance:check": "node scripts/check-performance.mjs",
+    "rollback:check": "node scripts/check-rollback-rehearsal.mjs",
+    "check": "npm run lint && npm run content:check && npm run links:check && npm run evidence:check && npm run structure:check && npm run events:check && npm run typecheck && npm run test && npm run build && npm run performance:check"
   },
   "dependencies": {
     "next": "14.2.35",
@@ -38,7 +46,7 @@
     "@playwright/test": "^1.51.1",
     "@types/node": "22.13.4",
     "@types/react": "18.3.18",
-    "@types/react-dom": "18.3.5",
+    "@types/react-dom": "18.3.18",
     "tsx": "^4.23.10",
     "typescript": "5.7.3",
     "vitest": "^3.2.7"

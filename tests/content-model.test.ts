@@ -9,6 +9,7 @@ import {
   getScenarioDetailModel,
   getSiteData,
 } from '@/lib/content';
+import { canBePrimary, primaryResourceConditions, resourceManifests, validateResourceManifest } from '@/lib/resources';
 
 function nonWhitespaceLength(value: string) {
   return value.replace(/\s/g, '').length;
@@ -23,7 +24,7 @@ describe('Phase 1.5 content model', () => {
     expect(home.primaryJourneyId).toBe('compare');
     expect(home.tasks.filter((task) => task.isPrimary)).toHaveLength(1);
     expect(home.tasks.filter((task) => task.isPrimary).map((task) => task.id)).toEqual([home.primaryJourneyId]);
-    expect(home.modules).toHaveLength(5);
+    expect(home.modules.map((module) => module.id)).toEqual(['tasks', 'compare', 'projects', 'explore']);
     expect(home.capabilities).toHaveLength(3);
     expect(home.projects).toHaveLength(3);
     expect(home.scenarios).toHaveLength(6);
@@ -81,5 +82,14 @@ describe('Phase 1.5 content model', () => {
         expect(project.resourceHealth.replacementUrl || project.resourceHealth.note).toBeTruthy();
       }
     }
+  });
+
+  it('keeps primary resource conditions explicit and replacement references safe', () => {
+    const manifest = resourceManifests[0];
+    const primary = manifest.resources.find((resource) => resource.id === manifest.primaryResourceId);
+    expect(validateResourceManifest(manifest)).toEqual([]);
+    expect(primary).toBeDefined();
+    expect(primaryResourceConditions(primary as NonNullable<typeof primary>)).toEqual({ machineReachable: true, humanVerified: false, fresh: false });
+    expect(canBePrimary(primary as NonNullable<typeof primary>)).toBe(false);
   });
 });

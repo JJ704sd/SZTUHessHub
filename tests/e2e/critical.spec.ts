@@ -32,13 +32,7 @@ test('comparison cards keep labels and footer actions within the card', async ({
     const kicker = card.querySelector('.card-kicker');
     const footer = card.querySelector('.dual-footer');
     if (!badge || !kicker || !footer) throw new Error('comparison card layout nodes are missing');
-    return {
-      card: cardBox,
-      badge: rect(badge),
-      kicker: rect(kicker),
-      footer: rect(footer),
-      footerChildren: Array.from(footer.children).map(rect),
-    };
+    return { card: cardBox, badge: rect(badge), kicker: rect(kicker), footer: rect(footer), footerChildren: Array.from(footer.children).map(rect) };
   });
 
   expect(geometry.badge.width).toBeGreaterThanOrEqual(48);
@@ -56,23 +50,32 @@ test('legacy comparison route redirects canonically and preserves query plus anc
   await expect(page.locator('#dual-lens')).toBeVisible();
 });
 
-test('project filters preserve URL state and recover from no results', async ({ page }) => {
+test('capability intent path reaches a related project or scenario', async ({ page }) => {
+  await page.goto('/capabilities');
+  const capabilityLink = page.locator('.capability-card h3 a').first();
+  await expect(capabilityLink).toHaveAttribute('href', /\/capabilities\//);
+  await capabilityLink.click();
+  await expect(page).toHaveURL(/\/capabilities\/[^/]+$/);
+  await expect(page.locator('h1')).toHaveCount(1);
+  expect(await page.locator('a[href^="/projects/"], a[href^="/scenarios/"]').count()).toBeGreaterThan(0);
+});
+
+test('legacy project URLs remain readable without P0 filter controls', async ({ page }) => {
   await page.goto('/projects');
-  const duration = await page.locator('#filter-duration option:not([value="all"])').first().getAttribute('value');
-  expect(duration).toBeTruthy();
-  await page.locator('#filter-duration').selectOption(duration as string);
-  await expect(page).toHaveURL(/duration=/);
-  await page.locator('#filter-duration').selectOption('all');
-  await expect(page).toHaveURL(/\/projects$/);
-  await page.goBack();
-  await expect(page.locator('#filter-duration')).toHaveValue(duration as string);
-  await page.goForward();
-  await expect(page.locator('#filter-duration')).toHaveValue('all');
+  await expect(page.locator('select')).toHaveCount(0);
 
   await page.goto('/projects?major=missing-major');
+  await expect(page.locator('.project-list-card')).toHaveCount(3);
+  await expect(page.locator('.invalid-condition-message')).toBeVisible();
+
+  await page.goto('/projects?major=major-ime&duration=invalid-duration');
+  await expect(page.locator('.condition-pill')).toHaveCount(1);
+  await expect(page.locator('.invalid-condition-message')).toBeVisible();
+
+  await page.goto('/projects?major=major-bme&duration=10%20%E5%88%86%E9%92%9F');
   await expect(page.locator('.empty-state')).toBeVisible();
-  await page.locator('.empty-state button').click();
-  await expect(page).toHaveURL(/\/projects$/);
+  await page.locator('.empty-state a').click();
+  await expect(page).toHaveURL(/\/projects#project-list$/);
   await expect(page.locator('.project-list-card')).toHaveCount(3);
 });
 
@@ -88,6 +91,33 @@ test('mobile navigation supports focus entry and Escape return', async ({ page }
   await expect(button).toBeFocused();
 });
 
+test('dual cards stay inside the viewport across the responsive matrix', async ({ page }) => {
+  for (const width of [320, 390, 768, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/majors');
+    const result = await page.evaluate(() => {
+      const viewport = document.documentElement.clientWidth;
+      const cards = Array.from(document.querySelectorAll<HTMLElement>('.dual-card')).filter((card) => card.getBoundingClientRect().width > 0);
+      const overflowAncestors: string[] = [];
+      for (const card of cards) for (let node: HTMLElement | null = card; node; node = node.parentElement) {
+        const overflowX = getComputedStyle(node).overflowX;
+        if (overflowX === 'hidden' || overflowX === 'clip') overflowAncestors.push(`${node.tagName}.${node.className}`);
+      }
+      const horizontalScrollers = Array.from(document.querySelectorAll<HTMLElement>('*')).filter((node) => node.scrollWidth > node.clientWidth + 1 && ['auto', 'scroll'].includes(getComputedStyle(node).overflowX)).map((node) => node.className || node.tagName);
+      return { viewport, documentWidth: document.documentElement.scrollWidth, cards: cards.map((card) => { const rect = card.getBoundingClientRect(); return { left: rect.left, right: rect.right, width: rect.width }; }), overflowAncestors, horizontalScrollers };
+    });
+    expect(result.documentWidth, `document overflows at ${width}px`).toBeLessThanOrEqual(result.viewport + 1);
+    expect(result.cards.length).toBe(2);
+    for (const card of result.cards) {
+      expect(card.width, `card has no width at ${width}px`).toBeGreaterThan(0);
+      expect(card.left, `card starts outside viewport at ${width}px`).toBeGreaterThanOrEqual(-1);
+      expect(card.right, `card ends outside viewport at ${width}px`).toBeLessThanOrEqual(result.viewport + 1);
+    }
+    expect(result.overflowAncestors, `dual-card ancestor clips at ${width}px`).toEqual([]);
+    expect(result.horizontalScrollers.every((selector) => selector === 'comparison-table-wrap'), `unexpected horizontal scroller at ${width}px`).toBe(true);
+  }
+});
+
 test('forced colors and reduced motion preserve the primary task surface', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
@@ -95,6 +125,18 @@ test('forced colors and reduced motion preserve the primary task surface', async
   await expect(page.locator('.task-card')).toHaveCount(3);
   const dimensions = await page.evaluate(() => ({ viewport: window.innerWidth, scrollWidth: document.documentElement.scrollWidth }));
   expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.viewport);
+});
+
+test('keyboard focus, 200% zoom and reduced motion remain usable', async ({ page }) => {
+  await page.setViewportSize({ width: 640, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  await expect(page.locator('.skip-link')).toBeFocused();
+  await page.evaluate(() => { document.documentElement.style.zoom = '2'; });
+  const result = await page.evaluate(() => ({ width: document.documentElement.clientWidth, scrollWidth: document.documentElement.scrollWidth, scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior }));
+  expect(result.scrollWidth).toBeLessThanOrEqual(result.width + 1);
+  expect(result.scrollBehavior).toBe('auto');
 });
 
 test('homepage stays within the Phase 1.6 height budget', async ({ page }) => {
@@ -106,19 +148,22 @@ test('homepage stays within the Phase 1.6 height budget', async ({ page }) => {
   }
 });
 
-test('FAQ and 404 remain usable', async ({ page }) => {
+test('FAQ, starter, resources and 404 remain usable', async ({ page }) => {
   await page.goto('/majors/faq');
   await expect(page.locator('.faq-item')).toHaveCount(6);
   await page.locator('.faq-item').nth(1).locator('summary').click();
   await expect(page.locator('.faq-item').nth(1)).toHaveAttribute('open', '');
-
+  await page.goto('/projects/signal-feature-notebook/starter');
+  await expect(page.locator('textarea')).toHaveCount(3);
+  await page.goto('/projects/signal-feature-notebook/resources');
+  await expect(page.locator('text=primaryResourceId')).toBeVisible();
   const response = await page.goto('/this-route-does-not-exist');
   expect(response?.status()).toBe(404);
   await expect(page.locator('h1')).toHaveCount(1);
 });
 
 test('critical and serious axe violations are absent on key pages', async ({ page }) => {
-  for (const path of ['/', '/projects', '/majors', '/capabilities', '/scenarios']) {
+  for (const path of ['/', '/projects', '/majors', '/capabilities', '/scenarios', '/sources']) {
     await page.goto(path);
     const results = await new AxeBuilder({ page: page as never }).analyze();
     const blockers = results.violations.filter((violation) => violation.impact === 'critical' || violation.impact === 'serious');

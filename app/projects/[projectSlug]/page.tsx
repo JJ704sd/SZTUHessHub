@@ -11,7 +11,7 @@ export function generateStaticParams() { return siteData.projects.map((project) 
 
 export function generateMetadata({ params }: { params: { projectSlug: string } }): Metadata {
   const project = siteData.projects.find((item) => item.slug === params.projectSlug);
-  return { title: project?.title ?? '项目体验卡', description: project?.summary ?? 'HseeHub 项目体验卡', alternates: { canonical: `/projects/${params.projectSlug}` } };
+  return { title: project?.title ?? '项目体验卡', description: project?.summary ?? 'HseeHub 项目体验卡', alternates: siteConfig.isProduction ? { canonical: `/projects/${params.projectSlug}` } : undefined };
 }
 
 export default function ProjectDetailPage({ params }: { params: { projectSlug: string } }) {
