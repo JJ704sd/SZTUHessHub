@@ -1,12 +1,22 @@
 import 'server-only';
 
 import rawSiteData from '../../content/site-data.json';
+import { aggregateProjectResourceHealth, evidenceData } from './evidence';
 import { parseSiteData, type Capability, type Major, type Project, type Scenario, type SiteData } from './schema';
 
-export const siteData: SiteData = parseSiteData(rawSiteData);
+const parsedSiteData = parseSiteData(rawSiteData);
+
+export const siteData: SiteData = {
+  ...parsedSiteData,
+  projects: parsedSiteData.projects.map((project) => ({ ...project, resourceHealth: aggregateProjectResourceHealth(project.id) })),
+};
 
 export function getSiteData(): SiteData {
   return siteData;
+}
+
+export function getEvidenceData() {
+  return evidenceData;
 }
 
 export function getMajorBySlug(slug: string): Major | undefined {

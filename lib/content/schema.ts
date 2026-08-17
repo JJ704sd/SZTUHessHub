@@ -43,10 +43,28 @@ const primaryMetadata = {
   lastVerified: dateSchema,
 };
 
+export const homePlanSchema = z.object({
+  primaryJourneyId: z.enum(['compare', 'capability', 'project']),
+  majorIds: z.array(nonEmptyString).length(2),
+  sharedFoundation: z.array(nonEmptyString).min(3).max(6),
+  featuredDualLensCaseId: nonEmptyString,
+  capabilityIds: z.array(nonEmptyString).min(2).max(3),
+  projectIds: z.array(nonEmptyString).length(3),
+  scenarioIds: z.array(nonEmptyString).min(1).max(6),
+  faqId: nonEmptyString,
+  showExploreSection: z.boolean(),
+  evidenceRecordId: nonEmptyString.optional(),
+}).superRefine((home, context) => {
+  if ((home.capabilityIds.length < 3 || home.scenarioIds.length < 6 || !home.showExploreSection) && !home.evidenceRecordId) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ['evidenceRecordId'], message: '首页能力/场景数量减少或合并探索区段时必须绑定 WP0 证据记录' });
+  }
+});
+
 export const siteMetaSchema = z.object({
   title: nonEmptyString,
   tagline: nonEmptyString,
   description: nonEmptyString,
+  home: homePlanSchema,
 });
 
 export const learningStoryItemSchema = z.object({ stage: nonEmptyString, title: nonEmptyString, summary: nonEmptyString });
@@ -67,6 +85,7 @@ export const majorSchema = z.object({
   cardSummary: z.string().trim().min(1).max(48),
   taskSummary: z.string().trim().min(1).max(48),
   focus: z.array(nonEmptyString).min(1),
+  primaryFocus: z.array(nonEmptyString).length(2),
   credits: z.number().int().positive(),
   creditNote: nonEmptyString,
   cohort: nonEmptyString,
@@ -74,6 +93,7 @@ export const majorSchema = z.object({
   electives: z.array(nonEmptyString).min(1),
   learningStory: z.array(learningStoryItemSchema).min(1),
   courseEvidence: z.array(courseEvidenceSchema).min(1),
+  representativeCourses: z.array(nonEmptyString).min(1).max(3),
 });
 
 export const dualLensSchema = z.object({
@@ -121,6 +141,16 @@ export const projectDataSchema = z.object({
   sensitivity: z.enum(['none', 'personal', 'health', 'commercial', 'security-relevant']),
 });
 
+export const quickTrySchema = z.discriminatedUnion('enabled', [
+  z.object({ enabled: z.literal(false) }),
+  z.object({
+    enabled: z.literal(true),
+    durationMinutes: z.number().int().positive().max(10),
+    minimumArtifact: nonEmptyString,
+    startAction: z.object({ label: nonEmptyString, href: nonEmptyString }),
+  }),
+]);
+
 export const projectCollaborationRoleSchema = z.object({
   id: nonEmptyString,
   title: nonEmptyString,
@@ -166,7 +196,10 @@ export const projectSchema = z.object({
   validation: nonEmptyString,
   nextStep: nonEmptyString,
   boundary: nonEmptyString,
+  dataBoundary: nonEmptyString,
+  safetyBoundary: nonEmptyString,
   sourceUrl: z.string().url().startsWith('https://'),
+  quickTry: quickTrySchema,
   resourceHealth: resourceHealthSchema,
 });
 
@@ -183,14 +216,60 @@ export const scenarioSchema = z.object({
 });
 
 export const faqSchema = z.object({ ...primaryMetadata, question: nonEmptyString, answer: nonEmptyString });
-export const sourceSchema = z.object({
+const sourceRecordBase = {
   id: nonEmptyString,
   title: nonEmptyString,
-  kind: nonEmptyString,
-  url: z.string().url().startsWith('https://'),
   version: nonEmptyString,
+  accessScope: nonEmptyString,
+  kind: nonEmptyString,
   scope: nonEmptyString,
   lastVerified: dateSchema,
+};
+
+export const sourceSchema = z.discriminatedUnion('accessType', [
+  z.object({ ...sourceRecordBase, accessType: z.literal('public_url'), url: z.string().url().startsWith('https://') }),
+  z.object({ ...sourceRecordBase, accessType: z.enum(['institutional', 'internal']), url: z.never().optional() }),
+]);
+
+export const claimSubjectTypeSchema = z.enum(['major', 'major_comparison', 'dual_lens_case', 'project']);
+export const claimFieldSchema = z.enum(['totalCredits', 'sharedFoundation', 'focusTask', 'representativeCourseGroup', 'sharedGoal', 'sharedArtifact', 'dataBoundary', 'safetyBoundary']);
+export const evidenceRefSchema = z.object({
+  id: nonEmptyString,
+  sourceId: nonEmptyString,
+  locator: nonEmptyString.optional(),
+  reviewedAt: dateSchema,
+  reviewDueAt: dateSchema,
+  owner: nonEmptyString,
+  reviewDecision: z.enum(['verified', 'disputed']),
+});
+export const claimRegistryEntrySchema = z.object({
+  key: nonEmptyString,
+  subjectType: claimSubjectTypeSchema,
+  subjectId: nonEmptyString,
+  field: claimFieldSchema,
+  normalizedContentHash: z.string().regex(/^sha256:[0-9a-f]{64}$/),
+  evidenceRefIds: z.array(nonEmptyString).min(1),
+});
+export const resourceEndpointSchema = z.object({
+  id: nonEmptyString,
+  ownerType: z.enum(['source', 'project']),
+  ownerId: nonEmptyString,
+  role: z.enum(['source', 'tool', 'replacement']),
+  required: z.boolean(),
+  url: z.string().url().startsWith('https://'),
+});
+export const linkAvailabilitySchema = z.object({
+  endpointId: nonEmptyString,
+  checkedAt: dateSchema,
+  status: z.enum(['available', 'degraded', 'unavailable', 'unverified']),
+  replacementEndpointId: nonEmptyString.optional(),
+  note: nonEmptyString.optional(),
+});
+export const evidenceDataSchema = z.object({
+  claims: z.array(claimRegistryEntrySchema),
+  evidenceRefs: z.array(evidenceRefSchema),
+  endpoints: z.array(resourceEndpointSchema),
+  linkAvailability: z.array(linkAvailabilitySchema),
 });
 
 export const siteDataSchema = z.object({
@@ -229,6 +308,20 @@ export const siteDataSchema = z.object({
   const majorIds = new Set(data.majors.map((item) => item.id));
   const capabilityIds = new Set(data.capabilities.map((item) => item.id));
   const scenarioIds = new Set(data.scenarios.map((item) => item.id));
+  const dualLensCaseIds = new Set(data.dualLensCases.map((item) => item.id));
+  const projectIds = new Set(data.projects.map((item) => item.id));
+  const faqIds = new Set(data.faqs.map((item) => item.id));
+  const home = data.siteMeta.home;
+  const checkHomeIds = (ids: string[], available: Set<string>, path: string) => {
+    if (new Set(ids).size !== ids.length) context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', path], message: '首页编排 ID 不得重复' });
+    ids.forEach((id, index) => { if (!available.has(id)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', path, index], message: `首页编排实体不存在：${id}` }); });
+  };
+  checkHomeIds(home.majorIds, majorIds, 'majorIds');
+  checkHomeIds(home.capabilityIds, capabilityIds, 'capabilityIds');
+  checkHomeIds(home.projectIds, projectIds, 'projectIds');
+  checkHomeIds(home.scenarioIds, scenarioIds, 'scenarioIds');
+  if (!dualLensCaseIds.has(home.featuredDualLensCaseId)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', 'featuredDualLensCaseId'], message: '首页同题双解实体不存在' });
+  if (!faqIds.has(home.faqId)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', 'faqId'], message: '首页 FAQ 实体不存在' });
   for (const item of data.dualLensCases) item.lenses.forEach((lens, index) => { if (!majorIds.has(lens.majorId)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['dualLensCases', item.id, 'lenses', index, 'majorId'], message: '专业关系不存在' }); });
   for (const item of data.majors) item.courseEvidence.forEach((evidence, index) => evidence.capabilityIds?.forEach((id) => { if (!capabilityIds.has(id)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['majors', item.id, 'courseEvidence', index, 'capabilityIds'], message: `能力关系不存在：${id}` }); }));
   for (const item of data.capabilities) item.majorEvidence.forEach((evidence, index) => { if (!majorIds.has(evidence.majorId)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['capabilities', item.id, 'majorEvidence', index, 'majorId'], message: '专业关系不存在' }); });
@@ -242,16 +335,26 @@ export const siteDataSchema = z.object({
 
 export type SiteData = z.infer<typeof siteDataSchema>;
 export type SiteMeta = z.infer<typeof siteMetaSchema>;
+export type HomePlan = z.infer<typeof homePlanSchema>;
 export type Major = z.infer<typeof majorSchema>;
 export type DualLens = z.infer<typeof dualLensSchema>;
 export type DualLensCase = z.infer<typeof dualLensCaseSchema>;
 export type Capability = z.infer<typeof capabilitySchema>;
 export type Project = z.infer<typeof projectSchema>;
+export type QuickTry = z.infer<typeof quickTrySchema>;
 export type Scenario = z.infer<typeof scenarioSchema>;
 export type FaqItem = z.infer<typeof faqSchema>;
 export type Source = z.infer<typeof sourceSchema>;
+export type SourceRecord = z.infer<typeof sourceSchema>;
 export type MediaAsset = z.infer<typeof mediaAssetSchema>;
 export type ResourceHealth = z.infer<typeof resourceHealthSchema>;
+export type ClaimSubjectType = z.infer<typeof claimSubjectTypeSchema>;
+export type ClaimField = z.infer<typeof claimFieldSchema>;
+export type EvidenceRef = z.infer<typeof evidenceRefSchema>;
+export type ClaimRegistryEntry = z.infer<typeof claimRegistryEntrySchema>;
+export type ResourceEndpoint = z.infer<typeof resourceEndpointSchema>;
+export type LinkAvailability = z.infer<typeof linkAvailabilitySchema>;
+export type EvidenceData = z.infer<typeof evidenceDataSchema>;
 
 export function parseSiteData(input: unknown): SiteData {
   return siteDataSchema.parse(input);

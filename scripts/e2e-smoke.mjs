@@ -16,7 +16,7 @@ function count(html, pattern) {
 try {
   const home = await page('/');
   assert.equal(count(home, /class="task-card/g), 3, 'home exposes three task entry cards');
-  assert.match(home, /href="\/majors\/compare"/);
+  assert.match(home, /href="\/majors"/);
   assert.match(home, /href="\/capabilities"/);
   assert.match(home, /href="\/projects"/);
   assert.equal(count(home, /data-home-module=/g), 4, 'home has four convergence modules');
@@ -39,12 +39,12 @@ try {
   const zero = await page('/projects?major=major-bme&duration=10%20%E5%88%86%E9%92%9F');
   assert.match(zero, /当前条件没有匹配的体验卡/);
 
-  for (const path of ['/majors/compare', '/capabilities/signals-images-and-data-ai', '/projects/signal-feature-notebook']) {
+  for (const path of ['/majors', '/capabilities/signals-images-and-data-ai', '/projects/signal-feature-notebook']) {
     const html = await page(path);
     assert.match(html, /id="main-content"|<main/);
   }
 
-  const comparison = await page('/majors/compare');
+  const comparison = await page('/majors');
   assert.match(comparison, /href="\/majors\/intelligent-medical-engineering"/, 'comparison exposes the intelligent medical engineering relation');
   assert.match(comparison, /href="\/majors\/biomedical-engineering"/, 'comparison exposes the biomedical engineering relation');
 

@@ -18,7 +18,7 @@ HseeHub 是一张帮助学生看懂健康与环境工程学院两个工程专业
 | 入口 | 用途 |
 | --- | --- |
 | [`/majors`](app/majors/page.tsx) | 学院与双专业概览 |
-| [`/majors/compare`](app/majors/compare/page.tsx) | 共同底座、侧重和同题双解 |
+| [`/majors`](app/majors/page.tsx) | 共同底座、侧重和同题双解（`/majors/compare` 308 canonical redirect） |
 | [`/capabilities`](app/capabilities/page.tsx) | 能力与课程证据 |
 | [`/projects`](app/projects/page.tsx) | 项目体验卡和可分享筛选 |
 | [`/scenarios`](app/scenarios/page.tsx) | 跨行业发展场景 |

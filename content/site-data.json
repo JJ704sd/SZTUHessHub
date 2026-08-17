@@ -2,7 +2,18 @@
   "siteMeta": {
     "title": "HseeHub｜健康与环境工程学院双专业导航",
     "tagline": "先看共同底座，再理解两种工程视角",
-    "description": "HseeHub 用学生听得懂的语言，带你认识智能医学工程与生物医学工程的共同基础、培养侧重、可迁移能力和可尝试的项目。内容以 2025 级事实为当前入口，不替代正式培养方案、教务通知或专业选择结论。"
+    "description": "HseeHub 用学生听得懂的语言，带你认识智能医学工程与生物医学工程的共同基础、培养侧重、可迁移能力和可尝试的项目。内容以 2025 级事实为当前入口，不替代正式培养方案、教务通知或专业选择结论。",
+    "home": {
+      "primaryJourneyId": "compare",
+      "majorIds": ["major-ime", "major-bme"],
+      "sharedFoundation": ["数学与自然科学", "生命健康与人体基础", "编程、电子与信号系统", "实验研究、数据分析与工程责任"],
+      "featuredDualLensCaseId": "case-wearable-vital-signs",
+      "capabilityIds": ["cap-health-user", "cap-signal-data-ai", "cap-design-validation"],
+      "projectIds": ["project-signal-feature-notebook", "project-sensor-alarm-prototype", "project-material-test-matrix"],
+      "scenarioIds": ["scenario-healthcare", "scenario-ai-data", "scenario-software", "scenario-electronic-iot", "scenario-robotics-manufacturing", "scenario-environment-city"],
+      "faqId": "faq-shared-foundation",
+      "showExploreSection": true
+    }
   },
   "mediaAssets": [
     {"id": "visual-signal-feature", "src": "/media/signal-feature.svg", "width": 640, "height": 360, "alt": "合成信号经过采样、特征提取和分类后形成可比较的结果表。", "decorative": false, "role": "card", "caption": "信号—特征—结果", "license": "原创 SVG/CSS", "lastVerified": "2026-08-13"},
@@ -21,6 +32,7 @@
       "cardSummary": "从数据、算法到智能系统，把健康问题变成可验证流程。",
       "taskSummary": "把信号与信息接成可测试的智能系统",
       "focus": ["医学数据、信息系统与人工智能", "信号与图像处理、机器学习", "智能仪器、嵌入式与医用机器人", "把感知、算法、软件和设备接成可验证的系统"],
+      "primaryFocus": ["医学数据、信息系统与人工智能", "信号与图像处理、机器学习"],
       "credits": 160,
       "creditNote": "2025 级总学分为 160；通识/学科/实践/论文为 60/61.5/26.5/12 学分。学分用于说明培养结构，不用于比较难度、含金量或专业优劣。",
       "cohort": "2025",
@@ -38,6 +50,7 @@
         {"course": "医用电子技术、微机原理与嵌入式系统", "detail": "理解传感、采样、计算和执行之间的接口，做出可测试的最小系统。", "capabilityIds": ["cap-sensing-measurement", "cap-electronics-control"]},
         {"course": "医学图像处理、智能医学传感技术、医疗大数据与数据挖掘", "detail": "把图像、信号和数据任务连接到工具、评估和责任边界。", "capabilityIds": ["cap-sensing-measurement", "cap-signal-data-ai", "cap-design-validation"]}
       ],
+      "representativeCourses": ["信号与系统、机器学习与模式识别", "程序设计基础、算法与数据结构、数据库原理"],
       "sourceId": "source-ime-2025",
       "lastVerified": "2026-08-13"
     },
@@ -52,6 +65,7 @@
       "cardSummary": "从测量、材料到器械验证，把生命问题变成工程方案。",
       "taskSummary": "把现象变成可测量、可制造的方案",
       "focus": ["电子、医用传感与医学检测", "生物医学材料、纳米医学与器械", "医学仪器设计、成像与测试", "将生物/医学问题转成可测量、可制造、可验证的工程方案"],
+      "primaryFocus": ["电子、医用传感与医学检测", "生物医学材料、纳米医学与器械"],
       "credits": 165,
       "creditNote": "2025 级总学分为 165；通识/学科/实践/论文为 60/70/23/12 学分。学分用于说明培养结构，不用于比较难度、含金量或专业优劣。",
       "cohort": "2025",
@@ -63,6 +77,7 @@
         {"stage": "03", "title": "形成材料、检测与仪器侧重", "summary": "通过生物检测、信号与大数据、材料与纳米医学、医学仪器等模块深入任务，同时理解与智能系统的接口。"},
         {"stage": "04", "title": "用测试和作品形成证据", "summary": "在高级项目研究、企业实习、竞赛或毕业论文中记录假设、测试和边界，再按场景补充标准与法规。"}
       ],
+      "representativeCourses": ["生物医学传感与检测、信号与系统", "生物医学材料及其评价、工程制图及 CAD"],
       "courseEvidence": [
         {"course": "生物医学传感与检测、信号与系统", "detail": "把生物或物理现象转成信号，记录采样、噪声、标定和检测结果。", "capabilityIds": ["cap-sensing-measurement", "cap-math-research"]},
         {"course": "生物医学材料及其评价、工程制图及 CAD", "detail": "从材料、结构、工艺和评价方法理解器械方案的功能与可靠性。", "capabilityIds": ["cap-materials-devices", "cap-design-validation"]},
@@ -275,6 +290,7 @@
       "prerequisites": ["会使用电脑和文件夹，或愿意边做边查", "知道变量、列表或表格的基本概念", "不需要真实健康数据，也不需要先安装 GPU 环境"],
       "tools": [{"name": "Python 与 Jupyter", "officialUrl": "https://jupyter.org/"}, {"name": "NumPy", "officialUrl": "https://numpy.org/doc/stable/user/quickstart.html"}, {"name": "scikit-learn", "officialUrl": "https://scikit-learn.org/stable/getting_started.html"}],
       "dataAccess": "默认使用自己生成的合成信号，公开可用、无需账号；如改用 PhysioNet，必须先确认具体数据集的访问级别。",
+      "dataBoundary": "默认只生成合成信号；不下载、上传或处理真实患者数据，PhysioNet 仅作为了解数据来源的可选入口。",
       "dataSource": "用脚本生成带噪正弦波或趋势序列；PhysioNet 仅作为了解生物医学数据来源的可选入口，不下载或上传受控数据。",
       "license": "合成数据由学生生成，可用于教学；外部数据必须遵守具体数据集许可、引用和访问条件，不能把数据许可默认为开放。",
       "steps": ["生成两类带噪信号，保存随机种子和参数。", "画出原始信号，记录缺失、噪声和采样差异。", "提取均值、波动、频域或趋势特征，做一个简单分类器。", "用固定训练/测试划分记录指标，并查看误分类样例。", "写明样本量、噪声、标签和指标不能代表什么。"],
@@ -282,7 +298,9 @@
       "validation": "固定随机种子，保留训练/测试分割；用混淆矩阵或准确率/召回率记录结果，并解释噪声、样本量和阈值如何影响结论。",
       "nextStep": "补学概率统计与信号处理，再把同一流程改写成环境传感器趋势分析；若进入医学数据，先阅读数据集许可和标注说明。",
       "boundary": "这是数据流程练习，不是医学筛查、诊断或健康建议；不使用真实患者数据，不把一次高指标写成临床有效性。",
+      "safetyBoundary": "不把分类结果写成诊断或临床有效性；不上传真实患者数据，不在站内执行外部代码。",
       "sourceUrl": "https://physionet.org/about/",
+      "quickTry": {"enabled": true, "durationMinutes": 10, "minimumArtifact": "一张包含曲线、特征表、分类结果和局限说明的结果表", "startAction": {"label": "查看 10 分钟导览", "href": "/projects/signal-feature-notebook"}},
       "resourceHealth": {"status": "available", "checkedAt": "2026-08-13", "note": "官方入口已登记；项目默认不下载受控数据。"},
       "sourceId": "source-physionet",
       "lastVerified": "2026-08-13"
@@ -314,6 +332,7 @@
       "prerequisites": ["了解电压、读数或变量的基本概念", "能阅读短程序并修改一个阈值", "优先使用仿真或低压套件，不要求接触人体或市电"],
       "tools": [{"name": "Arduino IDE", "officialUrl": "https://www.arduino.cc/en/software/"}, {"name": "Arduino 模拟输入教程", "officialUrl": "https://docs.arduino.cc/learn/microcontrollers/analog-input/"}],
       "dataAccess": "不需要外部数据；使用仿真生成的温湿度、光照或电位器读数，公开可用且不含个人信息。",
+      "dataBoundary": "只使用仿真或低压台架生成的短时序列，不采集人体信号，不连接医院、校园生产系统或联网控制设备。",
       "dataSource": "由仿真器或低压传感器现场生成短时序列；不采集人体信号，不连接医院、校园生产系统或联网控制设备。",
       "license": "自生成教学数据可用于学习；Arduino 软件、文档和示例代码按其官方许可与署名要求使用，改写代码时保留来源说明。",
       "steps": ["画出传感器、采样板、程序、提示灯或串口输出的系统框图。", "读取一段输入，记录单位、采样间隔、缺失值和明显噪声。", "加入简单平滑或质量标记，再设置一个只用于演示的提示规则。", "改变采样频率、加入异常读数、断开输入，记录系统如何处理。", "写出正常、异常和停止状态，并给每个状态配测试用例。"],
@@ -321,7 +340,9 @@
       "validation": "覆盖稳定输入、噪声输入、缺失输入和手动停止四种情况；检查单位和时间戳，并说明阈值不是医学或生产安全标准。",
       "nextStep": "继续学习 ADC、滤波、嵌入式状态机和仪器标定，再迁移到环境监测或设备振动，不直接接入真实医疗场景。",
       "boundary": "只做仿真、低压电池供电或受控台架；禁止连接市电、真实医疗设备、人体、危险执行器或生产系统，禁止绕过联锁和访问控制。",
+      "safetyBoundary": "禁止接触市电、人体、真实医疗设备、危险执行器或生产系统；异常输入必须保留停止状态。",
       "sourceUrl": "https://docs.arduino.cc/learn/microcontrollers/analog-input/",
+      "quickTry": {"enabled": false},
       "resourceHealth": {"status": "available", "checkedAt": "2026-08-13"},
       "sourceId": "source-arduino",
       "lastVerified": "2026-08-13"
@@ -353,6 +374,7 @@
       "prerequisites": ["会读表格，能区分目标指标和测量指标", "了解平均值、范围或简单权重", "使用教师提供的合成参数或明确公开的示例数据"],
       "tools": [{"name": "Python 与 pandas", "officialUrl": "https://pandas.pydata.org/docs/"}, {"name": "NIST 官方资源", "officialUrl": "https://www.nist.gov/"}],
       "dataAccess": "只使用自编合成参数或明确公开的示例参数；不把供应商内部数据、实验室原始数据或未授权标准文本上传到站内。",
+      "dataBoundary": "使用自编合成参数或明确公开的示例参数；不上传供应商内部数据、实验室原始数据或未授权标准文本。",
       "dataSource": "构造三种候选材料的密度、灵敏度、耐久性、环境范围和示例成本表；正式设计需回到数据表、标准原文和实验记录。",
       "license": "合成参数表可用于教学，但不能当作材料认证或产品规格；外部数据表、标准和图表按原来源许可使用并保留引用。",
       "steps": ["写下目标用途、不可接受的风险和必须测量的指标。", "给三种候选材料建立单位、范围、来源和缺失值列。", "用不同权重生成矩阵，并保留计算公式。", "改变一个权重或环境条件，观察结论是否变化。", "为最敏感指标提出低风险测试方案，写出不能外推的结论。"],
@@ -360,7 +382,9 @@
       "validation": "逐项检查单位、参数来源和缺失值；至少做一次权重变化和一次极端条件检查，把概念筛选与正式验证、合规认证分开。",
       "nextStep": "学习生物医学材料评价、测量不确定度和相关标准，再在合规实验条件下设计更完整的重复性测试。",
       "boundary": "不接触人体、动物或临床样本，不宣称材料生物相容性、器械安全性或医疗效果；真实实验要遵守实验室、化学品、机械和废弃物安全要求。",
+      "safetyBoundary": "不接触人体、动物或临床样本；概念矩阵不能替代材料认证、器械安全验证或合规实验。",
       "sourceUrl": "https://www.nist.gov/",
+      "quickTry": {"enabled": false},
       "resourceHealth": {"status": "available", "checkedAt": "2026-08-13", "note": "官方参考入口已登记；正式参数仍需回到具体标准或数据表。"},
       "sourceId": "source-nist",
       "lastVerified": "2026-08-13"
@@ -383,13 +407,13 @@
     {"id": "faq-real-patient-data", "slug": "real-patient-data", "question": "项目可以直接使用真实患者数据吗？", "answer": "首版项目不使用真实患者数据、病历、医学影像或可识别健康信息。优先使用合成数据或明确公开授权的数据；即使数据可以下载，也要核对许可、访问级别、去标识和允许用途。涉及人体、临床或受控数据时，必须遵守正式伦理、知情同意和数据管理流程，项目结果也不能写成诊断建议。", "sourceId": "source-physionet", "lastVerified": "2026-08-13"}
   ],
   "sources": [
-    {"id": "source-college-profile", "title": "健康与环境工程学院概况", "kind": "official-page", "url": "https://hsee.sztu.edu.cn/xygk.htm", "version": "现行公开页面", "scope": "学院定位、两个本科专业同院关系、医工交叉与健康/环境应用背景。", "lastVerified": "2026-08-13"},
-    {"id": "source-ime-2025", "title": "智能医学工程专业介绍与 2025 级培养方案事实登记", "kind": "official-page-and-curriculum", "url": "https://hsee.sztu.edu.cn/info/1107/2351.htm", "version": "2025", "scope": "专业定位、课程体系、人工智能与大数据、智能仪器/传感/机器人选修；学分与实践结构以校内正式培养方案为准。", "lastVerified": "2026-08-13"},
-    {"id": "source-bme-2025", "title": "生物医学工程专业介绍与 2025 级培养方案事实登记", "kind": "official-page-and-curriculum", "url": "https://hsee.sztu.edu.cn/info/1107/2352.htm", "version": "2025", "scope": "专业定位、电子/材料/检测/计算机交叉、四类选修模块与仪器测试侧重；学分与实践结构以校内正式培养方案为准。", "lastVerified": "2026-08-13"},
-    {"id": "source-physionet", "title": "PhysioNet About", "kind": "official-data-platform", "url": "https://physionet.org/about/", "version": "current", "scope": "生物医学数据平台的公开、去标识和受控访问背景；项目默认使用合成数据。", "lastVerified": "2026-08-13"},
-    {"id": "source-arduino", "title": "Arduino 官方软件与模拟输入教程", "kind": "official-tutorial", "url": "https://docs.arduino.cc/learn/microcontrollers/analog-input/", "version": "current", "scope": "低风险传感、模拟输入和 Arduino 入门工具链；项目仅建议仿真或受控低压台架。", "lastVerified": "2026-08-13"},
-    {"id": "source-nist", "title": "NIST 官方资源", "kind": "official-reference", "url": "https://www.nist.gov/", "version": "current", "scope": "测量、材料、标准和不确定度等公共参考入口；项目参数仍需回到具体数据表或标准原文。", "lastVerified": "2026-08-13"},
-    {"id": "source-monai-tutorials", "title": "MONAI Tutorials", "kind": "official-tutorial-repository", "url": "https://github.com/Project-MONAI/tutorials", "version": "current", "scope": "医学影像机器学习教学示例入口；仅用于学习数据流程与评估，不作为医疗有效性或诊断依据。", "lastVerified": "2026-08-13"},
-    {"id": "source-slicer-training", "title": "3D Slicer Training", "kind": "official-training", "url": "https://training.slicer.org/", "version": "current", "scope": "医学影像工具学习入口；正式使用时仍需核对样例数据、版本和数据许可。", "lastVerified": "2026-08-13"}
+    {"id": "source-college-profile", "title": "健康与环境工程学院概况", "kind": "official-page", "accessType": "public_url", "accessScope": "公开网页", "url": "https://hsee.sztu.edu.cn/xygk.htm", "version": "现行公开页面", "scope": "学院定位、两个本科专业同院关系、医工交叉与健康/环境应用背景。", "lastVerified": "2026-08-13"},
+    {"id": "source-ime-2025", "title": "智能医学工程专业介绍与 2025 级培养方案事实登记", "kind": "official-page-and-curriculum", "accessType": "public_url", "accessScope": "公开专业介绍与培养方案事实登记", "url": "https://hsee.sztu.edu.cn/info/1107/2351.htm", "version": "2025", "scope": "专业定位、课程体系、人工智能与大数据、智能仪器/传感/机器人选修；学分与实践结构以校内正式培养方案为准。", "lastVerified": "2026-08-13"},
+    {"id": "source-bme-2025", "title": "生物医学工程专业介绍与 2025 级培养方案事实登记", "kind": "official-page-and-curriculum", "accessType": "public_url", "accessScope": "公开专业介绍与培养方案事实登记", "url": "https://hsee.sztu.edu.cn/info/1107/2352.htm", "version": "2025", "scope": "专业定位、电子/材料/检测/计算机交叉、四类选修模块与仪器测试侧重；学分与实践结构以校内正式培养方案为准。", "lastVerified": "2026-08-13"},
+    {"id": "source-physionet", "title": "PhysioNet About", "kind": "official-data-platform", "accessType": "public_url", "accessScope": "公开数据平台介绍", "url": "https://physionet.org/about/", "version": "current", "scope": "生物医学数据平台的公开、去标识和受控访问背景；项目默认使用合成数据。", "lastVerified": "2026-08-13"},
+    {"id": "source-arduino", "title": "Arduino 官方软件与模拟输入教程", "kind": "official-tutorial", "accessType": "public_url", "accessScope": "公开软件与教程", "url": "https://docs.arduino.cc/learn/microcontrollers/analog-input/", "version": "current", "scope": "低风险传感、模拟输入和 Arduino 入门工具链；项目仅建议仿真或受控低压台架。", "lastVerified": "2026-08-13"},
+    {"id": "source-nist", "title": "NIST 官方资源", "kind": "official-reference", "accessType": "public_url", "accessScope": "公开参考资源", "url": "https://www.nist.gov/", "version": "current", "scope": "测量、材料、标准和不确定度等公共参考入口；项目参数仍需回到具体数据表或标准原文。", "lastVerified": "2026-08-13"},
+    {"id": "source-monai-tutorials", "title": "MONAI Tutorials", "kind": "official-tutorial-repository", "accessType": "public_url", "accessScope": "公开教程仓库", "url": "https://github.com/Project-MONAI/tutorials", "version": "current", "scope": "医学影像机器学习教学示例入口；仅用于学习数据流程与评估，不作为医疗有效性或诊断依据。", "lastVerified": "2026-08-13"},
+    {"id": "source-slicer-training", "title": "3D Slicer Training", "kind": "official-training", "accessType": "public_url", "accessScope": "公开培训资源", "url": "https://training.slicer.org/", "version": "current", "scope": "医学影像工具学习入口；正式使用时仍需核对样例数据、版本和数据许可。", "lastVerified": "2026-08-13"}
   ]
 }

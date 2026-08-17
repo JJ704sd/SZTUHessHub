@@ -1,0 +1,10 @@
+{
+  "baseUrl": "http://127.0.0.1:3013",
+  "runs": 3,
+  "samples": [],
+  "medians": null,
+  "failures": [
+    "Lighthouse 第 1 次运行失败：'lighthouse' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n"
+  ],
+  "checkedAt": "2026-08-17T05:17:26.049Z"
+}

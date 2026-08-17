@@ -30,6 +30,7 @@ export const siteConfig = {
   isProduction: environment === 'production',
   siteUrl: (configuredUrl && !isPlaceholderUrl ? configuredUrl.origin : null) || 'http://localhost:3000',
   releaseId: process.env.HSEEHUB_RELEASE_ID ?? `${environment}-local`,
+  majorCanonicalRoute: '/majors',
   currentCohort: '2025',
   contentBaseline: '2026-08-13',
   projectDataLabels: {

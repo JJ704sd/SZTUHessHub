@@ -6,7 +6,8 @@ const layout = read('app/layout.tsx');
 const skipLink = read('components/shell/skip-link.tsx');
 const header = read('components/global-header.tsx');
 const css = read('app/globals.css');
-const compare = read('app/majors/compare/page.tsx');
+const majors = read('app/majors/page.tsx');
+const nextConfig = read('next.config.mjs');
 const projects = read('components/project-browser.tsx');
 const projectsPage = read('app/projects/page.tsx');
 const failures = [];
@@ -18,7 +19,7 @@ expect(layout.includes('<SkipLink />') && skipLink.includes('href="#main-content
 expect(header.includes("aria-current={pathname === item.href ? 'page' : undefined}") && header.includes('aria-hidden={!menuOpen}') && header.includes('tabIndex={menuOpen ? 0 : -1}'), 'Header 必须公开精确当前项和菜单键盘状态');
 expect(!/main\s*\{[^}]*overflow\s*:\s*(?:clip|hidden)/s.test(css), '不得用 main overflow 裁切布局');
 expect(css.includes('min-width: 0') && css.includes('overflow-wrap: anywhere'), '双卡子项必须允许收缩和换行');
-expect(compare.includes('dual-case-disclosure') && compare.includes("from: 'compare'") && compare.includes("target: 'project'"), '对照页必须有 disclosure 和 compare→project 下一步事件');
+expect(majors.includes('id="dual-lens"') && majors.includes('DualLensCard') && nextConfig.includes("source: '/majors/compare'") && nextConfig.includes("destination: '/majors'") && nextConfig.includes('permanent: true'), '专业对照必须收敛到 /majors，并保留 legacy 308 重定向');
 expect(!/<select\b/i.test(projects) && projectsPage.includes('parseLegacyProjectFilters'), 'P0 项目浏览器不得输出筛选控件，必须保留旧参数解析');
 if (failures.length) { console.error('Phase 1.1 structure check failed.'); failures.forEach((failure) => console.error(`- ${failure}`)); process.exit(1); }
 console.log('Phase 1.1 structure check passed (four modules, header, dual-card, legacy projects).');
