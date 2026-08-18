@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Badge, PageIntro, SectionHeading, SourceLine } from '@/components/site';
+import { evidenceData, getLinkStatus, getProjectResourceState } from '@/lib/content/evidence';
 import { siteData } from '@/lib/content';
 import { siteConfig } from '@/lib/site-config';
-import { Badge, PageIntro, SectionHeading, SourceLine } from '@/components/site';
+
+const linkStatusLabels = { available: '入口可访问', degraded: '入口有变化', unavailable: '入口不可用', unverified: '入口待复核' } as const;
 
 export function generateStaticParams() { return siteData.projects.map((project) => ({ projectSlug: project.slug })); }
 
@@ -16,8 +19,10 @@ export default function ProjectResourcesPage({ params }: { params: { projectSlug
   const project = siteData.projects.find((item) => item.slug === params.projectSlug);
   if (!project) notFound();
   const source = siteData.sources.find((item) => item.id === project.sourceId);
-  return <div className="page-container"><PageIntro eyebrow="项目资源 · 跳转前先核对成本" title={`${project.title}：工具与数据入口`} description="HseeHub 负责中文导览和边界说明；外部教程、Demo 或工具的实际使用条款，以官方页面当前版本为准。"><Link className="button button-secondary" href={`/projects/${project.slug}`}>回到体验卡</Link></PageIntro>
-    <section className="detail-block"><SectionHeading eyebrow="资源状态" title="已登记的官方入口" description="如果外部资源暂时失效，项目详情仍然可读；请优先检查替代说明或返回上一步。" /><article className="project-list-card"><div><div className="card-topline"><Badge tone="teal">待人工核验</Badge><span className="card-kicker">最后核验：{project.lastVerified}</span></div><h2>{project.dataSource}</h2><ul className="detail-list list-no-top">{project.tools.map((tool) => <li key={tool.name}><a className="text-link" href={tool.officialUrl} target="_blank" rel="noreferrer">{tool.name} <span aria-hidden="true">↗</span></a></li>)}</ul><div className="tag-row"><Badge tone="muted">{siteConfig.projectDataLabels.kind[project.data.kind]} · {siteConfig.projectDataLabels.access[project.data.access]}</Badge><Badge tone="muted">{project.dataAccess}</Badge><Badge tone="muted">{project.license}</Badge></div></div><div className="project-list-side"><span className="project-viewpoint">跳转前说明</span><span>预计时长：{project.duration}</span><span>数据：{project.dataAccess}</span><a className="button button-primary" href={project.sourceUrl} target="_blank" rel="noreferrer">打开官方资源 <span aria-hidden="true">↗</span></a></div></article></section>
-    <section className="detail-block"><SectionHeading eyebrow="安全与许可" title="这张卡允许什么，不允许什么" /><div className="card-grid card-grid-2"><article className="side-card"><strong>数据边界</strong><p>{project.dataAccess}{project.dataAccess.endsWith('。') ? '' : '。'}{project.boundary}</p></article><article className="side-card"><strong>使用许可</strong><p>{project.license}{project.license.endsWith('。') ? '' : '。'}不要上传真实患者数据或未获许可的个人/商业敏感数据。</p></article></div><div className="source-block-spaced"><SourceLine source={source} label="项目登记" /></div></section>
+  const resourceState = getProjectResourceState(project);
+  const endpoints = evidenceData.endpoints.filter((endpoint) => project.endpointIds.includes(endpoint.id));
+  return <div className="page-container"><PageIntro eyebrow="项目资源 · 跳转前先核对状态" title={`${project.title}：工具与数据入口`} description="HseeHub 负责中文导览和边界说明；外部教程、Demo 或工具的实际使用条款，以官方页面当前版本为准。"><Link className="button button-secondary" href={`/projects/${project.slug}`}>回到体验卡</Link></PageIntro>
+    <section className="detail-block"><SectionHeading eyebrow="资源状态" title={resourceState.label} description={resourceState.description} /><div className="project-endpoint-grid">{endpoints.map((endpoint) => { const status = getLinkStatus(endpoint.id); const availability = evidenceData.linkAvailability.find((item) => item.endpointId === endpoint.id); return <article className="project-endpoint-card" key={endpoint.id}><div className="card-topline"><Badge tone={endpoint.role === 'source' ? 'blue' : 'teal'}>{endpoint.role === 'source' ? '主入口' : '替代入口'}</Badge><span className={`resource-state resource-state-${status === 'available' ? 'ready' : status === 'unavailable' ? 'unavailable' : 'unknown'}`}>{linkStatusLabels[status]}</span></div><h2>{endpoint.url}</h2><p>{availability?.note ?? '状态说明尚未登记。'}</p><small>最近检查：{availability?.checkedAt ?? '未登记'}</small><a className="button button-primary" href={endpoint.url} target="_blank" rel="noreferrer">打开官方入口 <span aria-hidden="true">↗</span></a></article>; })}</div></section>
+    <section className="detail-block"><SectionHeading eyebrow="数据、工具与许可" title="先看清成本和边界，再打开外部页面" /><div className="comparison-table-wrap"><table className="comparison-table"><caption className="sr-only">项目工具、数据和许可</caption><tbody><tr><th scope="row">工具</th><td><ul className="detail-list list-no-top">{project.tools.map((tool) => <li key={tool.name}><a className="text-link" href={tool.officialUrl} target="_blank" rel="noreferrer">{tool.name} <span aria-hidden="true">↗</span></a></li>)}</ul></td></tr><tr><th scope="row">数据类型</th><td>{siteConfig.projectDataLabels.kind[project.data.kind]} · {siteConfig.projectDataLabels.access[project.data.access]} · {siteConfig.projectDataLabels.sensitivity[project.data.sensitivity]}</td></tr><tr><th scope="row">数据来源</th><td>{project.dataSource}</td></tr><tr><th scope="row">许可</th><td>{project.license}</td></tr></tbody></table></div><div className="callout"><p><strong>风险边界：</strong>{project.boundary}</p></div><SourceLine source={source} label="项目登记" /></section>
   </div>;
 }

@@ -1,0 +1,132 @@
+{
+  "claims": [
+    {
+      "key": "pathway:path-employment:eligibilityBoundary",
+      "subjectType": "pathway",
+      "subjectId": "path-employment",
+      "field": "eligibilityBoundary",
+      "normalizedContentHash": "sha256:a4a4ed83f48f4fb929df4a2f74973c885ca75935833e056047d00a34a0c15330",
+      "evidenceRefIds": ["evidence-path-employment"]
+    },
+    {
+      "key": "pathway:path-domestic-postgraduate:eligibilityBoundary",
+      "subjectType": "pathway",
+      "subjectId": "path-domestic-postgraduate",
+      "field": "eligibilityBoundary",
+      "normalizedContentHash": "sha256:253e3512846aa93f057869d45f06c24232cb66f67c1c8b53ec0d59a82ac3cb8c",
+      "evidenceRefIds": ["evidence-path-domestic-postgraduate"]
+    },
+    {
+      "key": "pathway:path-public-service:eligibilityBoundary",
+      "subjectType": "pathway",
+      "subjectId": "path-public-service",
+      "field": "eligibilityBoundary",
+      "normalizedContentHash": "sha256:53f8c061bb28ac92393755b4ab4bfac16483edc6eb75e9ea6ea46d504476675a",
+      "evidenceRefIds": ["evidence-path-public-service"]
+    },
+    {
+      "key": "pathway:path-overseas-study:eligibilityBoundary",
+      "subjectType": "pathway",
+      "subjectId": "path-overseas-study",
+      "field": "eligibilityBoundary",
+      "normalizedContentHash": "sha256:a736dd9c32c126f1f4db014b8051766dc0d146ee3d0cce93cb77e76c0c615a66",
+      "evidenceRefIds": ["evidence-path-overseas-study"]
+    },
+    {
+      "key": "pathway:path-independent-work:eligibilityBoundary",
+      "subjectType": "pathway",
+      "subjectId": "path-independent-work",
+      "field": "eligibilityBoundary",
+      "normalizedContentHash": "sha256:a81bb8820dfcd8a07ecbe5154e2630897b651e28fcb3ea2033d8de4fe54141fe",
+      "evidenceRefIds": ["evidence-path-independent-work"]
+    }
+  ],
+  "evidenceRefs": [
+    {
+      "id": "evidence-path-employment",
+      "sourceId": "source-24365",
+      "endpointId": "endpoint-employment-24365",
+      "locator": "大学生就业服务与公共就业服务说明",
+      "reviewedAt": "2026-08-13",
+      "reviewDueAt": "2026-12-31",
+      "owner": "HseeHub P0 内容基线",
+      "reviewDecision": "verified"
+    },
+    {
+      "id": "evidence-path-domestic-postgraduate",
+      "sourceId": "source-graduate-admissions",
+      "endpointId": "endpoint-domestic-chsi",
+      "locator": "研究生招生信息官方入口",
+      "reviewedAt": "2026-08-13",
+      "reviewDueAt": "2026-12-31",
+      "owner": "HseeHub P0 内容基线",
+      "reviewDecision": "verified"
+    },
+    {
+      "id": "evidence-path-public-service",
+      "sourceId": "source-public-service",
+      "endpointId": "endpoint-public-service-government",
+      "locator": "中央政府官方信息入口",
+      "reviewedAt": "2026-08-13",
+      "reviewDueAt": "2026-12-31",
+      "owner": "HseeHub P0 内容基线",
+      "reviewDecision": "verified"
+    },
+    {
+      "id": "evidence-path-overseas-study",
+      "sourceId": "source-cscse",
+      "endpointId": "endpoint-overseas-cscse",
+      "locator": "国（境）外学历学位认证政务服务入口",
+      "reviewedAt": "2026-08-13",
+      "reviewDueAt": "2026-12-31",
+      "owner": "HseeHub P0 内容基线",
+      "reviewDecision": "verified"
+    },
+    {
+      "id": "evidence-path-independent-work",
+      "sourceId": "source-mohrss",
+      "endpointId": "endpoint-independent-mohrss",
+      "locator": "高校毕业生就业创业政策入口",
+      "reviewedAt": "2026-08-13",
+      "reviewDueAt": "2026-12-31",
+      "owner": "HseeHub P0 内容基线",
+      "reviewDecision": "verified"
+    }
+  ],
+  "endpoints": [
+    {"id": "endpoint-employment-24365", "ownerType": "pathway", "ownerId": "path-employment", "role": "source", "required": true, "url": "https://www.moe.gov.cn/srcsite/A15/s3265/202204/t20220406_614117.html"},
+    {"id": "endpoint-employment-college", "ownerType": "pathway", "ownerId": "path-employment", "role": "source", "required": true, "url": "https://hsee.sztu.edu.cn/info/1107/2351.htm"},
+    {"id": "endpoint-domestic-chsi", "ownerType": "pathway", "ownerId": "path-domestic-postgraduate", "role": "source", "required": true, "url": "https://yz.chsi.com.cn/"},
+    {"id": "endpoint-domestic-college", "ownerType": "pathway", "ownerId": "path-domestic-postgraduate", "role": "source", "required": true, "url": "https://hsee.sztu.edu.cn/info/1107/2351.htm"},
+    {"id": "endpoint-public-service-government", "ownerType": "pathway", "ownerId": "path-public-service", "role": "source", "required": true, "url": "https://www.gov.cn/"},
+    {"id": "endpoint-public-service-24365", "ownerType": "pathway", "ownerId": "path-public-service", "role": "source", "required": true, "url": "https://www.moe.gov.cn/srcsite/A15/s3265/202204/t20220406_614117.html"},
+    {"id": "endpoint-overseas-cscse", "ownerType": "pathway", "ownerId": "path-overseas-study", "role": "source", "required": true, "url": "https://zwfw.cscse.edu.cn/"},
+    {"id": "endpoint-overseas-slicer", "ownerType": "pathway", "ownerId": "path-overseas-study", "role": "source", "required": true, "url": "https://training.slicer.org/"},
+    {"id": "endpoint-independent-mohrss", "ownerType": "pathway", "ownerId": "path-independent-work", "role": "source", "required": true, "url": "https://job.mohrss.gov.cn/22zc/index.jhtml"},
+    {"id": "endpoint-independent-nist", "ownerType": "pathway", "ownerId": "path-independent-work", "role": "source", "required": true, "url": "https://www.nist.gov/"},
+    {"id": "endpoint-project-signal-primary", "ownerType": "project", "ownerId": "project-signal-feature-notebook", "role": "source", "required": true, "url": "https://physionet.org/about/"},
+    {"id": "endpoint-project-signal-alternative", "ownerType": "project", "ownerId": "project-signal-feature-notebook", "role": "replacement", "required": false, "url": "https://github.com/Project-MONAI/tutorials"},
+    {"id": "endpoint-project-sensor-primary", "ownerType": "project", "ownerId": "project-sensor-alarm-prototype", "role": "source", "required": true, "url": "https://docs.arduino.cc/learn/microcontrollers/analog-input/"},
+    {"id": "endpoint-project-sensor-alternative", "ownerType": "project", "ownerId": "project-sensor-alarm-prototype", "role": "replacement", "required": false, "url": "https://docs.arduino.cc/built-in-examples/basics/AnalogReadSerial/"},
+    {"id": "endpoint-project-material-primary", "ownerType": "project", "ownerId": "project-material-test-matrix", "role": "source", "required": true, "url": "https://www.nist.gov/"},
+    {"id": "endpoint-project-material-alternative", "ownerType": "project", "ownerId": "project-material-test-matrix", "role": "replacement", "required": false, "url": "https://pandas.pydata.org/docs/"}
+  ],
+  "linkAvailability": [
+    {"endpointId": "endpoint-employment-24365", "checkedAt": "2026-08-13", "status": "unverified", "note": "P0 只登记稳定官方入口，不展示即时政策状态。"},
+    {"endpointId": "endpoint-employment-college", "checkedAt": "2026-08-13", "status": "unverified", "note": "P0 只登记稳定官方入口，不展示即时岗位信息。"},
+    {"endpointId": "endpoint-domestic-chsi", "checkedAt": "2026-08-13", "status": "unverified", "note": "申请季和具体招生条件需回到当年度官方页面。"},
+    {"endpointId": "endpoint-domestic-college", "checkedAt": "2026-08-13", "status": "unverified", "note": "目标单位要求需单独核对。"},
+    {"endpointId": "endpoint-public-service-government", "checkedAt": "2026-08-13", "status": "unverified", "note": "不维护可报岗位清单。"},
+    {"endpointId": "endpoint-public-service-24365", "checkedAt": "2026-08-13", "status": "unverified", "note": "公共就业入口不替代招录资格审查。"},
+    {"endpointId": "endpoint-overseas-cscse", "checkedAt": "2026-08-13", "status": "unverified", "note": "认证要求需按目标项目和当期政务页面核对。"},
+    {"endpointId": "endpoint-overseas-slicer", "checkedAt": "2026-08-13", "status": "unverified", "note": "仅作为学习工具入口，不代表项目申请要求。"},
+    {"endpointId": "endpoint-independent-mohrss", "checkedAt": "2026-08-13", "status": "unverified", "note": "真实交易前还需核对合同、税务、版权和隐私。"},
+    {"endpointId": "endpoint-independent-nist", "checkedAt": "2026-08-13", "status": "unverified", "note": "标准和测量问题需回到具体原文。"},
+    {"endpointId": "endpoint-project-signal-primary", "checkedAt": "2026-08-18", "status": "available", "note": "人工抽查官方数据平台入口；项目实际使用固定种子合成信号，不下载受控数据。"},
+    {"endpointId": "endpoint-project-signal-alternative", "checkedAt": "2026-08-18", "status": "available", "note": "人工抽查官方教程仓库入口；只作为数据流程替代阅读入口。"},
+    {"endpointId": "endpoint-project-sensor-primary", "checkedAt": "2026-08-18", "status": "available", "note": "已核对 Arduino 官方 Analog Input 教程入口。"},
+    {"endpointId": "endpoint-project-sensor-alternative", "checkedAt": "2026-08-18", "status": "available", "note": "人工抽查 Arduino 官方 AnalogReadSerial 示例入口。"},
+    {"endpointId": "endpoint-project-material-primary", "checkedAt": "2026-08-18", "status": "available", "note": "人工抽查 NIST 官方入口；正式参数仍需回到具体数据表或标准原文。"},
+    {"endpointId": "endpoint-project-material-alternative", "checkedAt": "2026-08-18", "status": "available", "note": "人工抽查 pandas 官方文档入口，用于整理合成矩阵。"}
+  ]
+}

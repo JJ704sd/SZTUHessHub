@@ -10,8 +10,12 @@
     "lint": "node scripts/lint-source.mjs",
     "typecheck": "tsc --noEmit",
     "validate:content": "node scripts/validate-content.mjs",
-    "content:check": "npm run validate:content",
+    "pathways:check": "node scripts/validate-pathways.mjs",
+    "content:check": "npm run validate:content && npm run pathways:check",
     "links:check": "node scripts/check-links.mjs",
+    "test:e2e": "playwright test",
+    "test:visual": "playwright test tests/e2e/visual.spec.ts",
+    "lighthouse": "node scripts/lighthouse-mobile.mjs",
     "check": "npm run lint && npm run content:check && npm run links:check && npm run typecheck && npm run build"
   },
   "dependencies": {
@@ -21,9 +25,12 @@
     "zod": "3.24.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.1",
     "@types/node": "22.13.4",
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
+    "chrome-launcher": "^1.2.1",
+    "lighthouse": "^13.4.1",
     "typescript": "5.7.3"
   }
 }

@@ -1,14 +1,15 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { siteData, type Capability, type DualLensCase, type Major, type Project, type Scenario, type Source } from '@/lib/content';
+import { getProjectResourceState } from '@/lib/content/project-resources';
 import { siteConfig } from '@/lib/site-config';
 
-export function SectionHeading({ eyebrow, title, description, action }: { eyebrow?: string; title: string; description?: string; action?: ReactNode }) {
+export function SectionHeading({ eyebrow, title, description, action, titleId }: { eyebrow?: string; title: string; description?: string; action?: ReactNode; titleId?: string }) {
   return (
     <div className="section-heading">
       <div>
         {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
-        <h2>{title}</h2>
+        <h2 id={titleId}>{title}</h2>
         {description ? <p className="section-description">{description}</p> : null}
       </div>
       {action ? <div className="section-action">{action}</div> : null}
@@ -30,7 +31,7 @@ export function SourceLine({ source, label = '来源' }: { source?: Source; labe
     <div className="source-line">
       <span className="source-dot" aria-hidden="true" />
       <span>{label}：{source.title}</span>
-      <span className="source-meta">{source.version} · 核验于 {source.lastVerified}</span>
+      <span className="source-meta">{source.version} · 核验于 {source.lastVerified}{source.authorityTier ? ` · ${source.authorityTier} 级来源` : ''}</span>
     </div>
   );
 }
@@ -54,11 +55,13 @@ export function MajorProfileCard({ major }: { major: Major }) {
 }
 
 export function DualLensCard({ item, majorMap }: { item: DualLensCase; majorMap: Map<string, Major> }) {
+  const needsReview = item.reviewDueAt < new Date().toISOString().slice(0, 10);
   return (
     <article className="dual-card">
       <div className="card-topline"><Badge tone="amber">同题双解</Badge><span className="card-kicker">{item.sharedGoal}</span></div>
       <h3>{item.title}</h3>
       <p className="card-summary">{item.problem}</p>
+      {needsReview ? <div className="review-notice" role="status"><strong>需要复核</strong><span>这条案例已过复核日期，开始引用前请重新核对来源与边界。</span></div> : null}
       <div className="lens-grid">
         {item.lenses.map((lens) => <div className="lens" key={lens.majorId}>
           <div className="lens-heading"><span className="lens-dot" aria-hidden="true" /><strong>{lens.label}</strong></div>
@@ -85,17 +88,17 @@ export function CapabilityCard({ capability, index, majorMap }: { capability: Ca
 }
 
 export function ProjectCapsuleCard({ project, majorMap }: { project: Project; majorMap: Map<string, Major> }) {
-  const majorLabels = project.majorIds.map((id) => majorMap.get(id)?.shortName).filter(Boolean);
+  const resourceState = getProjectResourceState(project);
   return (
     <article className="project-card">
-      <div className="project-visual" aria-hidden="true"><span>{project.viewpoint.slice(0, 2)}</span><i /><i /><i /></div>
+      <div className="project-visual"><img src={project.preview.src} alt={project.preview.alt} width="560" height="360" /></div>
       <div className="project-content">
         <div className="card-topline"><Badge tone={project.majorIds.length > 1 ? 'amber' : 'teal'}>{project.kicker}</Badge><span className="card-kicker">{project.duration}</span></div>
         <h3>{project.title}</h3>
-        <p className="card-summary">{project.summary}</p>
-        <div className="tag-row">{majorLabels.map((label) => <Badge key={label} tone="muted">{label}</Badge>)}<Badge tone="muted">{project.viewpoint}</Badge></div>
-        <div className="project-meta"><span>适合：{project.suitableFor}</span><span>产出：{project.expectedOutput}</span></div>
-        <div className="card-footer"><span className="status-ready">● 可先看清成本与边界</span><ArrowLink href={`/projects/${project.slug}`}>打开体验卡</ArrowLink></div>
+        <p className="project-card-line"><strong>适合谁</strong>{project.suitableFor}</p>
+        <p className="project-card-line"><strong>会留下</strong>{project.expectedOutput}</p>
+        <dl className="project-meta-grid"><div><dt>时长</dt><dd>{project.duration}</dd></div><div><dt>最低基础</dt><dd>{project.prerequisites[0]}</dd></div><div><dt>资源</dt><dd className={`resource-state resource-state-${resourceState.key}`}><span aria-hidden="true">{resourceState.key === 'ready' ? '●' : resourceState.key === 'alternative' ? '↗' : '!'}</span>{resourceState.label}</dd></div></dl>
+        <div className="card-footer"><span className={`resource-state resource-state-${resourceState.key}`} title={resourceState.description}>{resourceState.description}</span><ArrowLink href={`/projects/${project.slug}`}>看看怎么开始</ArrowLink></div>
       </div>
     </article>
   );
@@ -112,8 +115,9 @@ export function ScenarioCard({ scenario, index }: { scenario: Scenario; index: n
   );
 }
 
-export function FAQList({ items }: { items: Array<{ id: string; question: string; answer: string }> }) {
-  return <div className="faq-list">{items.map((item, index) => <details className="faq-item" key={item.id} open={index === 0}><summary><span>{item.question}</span><span className="faq-toggle" aria-hidden="true">+</span></summary><div className="faq-answer"><p>{item.answer}</p></div></details>)}</div>;
+export function FAQList({ items }: { items: Array<{ id: string; question: string; answer: string; reviewDueAt?: string }> }) {
+  const today = new Date().toISOString().slice(0, 10);
+  return <div className="faq-list">{items.map((item, index) => <details className="faq-item" key={item.id} open={index === 0}><summary><span>{item.question}</span><span className="faq-toggle" aria-hidden="true">+</span></summary><div className="faq-answer">{item.reviewDueAt && item.reviewDueAt < today ? <div className="review-notice" role="status"><strong>需要复核</strong><span>这条回答已过复核日期，正式课程与通知请回到当前来源。</span></div> : null}<p>{item.answer}</p></div></details>)}</div>;
 }
 
 export function FoundationTable({ majors }: { majors: Major[] }) {
@@ -148,12 +152,12 @@ export function SiteFooter() {
       <div className="page-container footer-inner">
         <div className="footer-brand">
           <Link className="brand" href="/" aria-label="HseeHub 首页"><span className="brand-mark" aria-hidden="true">H</span><span className="brand-copy"><strong>HseeHub</strong><span>健康工程探索站</span></span></Link>
-          <p>帮助学生看懂同院两个工程专业的共同底座、不同侧重和跨行业能力。内容是解释性导览，不替代正式培养方案或教务通知。</p>
+          <p>给健康工程学生的探索桌面：先看懂两个专业，试一个小项目，留下可复核的东西，再决定下一步。</p>
         </div>
         <div className="footer-col"><strong>从这里开始</strong><Link href="/majors/compare">5 分钟看懂两个专业</Link><Link href="/capabilities">{siteData.capabilities.length} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
-        <div className="footer-col"><strong>内容边界</strong><Link href="/sources">来源与版本</Link><Link href="/majors/faq">学生常问</Link><Link href="/about">关于本站</Link></div>
+        <div className="footer-col"><strong>来源与边界</strong><Link href="/sources">来源、版本与核验</Link><Link href="/majors/faq">学生常问</Link><Link href="/about">关于本站</Link></div>
       </div>
-      <div className="page-container footer-bottom"><span>默认内容版本：{siteConfig.currentCohort} 级 · 首版只读公开浏览</span><span>医疗内容仅供专业学习，不构成医疗建议</span></div>
+      <div className="page-container footer-bottom"><span>默认内容版本：{siteConfig.currentCohort} 级 · 最近一次内容复核：{siteConfig.contentBaseline}</span><span>项目优先使用合成/公开数据；不处理真实患者数据</span></div>
     </footer>
   );
 }

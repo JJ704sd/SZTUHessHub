@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const content = readFileSync(resolve(root, 'content/site-data.json'), 'utf8');
 const data = JSON.parse(content);
+const pathwayData = JSON.parse(readFileSync(resolve(root, 'content/pathways.json'), 'utf8'));
+const evidenceData = JSON.parse(readFileSync(resolve(root, 'content/evidence.json'), 'utf8'));
 const failures = [];
 
 function checkUrl(value, label) {
@@ -17,10 +19,27 @@ function checkUrl(value, label) {
 }
 
 for (const source of data.sources ?? []) checkUrl(source.url, `sources.${source.id}.url`);
+for (const source of data.sources ?? []) {
+  if (!['A', 'B', 'C', 'D'].includes(source.authorityTier)) failures.push(`sources.${source.id}.authorityTier 必须显式声明 A/B/C/D`);
+}
 for (const project of data.projects ?? []) {
   checkUrl(project.sourceUrl, `projects.${project.id}.sourceUrl`);
   for (const tool of project.tools ?? []) checkUrl(tool.officialUrl, `projects.${project.id}.tools.${tool.name}`);
+  const endpoints = (project.endpointIds ?? []).map((id) => evidenceData.endpoints.find((endpoint) => endpoint.id === id));
+  if (endpoints.length < 2 || endpoints.some((endpoint) => !endpoint)) failures.push(`projects.${project.id} 必须登记可验证的主入口和替代入口`);
+  if (!endpoints.some((endpoint) => endpoint?.ownerType === 'project' && endpoint.ownerId === project.id && endpoint.role === 'source')) failures.push(`projects.${project.id} 缺少 owner 正确的主入口 endpoint`);
+  if (!endpoints.some((endpoint) => endpoint?.ownerType === 'project' && endpoint.ownerId === project.id && endpoint.role === 'replacement')) failures.push(`projects.${project.id} 缺少 owner 正确的替代入口 endpoint`);
+  for (const endpoint of endpoints) {
+    if (endpoint && !evidenceData.linkAvailability.some((item) => item.endpointId === endpoint.id)) failures.push(`${endpoint.id} 缺少 linkAvailability`);
+  }
 }
+for (const pathway of pathwayData.pathways ?? []) {
+  for (const sourceId of pathway.sourceIds ?? []) {
+    const source = data.sources.find((item) => item.id === sourceId);
+    if (!source) failures.push(`pathways.${pathway.id}.sourceIds 缺少来源：${sourceId}`);
+  }
+}
+for (const endpoint of evidenceData.endpoints ?? []) checkUrl(endpoint.url, `evidence.endpoints.${endpoint.id}.url`);
 
 const routeSources = [
   readFileSync(resolve(root, 'app/page.tsx'), 'utf8'),
@@ -37,4 +56,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`Link check passed (${data.sources.length} sources, ${data.projects.length} projects).`);
+console.log(`Link check passed (${data.sources.length} sources, ${data.projects.length} projects, ${pathwayData.pathways.length} pathways).`);

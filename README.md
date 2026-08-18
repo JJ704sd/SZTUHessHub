@@ -1,37 +1,45 @@
-# HseeHub · 健康工程探索站
+# HseeHub · 健康工程学生探索桌面
 
-HseeHub 是一张帮助学生看懂健康与环境工程学院两个工程专业的探索地图：先理解共同底座和不同技术侧重，再把课程连接到可迁移能力、跨行业场景和可以继续尝试的小项目。
+HseeHub 帮学生先看懂智能医学工程与生物医学工程，再试一个低风险小项目，留下可复核的产物，最后决定下一步往哪里走。
 
-首版目标：让第一次访问的学生在约 5 分钟内说清两个专业的共同基础与差异，在约 10 分钟内找到一个适合继续验证的项目角色。
+主线是：
 
-## 当前首版
+```text
+看懂专业 → 试一个小项目 → 留下可复核作品 → 再看下一步方向
+```
 
-- **双专业导览**：智能医学工程与生物医学工程的 2025 级培养方案快照，包含共同底座、课程侧重、选修模块和四年学习故事，分别对应 160 / 165 学分。
-- **同题双解**：2 个共同问题案例，展示两个专业的角色、输入、输出、接口、共同产物、验收方法和风险边界。
-- **能力地图**：8 类可迁移能力，将课程证据连接到工程任务、健康样例和跨行业样例。
-- **发展场景**：6 类场景，包括医疗健康、AI/数据、软件系统、电子物联、机器人/制造、环境/城市/公共技术；每个场景都说明共用能力和新增门槛。
-- **项目体验卡**：3 个小项目，覆盖数据/AI、传感/仪器、材料/检测，并包含一张双专业协作卡；支持按专业、能力、场景、视角和时长筛选。
-- **内容边界**：内容以来源、版本和最后核验时间为线索；首版只读浏览，不提供登录、社区、职位排名、真实患者数据、站内模型运行或任意代码执行。
+首页服务第一次来的学生，不是培养方案镜像、资格判断工具或社区。卡面先说动作和成本，详情页再说明步骤、许可、停止条件和风险；来源、版本与核验记录集中在来源页和相关详情中。
 
 ## 页面入口
 
 | 入口 | 用途 |
 | --- | --- |
-| [`/majors`](app/majors/page.tsx) | 学院与双专业概览 |
-| [`/majors/compare`](app/majors/compare/page.tsx) | 共同底座、侧重和同题双解 |
-| [`/capabilities`](app/capabilities/page.tsx) | 能力与课程证据 |
-| [`/projects`](app/projects/page.tsx) | 项目体验卡和可分享筛选 |
-| [`/scenarios`](app/scenarios/page.tsx) | 跨行业发展场景 |
-| [`/sources`](app/sources/page.tsx) | 来源、版本、许可和核验信息 |
+| [`/majors`](app/majors/page.tsx) | 专业与课程：共同底座、课程侧重、培养方案入口 |
+| [`/projects`](app/projects/page.tsx) | 做个项目：三张体验卡、筛选、资源状态和产物模板 |
+| [`/capabilities`](app/capabilities/page.tsx) | 能力地图：课程、工程任务与可迁移场景 |
+| [`/pathways`](app/pathways/page.tsx) | 选下一步：日常任务、15 分钟动作和关键门槛 |
+| [`/scenarios`](app/scenarios/page.tsx) | 跨场景关系页，从能力或项目进入 |
+| [`/sources`](app/sources/page.tsx) | 来源、版本、许可与最后核验 |
 
-## 技术栈
+已传播的旧路由继续保留，包括专业详情、课程版本、项目资源、场景详情和路径详情；本轮不建设登录、评论、社区、投稿、个人足迹或治理后台。
 
-- Next.js 14 App Router + React 18
-- TypeScript
-- JSON 内容事实源 + 类型化读取层
-- 语义 CSS tokens、亮色/暗色主题和响应式布局
-- 服务端优先输出核心文字，筛选等交互按需客户端化
-- 构建期内容关系、外链协议、源码规范和 TypeScript 检查
+## Release A / P0 内容
+
+- 首页依次呈现任务启动台、3 个精选项目、1 个同题双专业案例、1 个产物到 3 条路径的改写示例、4 个编辑部整理的常见问题和内容边界页尾。
+- 项目卡固定展示适合谁、会留下什么、时长/最低基础/资源状态；项目详情补齐步骤、停止条件、模板、数据许可、风险边界和下一步。
+- 三个项目都登记主入口、替代入口和 `linkAvailability`；状态只由 `content/evidence.json` 的 endpoint 数据聚合，不从文案猜测“可开始”。
+- 三份预览来自确定性合成流程，素材登记了 `alt`、作者、许可、来源和生成脚本；不使用真实患者数据。
+- `/pathways` 只做轻量比较，完整行动、来源、时效和证据改写下沉到路径详情。
+
+## 技术栈与内容源
+
+- Next.js 14 App Router + React 18 + TypeScript
+- JSON 内容事实源、类型化读取层、构建期关系与链接校验
+- 语义 CSS token、亮暗主题、reduced-motion、服务端输出核心文字
+- `content/site-data.json`：专业、能力、项目、场景、FAQ 和来源
+- `content/pathways.json`：路径、产物和方向改写
+- `content/evidence.json`：claims、endpoint 与 `linkAvailability`
+- `lib/content.ts`、`lib/content/`：类型、关系读取和事实状态
 
 ## 本地运行
 
@@ -40,9 +48,9 @@ npm install
 npm run dev
 ```
 
-打开 `http://localhost:3000` 查看站点。
+打开 `http://localhost:3000`。
 
-提交或发布前运行完整门禁：
+提交前运行完整门禁：
 
 ```bash
 npm run check
@@ -52,42 +60,33 @@ npm run check
 
 ```bash
 npm run lint          # 源码规范与 token 使用检查
-npm run content:check # 内容数量、字段、关系和安全边界检查
-npm run links:check   # 来源与项目外链协议检查
+npm run content:check # 内容、路径、项目 endpoint 和产物关系
+npm run links:check   # 来源、项目工具和 endpoint URL 协议
 npm run typecheck     # TypeScript 检查
-npm run build         # Next.js 生产构建
+npm run build         # Next.js production build
+npm run test:e2e      # Playwright 关键路径
+npm run test:visual   # Playwright 视觉基线
+npm run lighthouse    # production build 下三页各运行三次取中位
 ```
+
+Playwright 正式快照放在 `tests/e2e/__screenshots__/`；临时运行产物放在 `test-results/`，后者不能替代测试源码或正式基线。
 
 正式部署前，请参考 [`.env.example`](.env.example) 设置 `NEXT_PUBLIC_SITE_URL`，让 canonical、sitemap 和 robots 使用真实站点地址。
 
-## 内容与迭代
-
-首版内容主要维护在 [`content/site-data.json`](content/site-data.json)，类型定义和内容读取层位于 [`lib/content.ts`](lib/content.ts)，站点级配置位于 [`lib/site-config.ts`](lib/site-config.ts)。新增或更新内容时应优先扩展内容模型和关系字段，不在页面组件中复制专业名称、版本、数量或颜色规则。
-
-每次内容变更至少检查：
-
-1. 课程、能力、场景、项目之间的关系 ID 是否仍然有效。
-2. 来源、适用版本、许可、数据访问级别和最后核验时间是否齐全。
-3. 学分与课程是否绑定正确的培养方案版本。
-4. 是否仍然清楚表达“能力可以迁移，但领域门槛和安全责任不会自动消失”。
-5. `npm run check` 是否通过。
-
-## 规划与质量门禁
-
-- [网站架构与产品规划](docs/HseeHub-website-architecture-spec.md)
-- [HseeHub 第一版质量检查点](docs/HseeHub-v1-quality-checkpoints.md)
-
-当前仓库对应首版开发验收阶段。学生/教师语言评审、200% 缩放与屏幕阅读器完整验收、外链人工复核、CI 预览和正式部署回滚仍属于后续交付收口项。
-
 ## 安全边界
 
-HseeHub 只提供解释性导览和安全的外部资源入口：
-
+- 项目优先使用合成数据、公开授权数据或受控的本地教学材料。
 - 不上传或处理真实患者数据、病历、医学影像或可识别健康信息。
 - 不在站内执行不可信代码、训练模型或连接医院/校园生产系统。
-- 项目优先使用合成数据、公开授权数据或受控的本地教学材料。
-- 医疗与健康相关内容不构成诊断、治疗或专业决策建议。
+- 医疗与健康相关内容只用于专业学习，不构成诊断、治疗或专业决策建议。
+- 外部入口的实际条款、版本和资格信息以原页面为准；HseeHub 不提供录取、就业或个体资格结论。
 
-## License
+## 维护节奏
 
-当前仓库的内容来源、第三方工具和外部数据各自遵循其登记页面中的版本与许可说明。新增内容前请先补充来源、许可和核验信息。
+新增内容先补来源、适用版本、许可、owner、更新时间和复核日期，再扩展页面。课程、学分与路径事实按版本维护，不原地覆盖历史内容。每次内容变更至少运行 `npm run check`，外部入口还需要人工核对其语义和许可。
+
+## 相关文档
+
+- [下一阶段产品与体验重构 Spec](docs/HseeHub-next-stage-experience-spec.md)
+- [网站架构与产品规划](docs/HseeHub-website-architecture-spec.md)
+- [第一版质量检查点](docs/HseeHub-v1-quality-checkpoints.md)

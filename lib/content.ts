@@ -1,9 +1,11 @@
 import rawSiteData from "../content/site-data.json";
+import type { HomePlan } from './content/schema';
 
 export type SiteMeta = {
   title: string;
   tagline: string;
   description: string;
+  home?: HomePlan;
 };
 
 export type LearningStoryItem = {
@@ -59,6 +61,9 @@ export type DualLensCase = {
   riskBoundary: string;
   sourceId: string;
   lastVerified: string;
+  owner: string;
+  updatedAt: string;
+  reviewDueAt: string;
 };
 
 export type MajorEvidence = {
@@ -90,6 +95,23 @@ export type ProjectData = {
   kind: 'none' | 'synthetic' | 'real';
   access: 'none' | 'open' | 'restricted' | 'credentialed';
   sensitivity: 'none' | 'personal' | 'health' | 'commercial' | 'security-relevant';
+};
+
+export type ProjectArtifactTemplate = {
+  label: string;
+  href: string;
+  version: string;
+  license: string;
+};
+
+export type ProjectPreview = {
+  src: string;
+  alt: string;
+  kind: 'project_output' | 'process' | 'diagram';
+  author: string;
+  license: string;
+  sourceRef: string;
+  generationRef: string;
 };
 
 export type ProjectCollaborationRole = {
@@ -126,13 +148,22 @@ export type Project = {
   dataSource: string;
   license: string;
   steps: string[];
+  stopCondition: string;
   expectedOutput: string;
+  artifactId: string;
+  artifactTemplate: ProjectArtifactTemplate;
+  reflectionPrompt: string;
   validation: string;
   nextStep: string;
   boundary: string;
   sourceUrl: string;
   sourceId: string;
   lastVerified: string;
+  endpointIds: string[];
+  preview: ProjectPreview;
+  owner: string;
+  updatedAt: string;
+  reviewDueAt: string;
 };
 
 export type Scenario = {
@@ -154,6 +185,9 @@ export type FaqItem = {
   answer: string;
   sourceId: string;
   lastVerified: string;
+  owner: string;
+  updatedAt: string;
+  reviewDueAt: string;
 };
 
 export type Source = {
@@ -164,6 +198,7 @@ export type Source = {
   version: string;
   scope: string;
   lastVerified: string;
+  authorityTier?: 'A' | 'B' | 'C' | 'D';
 };
 
 export type SiteData = {

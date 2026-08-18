@@ -22,9 +22,18 @@ const PROJECT_REQUIRED_FIELDS = [
   'mode',
   'courseEvidence',
   'data',
+  'stopCondition',
   'expectedOutput',
+  'artifactId',
+  'artifactTemplate',
+  'reflectionPrompt',
   'validation',
   'nextStep',
+  'endpointIds',
+  'preview',
+  'owner',
+  'updatedAt',
+  'reviewDueAt',
 ];
 
 const BANNED_TERMS = [
@@ -246,7 +255,11 @@ function validateProjectLinks(value, path, linkContext = false) {
     const embeddedUrls = trimmed.match(URL_PATTERN) ?? [];
 
     if (linkContext) {
-      validateHttpsUrl(trimmed, path);
+      if (trimmed.startsWith('/')) {
+        if (!trimmed.startsWith('/project-templates/')) addError(`${formatPath(path)} 内部模板地址必须位于 /project-templates/：${trimmed}`);
+      } else {
+        validateHttpsUrl(trimmed, path);
+      }
     } else {
       embeddedUrls.forEach((url) => validateHttpsUrl(url, path));
     }
@@ -262,7 +275,12 @@ function validateProjectLinks(value, path, linkContext = false) {
     const isLinkField = URL_FIELD_PATTERN.test(propertyName) || LINK_FIELD_PATTERN.test(propertyName);
 
     if (isLinkField && typeof propertyValue === 'string' && propertyValue.trim()) {
-      validateHttpsUrl(propertyValue.trim(), propertyPath);
+      const linkValue = propertyValue.trim();
+      if (linkValue.startsWith('/')) {
+        if (!linkValue.startsWith('/project-templates/')) addError(`${formatPath(propertyPath)} 内部链接只能指向 /project-templates/：${linkValue}`);
+      } else {
+        validateHttpsUrl(linkValue, propertyPath);
+      }
     } else {
       validateProjectLinks(propertyValue, propertyPath, linkContext || isLinkField);
     }
@@ -439,6 +457,32 @@ function validateProject(record, path) {
     });
   }
 
+  if (!Array.isArray(record.endpointIds) || record.endpointIds.length < 2) {
+    addError(`${formatPath([...path, 'endpointIds'])} 至少需要一个主入口和一个替代入口`);
+  }
+
+  if (!isRecord(record.artifactTemplate)) {
+    addError(`${formatPath([...path, 'artifactTemplate'])} 必须登记产物模板地址、版本和许可`);
+  } else {
+    for (const field of ['label', 'href', 'version', 'license']) {
+      if (!hasValue(record.artifactTemplate[field])) addError(`${formatPath([...path, 'artifactTemplate', field])} 为必填项`);
+    }
+  }
+
+  if (!isRecord(record.preview)) {
+    addError(`${formatPath([...path, 'preview'])} 必须登记真实流程产物预览和素材信息`);
+  } else {
+    for (const field of ['src', 'alt', 'kind', 'author', 'license', 'sourceRef', 'generationRef']) {
+      if (!hasValue(record.preview[field])) addError(`${formatPath([...path, 'preview', field])} 为必填项`);
+    }
+    if (typeof record.preview.src === 'string' && !record.preview.src.startsWith('/project-previews/')) {
+      addError(`${formatPath([...path, 'preview', 'src'])} 必须来自 /project-previews/`);
+    }
+    if (!['project_output', 'process', 'diagram'].includes(record.preview.kind)) {
+      addError(`${formatPath([...path, 'preview', 'kind'])} kind 无效`);
+    }
+  }
+
   if (hasValue(record.sourceUrl)) {
     validateHttpsUrl(record.sourceUrl, [...path, 'sourceUrl']);
   }
@@ -501,6 +545,17 @@ function validateRequiredCollections(data) {
       }
 
       validatePrimaryMetadata(record, recordPath);
+
+      if (['projects', 'dualLensCases', 'faqs'].includes(rule.key)) {
+        if (!hasValue(record.owner)) addError(`${formatPath([...recordPath, 'owner'])} 为首页内容必填项`);
+        for (const field of ['updatedAt', 'reviewDueAt']) {
+          if (!hasValue(record[field])) addError(`${formatPath([...recordPath, field])} 为首页内容必填项`);
+          else if (!validDate(record[field])) addError(`${formatPath([...recordPath, field])} 必须是有效的 YYYY-MM-DD 日期`);
+        }
+        if (validDate(record.updatedAt) && validDate(record.reviewDueAt) && record.reviewDueAt < record.updatedAt) {
+          addError(`${formatPath(recordPath)}.reviewDueAt 不能早于 updatedAt`);
+        }
+      }
 
       if (rule.key === 'majors') {
         validateMajor(record, recordPath);
