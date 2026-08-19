@@ -1,4 +1,5 @@
 import { execFileSync, spawn } from 'node:child_process';
+import net from 'node:net';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 
@@ -7,9 +8,18 @@ const baseUrl = `http://127.0.0.1:${port}`;
 const nextCli = join(process.cwd(), 'node_modules', 'next', 'dist', 'bin', 'next');
 const playwrightCli = join(process.cwd(), 'node_modules', '@playwright', 'test', 'cli.js');
 
-async function waitForServer(timeoutMs = 30_000) {
+function isPortOccupied() {
+  return new Promise((resolve) => {
+    const probe = net.createServer();
+    probe.once('error', (error) => resolve(error?.code === 'EADDRINUSE'));
+    probe.listen({ host: '127.0.0.1', port }, () => probe.close(() => resolve(false)));
+  });
+}
+
+async function waitForServer(child, timeoutMs = 30_000) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
+    if (child.exitCode !== null) throw new Error(`Release B browser server exited before readiness (code ${child.exitCode})`);
     try { if ((await fetch(baseUrl)).ok) return; } catch {}
     await delay(250);
   }
@@ -46,7 +56,7 @@ function stopServer(pid) {
   }
 }
 
-if (process.platform === 'win32' && execFileSync('netstat', ['-ano'], { encoding: 'utf8' }).split(/\r?\n/).some((line) => line.includes(`:${port}`) && line.includes('LISTENING'))) {
+if (await isPortOccupied()) {
   throw new Error(`Release B check port ${port} is already in use; stop the stale test server before building or testing`);
 }
 
@@ -59,7 +69,7 @@ const server = spawn(process.execPath, [nextCli, 'start', '-p', String(port)], {
 server.unref();
 
 try {
-  await waitForServer();
+  await waitForServer(server);
   await runPlaywright('E2E', ['tests/e2e/home.spec.ts', 'tests/e2e/release-a-baseline.spec.ts', '--project=desktop-light', '--project=mobile-light', '--project=narrow-light']);
   await runPlaywright('accessibility', ['tests/e2e/a11y.spec.ts', '--project=desktop-light']);
   // visual.spec.ts owns the viewport/theme matrix; run it once with the

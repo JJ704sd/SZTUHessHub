@@ -113,9 +113,9 @@ export function ScenarioCard({ scenario, index, capabilityLinks = [] }: { scenar
   );
 }
 
-export function FAQList({ items }: { items: Array<{ id: string; question: string; answer: string; reviewDueAt?: string }> }) {
+export function FAQList({ items }: { items: Array<{ id: string; slug?: string; question: string; answer: string; reviewDueAt?: string }> }) {
   const today = new Date().toISOString().slice(0, 10);
-  return <div className="faq-list">{items.map((item, index) => <details className="faq-item" key={item.id} open={index === 0}><summary><span>{item.question}</span><span className="faq-toggle" aria-hidden="true">+</span></summary><div className="faq-answer">{item.reviewDueAt && item.reviewDueAt < today ? <div className="review-notice" role="status"><strong>需要复核</strong><span>这条回答已过复核日期，正式课程与通知请回到当前来源。</span></div> : null}<p>{item.answer}</p></div></details>)}</div>;
+  return <div className="faq-list">{items.map((item, index) => <details className="faq-item" id={item.slug ?? item.id} key={item.id} open={index === 0}><summary><span>{item.question}</span><span className="faq-toggle" aria-hidden="true">+</span></summary><div className="faq-answer">{item.reviewDueAt && item.reviewDueAt < today ? <div className="review-notice" role="status"><strong>需要复核</strong><span>这条回答已过复核日期，正式课程与通知请回到当前来源。</span></div> : null}<p>{item.answer}</p></div></details>)}</div>;
 }
 
 export function FoundationTable({ majors }: { majors: Major[] }) {

@@ -152,6 +152,8 @@ test('FAQ, starter, resources and 404 remain usable', async ({ page }) => {
   await expect(page.locator('.faq-item')).toHaveCount(6);
   await page.locator('.faq-item').nth(1).locator('summary').click();
   await expect(page.locator('.faq-item').nth(1)).toHaveAttribute('open', '');
+  await page.goto('/majors/faq#shared-foundation');
+  await expect(page.locator('#shared-foundation')).toBeVisible();
   await page.goto('/projects/signal-feature-notebook/starter');
   await expect(page.locator('textarea')).toHaveCount(3);
   await page.goto('/projects/signal-feature-notebook/resources');
