@@ -15,11 +15,12 @@ function count(html, pattern) {
 
 try {
   const home = await page('/');
-  assert.equal(count(home, /class="task-card/g), 3, 'home exposes three task entry cards');
-  assert.match(home, /href="\/majors"/);
-  assert.match(home, /href="\/capabilities"/);
-  assert.match(home, /href="\/projects"/);
-  assert.equal(count(home, /data-home-module=/g), 4, 'home has four convergence modules');
+  assert.equal(count(home, /class="home-task-entry/g), 3, 'home exposes three task entry links');
+  assert.match(home, /href="\/majors\/compare"/);
+  assert.match(home, /href="\/projects\?intent=quick-look"/);
+  assert.match(home, /href="\/pathways\/explore"/);
+  assert.match(home, /class="home-featured-projects/g);
+  assert.equal(count(home, /class="home-compact-project"/g), 2, 'home exposes two compact project entries');
 
   const projects = await page('/projects');
   assert.equal(count(projects, /class="project-list-card/g), 3, 'project catalog shows all three cards by default');
@@ -27,17 +28,19 @@ try {
   assert.match(projects, /class="status-badge/g);
 
   const filtered = await page(`/projects?duration=${encodeURIComponent('10 分钟')}`);
-  assert.match(filtered, /符合已应用条件/);
-  assert.match(filtered, /清除全部/);
+  assert.match(filtered, /正在使用旧筛选链接/);
+  assert.match(filtered, /关闭并看全部/);
 
   const empty = await page('/projects?major=missing-major');
   assert.equal(count(empty, /class="project-list-card/g), 3, 'invalid legacy condition keeps all project cards');
-  assert.match(empty, /已忽略无效旧链接条件/);
+  assert.match(empty, /筛选或意图值已经无法识别/);
+  assert.match(empty, /已忽略无效条件/);
   const mixed = await page('/projects?major=major-ime&duration=invalid-duration');
-  assert.match(mixed, /已应用的条件/);
-  assert.match(mixed, /已忽略无效旧链接条件/);
+  assert.match(mixed, /正在使用旧筛选链接/);
+  assert.match(mixed, /已忽略无效条件/);
   const zero = await page('/projects?major=major-bme&duration=10%20%E5%88%86%E9%92%9F');
-  assert.match(zero, /当前条件没有匹配的体验卡/);
+  assert.equal(count(zero, /class="project-list-card/g), 0, 'valid legacy conditions can produce an honest empty state');
+  assert.match(zero, /旧筛选暂时没有匹配项目/);
 
   for (const path of ['/majors', '/capabilities/signals-images-and-data-ai', '/projects/signal-feature-notebook']) {
     const html = await page(path);

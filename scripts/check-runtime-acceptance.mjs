@@ -5,7 +5,7 @@ const failures = [];
 const count = (html, pattern) => (html.match(pattern) ?? []).length;
 const page = async (path) => { const response = await fetch(`${origin}${path}`); const html = await response.text(); if (!response.ok) failures.push(`${path} HTTP ${response.status}`); return html; };
 const home = await page('/');
-if (count(home, /class="home-task-entry/g) !== 3 || !home.includes('home-featured-projects') || !home.includes('home-compact-projects')) failures.push('首页必须 SSR 输出 Release B 三任务与 1+2 项目层级');
+if (count(home, /class="home-task-entry/g) !== 3 || count(home, /class="home-compact-project"/g) !== 2 || !home.includes('home-featured-projects') || !home.includes('href="/projects?intent=quick-look"')) failures.push('首页必须 SSR 输出 Release B 三任务与 1+2 项目层级');
 const compare = await page('/majors/compare');
 if (!compare.includes('id="dual-lens"') || count(compare, /class="dual-card/g) < 2 || !compare.includes('共同')) failures.push('专业对照页缺少共同底座、任务或双卡内容');
 const legacyCompare = await fetch(`${origin}/majors/compare?view=dual`, { redirect: 'manual' });
