@@ -79,6 +79,25 @@ Playwright 正式快照放在 `tests/e2e/__screenshots__/`；临时运行产物�
 
 正式部署前，请参考 [`.env.example`](.env.example) 设置 `NEXT_PUBLIC_SITE_URL`，让 canonical、sitemap 和 robots 使用真实站点地址。
 
+## 内容与迭代
+
+首版内容主要维护在 [`content/site-data.json`](content/site-data.json)，类型定义和内容读取层位于 [`lib/content/`](lib/content/)，站点级配置位于 [`lib/site-config.ts`](lib/site-config.ts)。新增或更新内容时应优先扩展内容模型和关系字段，不在页面组件中复制专业名称、版本、数量或颜色规则。
+
+每次内容变更至少检查：
+
+1. 课程、能力、场景、项目之间的关系 ID 是否仍然有效。
+2. 来源、适用版本、许可、数据访问级别和最后核验时间是否齐全。
+3. 学分与课程是否绑定正确的培养方案版本。
+4. 是否仍然清楚表达“能力可以迁移，但领域门槛和安全责任不会自动消失”。
+5. `npm run check` 是否通过。
+
+## 规划与质量门禁
+
+- [网站架构与产品规划](docs/HseeHub-website-architecture-spec.md)
+- [Phase 1.5：体验压缩、关系闭环与发布验证 Spec](docs/HseeHub-phase-1.5-experience-spec.md)
+- [HseeHub 第一版质量检查点](docs/HseeHub-v1-quality-checkpoints.md)
+
+当前 Release B 已完成代码基线；学生/教师语言评审、200% 缩放与屏幕阅读器完整验收、外链人工复核、CI 预览和正式部署回滚仍属于后续交付收口项。
 ## 安全边界
 
 - 项目优先使用合成数据、公开授权数据或受控的本地教学材料。

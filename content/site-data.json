@@ -1,51 +1,177 @@
 {
   "siteMeta": {
-    "title": "HseeHub｜健康工程学生探索桌面",
-    "tagline": "先看任务，再试一个小项目",
-    "description": "给健康工程学生的探索桌面：先看懂智能医学工程与生物医学工程，试一个小项目，留下能讲清过程与限制的作品，再决定下一步。内容以 2025 级事实为当前入口，不替代正式培养方案、教务通知或个人资格判断。",
+    "title": "HseeHub｜健康与环境工程学院双专业导航",
+    "tagline": "先看共同底座，再理解两种工程视角",
+    "description": "HseeHub 用学生听得懂的语言，带你认识智能医学工程与生物医学工程的共同基础、培养侧重、可迁移能力和可尝试的项目。内容以 2025 级事实为当前入口，不替代正式培养方案、教务通知或专业选择结论。",
     "home": {
       "primaryJourneyId": "compare",
-      "majorIds": ["major-ime", "major-bme"],
-      "sharedFoundation": ["数学与自然科学", "生命健康与人体基础", "编程、电子与信号系统", "实验研究、数据分析与工程责任"],
+      "majorIds": [
+        "major-ime",
+        "major-bme"
+      ],
+      "sharedFoundation": [
+        "数学与自然科学",
+        "生命健康与人体基础",
+        "编程、电子与信号系统",
+        "实验研究、数据分析与工程责任"
+      ],
       "featuredDualLensCaseId": "case-wearable-vital-signs",
-      "capabilityIds": ["cap-health-user", "cap-signal-data-ai", "cap-design-validation"],
-      "projectIds": ["project-signal-feature-notebook", "project-sensor-alarm-prototype", "project-material-test-matrix"],
-      "scenarioIds": ["scenario-healthcare", "scenario-ai-data", "scenario-software", "scenario-electronic-iot", "scenario-robotics-manufacturing", "scenario-environment-city"],
+      "capabilityIds": [
+        "cap-health-user",
+        "cap-signal-data-ai",
+        "cap-design-validation"
+      ],
+      "projectIds": [
+        "project-signal-feature-notebook",
+        "project-sensor-alarm-prototype",
+        "project-material-test-matrix"
+      ],
+      "scenarioIds": [
+        "scenario-healthcare",
+        "scenario-ai-data",
+        "scenario-software",
+        "scenario-electronic-iot",
+        "scenario-robotics-manufacturing",
+        "scenario-environment-city"
+      ],
       "faqId": "faq-shared-foundation",
-      "showExploreSection": true,
-      "pathwayLaunch": {
-        "startModeOrder": ["has-direction", "from-assets", "undecided"],
-        "pathwayIds": ["path-employment", "path-domestic-postgraduate", "path-public-service", "path-overseas-study", "path-independent-work"],
-        "featuredArtifactId": "artifact-signal-analysis",
-        "defaultHorizon": "15-minutes"
-      }
+      "showExploreSection": true
     }
   },
+  "mediaAssets": [
+    {
+      "id": "visual-signal-feature",
+      "src": "/media/signal-feature.svg",
+      "width": 640,
+      "height": 360,
+      "alt": "合成信号经过采样、特征提取和分类后形成可比较的结果表。",
+      "decorative": false,
+      "role": "card",
+      "caption": "信号—特征—结果",
+      "license": "原创 SVG/CSS",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "visual-sensor-alarm",
+      "src": "/media/sensor-alarm.svg",
+      "width": 640,
+      "height": 360,
+      "alt": "传感器输入经过采样和质量标记后进入提示系统，并保留安全停止状态。",
+      "decorative": false,
+      "role": "card",
+      "caption": "传感—采样—提示",
+      "license": "原创 SVG/CSS",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "visual-material-matrix",
+      "src": "/media/material-matrix.svg",
+      "width": 640,
+      "height": 360,
+      "alt": "三种候选材料按灵敏度、耐久性、环境范围和测试成本组成选型矩阵。",
+      "decorative": false,
+      "role": "card",
+      "caption": "材料—指标—测试",
+      "license": "原创 SVG/CSS",
+      "lastVerified": "2026-08-13"
+    }
+  ],
   "majors": [
     {
       "id": "major-ime",
       "slug": "intelligent-medical-engineering",
       "name": "智能医学工程",
       "shortName": "智能医工",
+      "navigationLabel": "看懂智能医工",
       "eyebrow": "2025 级｜四年制｜160 学分",
       "summary": "从生命健康问题出发，把数据、算法、软件、电子与设备连成可以解释、测试和迭代的智能系统。它不是只学软件，也需要人体、生理、信号、实验和工程责任基础。",
-      "focus": ["医学数据、信息系统与人工智能", "信号与图像处理、机器学习", "智能仪器、嵌入式与医用机器人", "把感知、算法、软件和设备接成可验证的系统"],
+      "cardSummary": "从数据、算法到智能系统，把健康问题变成可验证流程。",
+      "taskSummary": "把信号与信息接成可测试的智能系统",
+      "focus": [
+        "医学数据、信息系统与人工智能",
+        "信号与图像处理、机器学习",
+        "智能仪器、嵌入式与医用机器人",
+        "把感知、算法、软件和设备接成可验证的系统"
+      ],
+      "primaryFocus": [
+        "医学数据、信息系统与人工智能",
+        "信号与图像处理、机器学习"
+      ],
       "credits": 160,
       "creditNote": "2025 级总学分为 160；通识/学科/实践/论文为 60/61.5/26.5/12 学分。学分用于说明培养结构，不用于比较难度、含金量或专业优劣。",
       "cohort": "2025",
-      "foundation": ["数学、物理、化学与自然科学基础", "人体结构、生理与生命健康问题理解", "程序设计、电子、信号与系统", "实验研究、数据分析与文献阅读", "工程设计、团队协作、项目管理与伦理责任"],
-      "electives": ["智能医学信息：医院信息系统、医疗大数据与数据挖掘、智能生物医学信息学", "智能医学仪器：智能医学仪器、智能医学传感技术、医学电子设计自动化", "智能医学机器人：神经工程学与医用机器人、医用生物力学和相关控制任务"],
+      "foundation": [
+        "数学、物理、化学与自然科学基础",
+        "人体结构、生理与生命健康问题理解",
+        "程序设计、电子、信号与系统",
+        "实验研究、数据分析与文献阅读",
+        "工程设计、团队协作、项目管理与伦理责任"
+      ],
+      "electives": [
+        "智能医学信息：医院信息系统、医疗大数据与数据挖掘、智能生物医学信息学",
+        "智能医学仪器：智能医学仪器、智能医学传感技术、医学电子设计自动化",
+        "智能医学机器人：神经工程学与医用机器人、医用生物力学和相关控制任务"
+      ],
       "learningStory": [
-        {"stage": "01", "title": "认识生命健康问题", "summary": "接触人体、生理和专业导论，知道工程问题来自真实使用场景，也知道两个专业有共同底座。"},
-        {"stage": "02", "title": "建立通用工具箱", "summary": "学习数理自然科学、编程、电子、信号、实验研究和工程沟通，形成处理问题的共同语言。"},
-        {"stage": "03", "title": "形成智能系统侧重", "summary": "通过机器学习、数据库、嵌入式、医学图像与数据类选修，把感知、算法和信息流程连接起来。"},
-        {"stage": "04", "title": "用项目验证方向", "summary": "在高级项目研究、企业实习、竞赛或毕业论文中形成作品证据，再按目标场景补充领域知识和规范。"}
+        {
+          "stage": "01",
+          "title": "认识生命健康问题",
+          "summary": "接触人体、生理和专业导论，知道工程问题来自真实使用场景，也知道两个专业有共同底座。"
+        },
+        {
+          "stage": "02",
+          "title": "建立通用工具箱",
+          "summary": "学习数理自然科学、编程、电子、信号、实验研究和工程沟通，形成处理问题的共同语言。"
+        },
+        {
+          "stage": "03",
+          "title": "形成智能系统侧重",
+          "summary": "通过机器学习、数据库、嵌入式、医学图像与数据类选修，把感知、算法和信息流程连接起来。"
+        },
+        {
+          "stage": "04",
+          "title": "用项目验证方向",
+          "summary": "在高级项目研究、企业实习、竞赛或毕业论文中形成作品证据，再按目标场景补充领域知识和规范。"
+        }
       ],
       "courseEvidence": [
-        {"course": "信号与系统、机器学习与模式识别", "detail": "从波形、图像或数据中提取结构、建立模型并比较误差。", "capabilityIds": ["cap-math-research", "cap-signal-data-ai"]},
-        {"course": "程序设计基础、算法与数据结构、数据库原理", "detail": "把数据处理步骤组织成可维护的程序和信息流程。", "capabilityIds": ["cap-software-information", "cap-signal-data-ai"]},
-        {"course": "医用电子技术、微机原理与嵌入式系统", "detail": "理解传感、采样、计算和执行之间的接口，做出可测试的最小系统。", "capabilityIds": ["cap-sensing-measurement", "cap-electronics-control"]},
-        {"course": "医学图像处理、智能医学传感技术、医疗大数据与数据挖掘", "detail": "把图像、信号和数据任务连接到工具、评估和责任边界。", "capabilityIds": ["cap-sensing-measurement", "cap-signal-data-ai", "cap-design-validation"]}
+        {
+          "course": "信号与系统、机器学习与模式识别",
+          "detail": "从波形、图像或数据中提取结构、建立模型并比较误差。",
+          "capabilityIds": [
+            "cap-math-research",
+            "cap-signal-data-ai"
+          ]
+        },
+        {
+          "course": "程序设计基础、算法与数据结构、数据库原理",
+          "detail": "把数据处理步骤组织成可维护的程序和信息流程。",
+          "capabilityIds": [
+            "cap-software-information",
+            "cap-signal-data-ai"
+          ]
+        },
+        {
+          "course": "医用电子技术、微机原理与嵌入式系统",
+          "detail": "理解传感、采样、计算和执行之间的接口，做出可测试的最小系统。",
+          "capabilityIds": [
+            "cap-sensing-measurement",
+            "cap-electronics-control"
+          ]
+        },
+        {
+          "course": "医学图像处理、智能医学传感技术、医疗大数据与数据挖掘",
+          "detail": "把图像、信号和数据任务连接到工具、评估和责任边界。",
+          "capabilityIds": [
+            "cap-sensing-measurement",
+            "cap-signal-data-ai",
+            "cap-design-validation"
+          ]
+        }
+      ],
+      "representativeCourses": [
+        "信号与系统、机器学习与模式识别",
+        "程序设计基础、算法与数据结构、数据库原理"
       ],
       "sourceId": "source-ime-2025",
       "lastVerified": "2026-08-13"
@@ -55,25 +181,96 @@
       "slug": "biomedical-engineering",
       "name": "生物医学工程",
       "shortName": "生医工",
+      "navigationLabel": "看懂生医工",
       "eyebrow": "2025 级｜四年制｜165 学分",
       "summary": "把生命科学和医学问题转成可测量、可制造、可验证的器械、材料、检测或信息方案。它也包含编程、电子和数据，不是只做硬件。",
-      "focus": ["电子、医用传感与医学检测", "生物医学材料、纳米医学与器械", "医学仪器设计、成像与测试", "将生物/医学问题转成可测量、可制造、可验证的工程方案"],
+      "cardSummary": "从测量、材料到器械验证，把生命问题变成工程方案。",
+      "taskSummary": "把现象变成可测量、可制造的方案",
+      "focus": [
+        "电子、医用传感与医学检测",
+        "生物医学材料、纳米医学与器械",
+        "医学仪器设计、成像与测试",
+        "将生物/医学问题转成可测量、可制造、可验证的工程方案"
+      ],
+      "primaryFocus": [
+        "电子、医用传感与医学检测",
+        "生物医学材料、纳米医学与器械"
+      ],
       "credits": 165,
       "creditNote": "2025 级总学分为 165；通识/学科/实践/论文为 60/70/23/12 学分。学分用于说明培养结构，不用于比较难度、含金量或专业优劣。",
       "cohort": "2025",
-      "foundation": ["数学、物理、化学与自然科学基础", "人体结构、生理、生物学与生命健康问题理解", "程序设计、电路、电子、信号与系统", "实验研究、测量、数据分析与文献阅读", "工程设计、材料与器械责任、团队协作和伦理"],
-      "electives": ["生物检测：分子诊断学、体外诊断产业技术、免疫检验原理与技术", "医学信号处理及大数据：医学大数据与人工智能、生物医学数字信号处理、医学图像处理", "生物医学材料与纳米医学：微纳米加工技术、纳米生物医学技术、组织工程与人工器官", "生物医学仪器：生物医学成像、医学电子设计自动化、医学仪器原理与设计"],
+      "foundation": [
+        "数学、物理、化学与自然科学基础",
+        "人体结构、生理、生物学与生命健康问题理解",
+        "程序设计、电路、电子、信号与系统",
+        "实验研究、测量、数据分析与文献阅读",
+        "工程设计、材料与器械责任、团队协作和伦理"
+      ],
+      "electives": [
+        "生物检测：分子诊断学、体外诊断产业技术、免疫检验原理与技术",
+        "医学信号处理及大数据：医学大数据与人工智能、生物医学数字信号处理、医学图像处理",
+        "生物医学材料与纳米医学：微纳米加工技术、纳米生物医学技术、组织工程与人工器官",
+        "生物医学仪器：生物医学成像、医学电子设计自动化、医学仪器原理与设计"
+      ],
       "learningStory": [
-        {"stage": "01", "title": "认识生命与工程对象", "summary": "从人体、生物学、化学和专业导论开始，理解检测对象、使用者和工程约束的关系。"},
-        {"stage": "02", "title": "建立测量与制作基础", "summary": "学习数理自然科学、编程、电路、电子、信号、制图和实验，把现象变成数据。"},
-        {"stage": "03", "title": "形成材料、检测与仪器侧重", "summary": "通过生物检测、信号与大数据、材料与纳米医学、医学仪器等模块深入任务，同时理解与智能系统的接口。"},
-        {"stage": "04", "title": "用测试和作品形成证据", "summary": "在高级项目研究、企业实习、竞赛或毕业论文中记录假设、测试和边界，再按场景补充标准与法规。"}
+        {
+          "stage": "01",
+          "title": "认识生命与工程对象",
+          "summary": "从人体、生物学、化学和专业导论开始，理解检测对象、使用者和工程约束的关系。"
+        },
+        {
+          "stage": "02",
+          "title": "建立测量与制作基础",
+          "summary": "学习数理自然科学、编程、电路、电子、信号、制图和实验，把现象变成数据。"
+        },
+        {
+          "stage": "03",
+          "title": "形成材料、检测与仪器侧重",
+          "summary": "通过生物检测、信号与大数据、材料与纳米医学、医学仪器等模块深入任务，同时理解与智能系统的接口。"
+        },
+        {
+          "stage": "04",
+          "title": "用测试和作品形成证据",
+          "summary": "在高级项目研究、企业实习、竞赛或毕业论文中记录假设、测试和边界，再按场景补充标准与法规。"
+        }
+      ],
+      "representativeCourses": [
+        "生物医学传感与检测、信号与系统",
+        "生物医学材料及其评价、工程制图及 CAD"
       ],
       "courseEvidence": [
-        {"course": "生物医学传感与检测、信号与系统", "detail": "把生物或物理现象转成信号，记录采样、噪声、标定和检测结果。", "capabilityIds": ["cap-sensing-measurement", "cap-math-research"]},
-        {"course": "生物医学材料及其评价、工程制图及 CAD", "detail": "从材料、结构、工艺和评价方法理解器械方案的功能与可靠性。", "capabilityIds": ["cap-materials-devices", "cap-design-validation"]},
-        {"course": "生物化学、生理学（工）、人体解剖学（工）", "detail": "建立生命过程、检测对象和使用者需求的基础语言。", "capabilityIds": ["cap-health-user", "cap-math-research"]},
-        {"course": "生物医学伦理与仪器法规、医学仪器原理与设计", "detail": "把设计、测量、风险、验证和器械责任放进同一条工程流程。", "capabilityIds": ["cap-materials-devices", "cap-design-validation"]}
+        {
+          "course": "生物医学传感与检测、信号与系统",
+          "detail": "把生物或物理现象转成信号，记录采样、噪声、标定和检测结果。",
+          "capabilityIds": [
+            "cap-sensing-measurement",
+            "cap-math-research"
+          ]
+        },
+        {
+          "course": "生物医学材料及其评价、工程制图及 CAD",
+          "detail": "从材料、结构、工艺和评价方法理解器械方案的功能与可靠性。",
+          "capabilityIds": [
+            "cap-materials-devices",
+            "cap-design-validation"
+          ]
+        },
+        {
+          "course": "生物化学、生理学（工）、人体解剖学（工）",
+          "detail": "建立生命过程、检测对象和使用者需求的基础语言。",
+          "capabilityIds": [
+            "cap-health-user",
+            "cap-math-research"
+          ]
+        },
+        {
+          "course": "生物医学伦理与仪器法规、医学仪器原理与设计",
+          "detail": "把设计、测量、风险、验证和器械责任放进同一条工程流程。",
+          "capabilityIds": [
+            "cap-materials-devices",
+            "cap-design-validation"
+          ]
+        }
       ],
       "sourceId": "source-bme-2025",
       "lastVerified": "2026-08-13"
@@ -87,17 +284,30 @@
       "problem": "如何把身体活动中的一个可测信号，变成稳定采样、可追溯处理并且让使用者看得懂的教学原型？",
       "sharedGoal": "共同完成一个不接入真实患者的低风险演示：说明传感器、采样、数据处理、界面提示和测试边界如何衔接。",
       "lenses": [
-        {"majorId": "major-ime", "label": "数据与智能系统透镜", "role": "设计信号处理、异常标记、数据接口和面向使用者的反馈流程。", "input": "采样序列、采样频率、噪声说明、任务目标和界面需求。", "output": "清洗与特征提取流程、可复现分析脚本、数据字典和反馈原型。", "interface": "约定时间戳、单位、缺失值、质量标记和处理版本，向仪器侧返回采样与质量要求。", "contribution": "把感知到的信息输出组织成可解释、可测试的数字流程，不把一次演示当成医疗结论。"},
-        {"majorId": "major-bme", "label": "传感、仪器与测试透镜", "role": "选择或描述传感、采样电路、接触界面和标定方法，检查信号是否值得被处理。", "input": "目标物理量、传感器参数、安装条件、噪声来源和测试环境。", "output": "传感与采样框图、标定记录、信号质量检查表和台架测试计划。", "interface": "向数据侧提供量程、单位、采样限制和质量标记；接收算法侧的质量阈值与失败反馈。", "contribution": "让输入数据有测量依据，并把器械、材料、环境和可靠性问题提前暴露出来。"}
+        {
+          "majorId": "major-ime",
+          "label": "数据与智能系统透镜",
+          "role": "设计信号处理、异常标记、数据接口和面向使用者的反馈流程。",
+          "input": "采样序列、采样频率、噪声说明、任务目标和界面需求。",
+          "output": "清洗与特征提取流程、可复现分析脚本、数据字典和反馈原型。",
+          "interface": "约定时间戳、单位、缺失值、质量标记和处理版本，向仪器侧返回采样与质量要求。",
+          "contribution": "把感知到的信息输出组织成可解释、可测试的数字流程，不把一次演示当成医疗结论。"
+        },
+        {
+          "majorId": "major-bme",
+          "label": "传感、仪器与测试透镜",
+          "role": "选择或描述传感、采样电路、接触界面和标定方法，检查信号是否值得被处理。",
+          "input": "目标物理量、传感器参数、安装条件、噪声来源和测试环境。",
+          "output": "传感与采样框图、标定记录、信号质量检查表和台架测试计划。",
+          "interface": "向数据侧提供量程、单位、采样限制和质量标记；接收算法侧的质量阈值与失败反馈。",
+          "contribution": "让输入数据有测量依据，并把器械、材料、环境和可靠性问题提前暴露出来。"
+        }
       ],
       "sharedArtifact": "系统框图、采样与数据字典、两专业接口表、测试计划和风险清单。",
       "validation": "检查采样稳定性、信号质量记录、处理复现性和接口字段一致性；只验证教学原型流程，不推断医疗效果。",
       "riskBoundary": "不接入真实患者、医院系统或医疗设备，不给出诊断和健康处置建议；阈值与数据只用于教学演示，正式设备还需要伦理、法规、质量体系和专业测试。",
       "sourceId": "source-college-profile",
-      "lastVerified": "2026-08-13",
-      "owner": "HseeHub P0 专业内容编辑",
-      "updatedAt": "2026-08-18",
-      "reviewDueAt": "2026-09-18"
+      "lastVerified": "2026-08-13"
     },
     {
       "id": "case-medical-imaging-workflow",
@@ -106,17 +316,30 @@
       "problem": "如何把一张公开授权或合成影像，从采集质量检查、处理、标注到展示串成一条可以复核的流程？",
       "sharedGoal": "共同画出从影像输入到展示结果的端到端流程，区分设备与信号质量、算法误差、界面提示和人工复核。",
       "lenses": [
-        {"majorId": "major-ime", "label": "图像与信息系统透镜", "role": "组织预处理、特征或分割流程、评估表、结果追溯和查看器提示。", "input": "公开/合成图像、任务说明、标签规范、处理版本和展示需求。", "output": "可复现处理步骤、误差分类、评估表、结果说明和信息流图。", "interface": "约定影像元数据、处理版本、模型输出、人工复核状态和失败提示字段。", "contribution": "关注数据流程、算法误差、可解释展示和系统集成。"},
-        {"majorId": "major-bme", "label": "成像、仪器与验证透镜", "role": "解释成像原理、设备链路、信号质量与参数变化，提出适合的性能检查。", "input": "成像模态说明、采集参数、设备或仿真链路、图像质量观察和样例。", "output": "采集质量检查表、误差来源记录、参数说明和验证测试方案。", "interface": "向信息侧提供质量指标、采集条件、可比范围和数据限制；接收处理后的误差与复核记录。", "contribution": "避免把低质量输入或设备差异误当成算法能力，并把仪器验证接到软件流程上。"}
+        {
+          "majorId": "major-ime",
+          "label": "图像与信息系统透镜",
+          "role": "组织预处理、特征或分割流程、评估表、结果追溯和查看器提示。",
+          "input": "公开/合成图像、任务说明、标签规范、处理版本和展示需求。",
+          "output": "可复现处理步骤、误差分类、评估表、结果说明和信息流图。",
+          "interface": "约定影像元数据、处理版本、模型输出、人工复核状态和失败提示字段。",
+          "contribution": "关注数据流程、算法误差、可解释展示和系统集成。"
+        },
+        {
+          "majorId": "major-bme",
+          "label": "成像、仪器与验证透镜",
+          "role": "解释成像原理、设备链路、信号质量与参数变化，提出适合的性能检查。",
+          "input": "成像模态说明、采集参数、设备或仿真链路、图像质量观察和样例。",
+          "output": "采集质量检查表、误差来源记录、参数说明和验证测试方案。",
+          "interface": "向信息侧提供质量指标、采集条件、可比范围和数据限制；接收处理后的误差与复核记录。",
+          "contribution": "避免把低质量输入或设备差异误当成算法能力，并把仪器验证接到软件流程上。"
+        }
       ],
       "sharedArtifact": "从采集到展示的流程图、影像质量与算法误差对照表、字段接口说明和人工复核清单。",
       "validation": "使用公开授权或合成样例，复核输入来源、处理版本、标注一致性和错误类型，并写明样例限制。",
       "riskBoundary": "不使用真实患者影像，不输出诊断、分诊或治疗建议；教学结果不能替代临床验证、伦理审查、数据治理、器械注册和专业人员判断。",
       "sourceId": "source-monai-tutorials",
-      "lastVerified": "2026-08-13",
-      "owner": "HseeHub P0 专业内容编辑",
-      "updatedAt": "2026-08-18",
-      "reviewDueAt": "2026-09-18"
+      "lastVerified": "2026-08-13"
     }
   ],
   "capabilities": [
@@ -125,10 +348,22 @@
       "slug": "health-and-user-understanding",
       "name": "生命健康与用户理解",
       "shortName": "理解人和场景",
+      "navigationLabel": "理解人和场景",
       "summary": "先理解人体、生物过程、使用者和场景约束，再决定要测什么、做什么和如何验证。",
+      "cardSummary": "先理解人、对象和场景，再决定测什么、做什么。",
+      "taskSummary": "把问题拆成使用者、对象、限制和可观察结果",
       "why": "工程方案不是只对着数据或器件优化；对象、使用者、环境和责任会改变问题本身。",
       "task": "把健康或公共技术问题拆成使用者、对象、场景、限制和可观察结果，并记录仍需专家确认的部分。",
-      "majorEvidence": [{"majorId": "major-ime", "course": "人体解剖学（工）、生理学、智能医学工程导论"}, {"majorId": "major-bme", "course": "生理学（工）、人体解剖学（工）、生物医学工程导论"}],
+      "majorEvidence": [
+        {
+          "majorId": "major-ime",
+          "course": "人体解剖学（工）、生理学、智能医学工程导论"
+        },
+        {
+          "majorId": "major-bme",
+          "course": "生理学（工）、人体解剖学（工）、生物医学工程导论"
+        }
+      ],
       "healthExample": "为可穿戴项目整理使用者、佩戴场景、采样限制和误差风险，不把数据图表直接解释成健康判断。",
       "transferExample": "把同样的访谈和约束梳理方法用于运动设备、养老服务或公共设施，再补充对应领域知识。",
       "sourceId": "source-college-profile",
@@ -139,10 +374,22 @@
       "slug": "mathematical-modeling-and-research",
       "name": "数理建模与科学研究",
       "shortName": "建模和求证",
+      "navigationLabel": "建模和求证",
       "summary": "把问题变成假设、模型、实验和证据，知道结果在什么条件下才成立。",
+      "cardSummary": "把问题变成假设、实验和能复核的证据。",
+      "taskSummary": "定义变量、指标和小实验，说明不确定性",
       "why": "可复现的测量、比较和误差说明，比一个漂亮的单次结果更能帮助团队做决定。",
       "task": "定义变量和评价指标，设计小实验或对照，记录数据处理步骤并说明不确定性。",
-      "majorEvidence": [{"majorId": "major-ime", "course": "线性代数、概率论与概率统计、高级项目研究"}, {"majorId": "major-bme", "course": "线性代数、概率论与数理统计、生物医学统计学"}],
+      "majorEvidence": [
+        {
+          "majorId": "major-ime",
+          "course": "线性代数、概率论与概率统计、高级项目研究"
+        },
+        {
+          "majorId": "major-bme",
+          "course": "线性代数、概率论与数理统计、生物医学统计学"
+        }
+      ],
       "healthExample": "比较两种信号去噪方法在合成数据上的变化，并说明样本量和噪声假设。",
       "transferExample": "把实验设计和误差记录迁移到环境监测、质量工程或能源数据分析，但要补充领域指标和标准。",
       "sourceId": "source-ime-2025",
@@ -153,10 +400,22 @@
       "slug": "sensing-measurement-and-testing",
       "name": "感知、测量与医学检测",
       "shortName": "把现象变成可信数据",
+      "navigationLabel": "把现象变成可信数据",
       "summary": "让物理或生物现象经过传感、采样、标定和质量检查，变成可以被解释的数据。",
+      "cardSummary": "经过传感、采样和标定，让输入值得被解释。",
+      "taskSummary": "写清量程、单位、采样、噪声和失效状态",
       "why": "输入不可靠时，后面的算法、可视化和决策都会继承误差；测量边界要在项目开始时说清楚。",
       "task": "画出传感—采样—处理链，写明量程、单位、采样频率、噪声、标定和失效状态。",
-      "majorEvidence": [{"majorId": "major-ime", "course": "医用电子技术、智能医学传感技术、信号与系统"}, {"majorId": "major-bme", "course": "生物医学传感与检测、医学仪器原理与设计、信号与系统"}],
+      "majorEvidence": [
+        {
+          "majorId": "major-ime",
+          "course": "医用电子技术、智能医学传感技术、信号与系统"
+        },
+        {
+          "majorId": "major-bme",
+          "course": "生物医学传感与检测、医学仪器原理与设计、信号与系统"
+        }
+      ],
       "healthExample": "为合成生命信号演示建立采样质量表，区分信号缺失、噪声和任务结果。",
       "transferExample": "将采样与标定方法迁移到温湿度、设备振动、汽车传感或工业视觉，另补现场安全和维护要求。",
       "sourceId": "source-bme-2025",
@@ -167,10 +426,22 @@
       "slug": "signals-images-and-data-ai",
       "name": "信号、图像与数据 AI",
       "shortName": "从数据中找结构",
+      "navigationLabel": "从数据中找结构",
       "summary": "从波形、图像和表格数据中提取结构与规律，并用合适的评价方式说明模型或规则的局限。",
+      "cardSummary": "从波形、图像和表格中找结构，并说明模型局限。",
+      "taskSummary": "完成清洗、特征、评估和错误分析闭环",
       "why": "相同算法在不同数据分布、错误成本和标注规则下会产生不同含义，不能只看一个指标。",
       "task": "完成清洗、可视化、特征或模型、评估和错误分析的闭环，保留数据与版本说明。",
-      "majorEvidence": [{"majorId": "major-ime", "course": "机器学习与模式识别、医学图像处理、医疗大数据与数据挖掘"}, {"majorId": "major-bme", "course": "医学大数据与人工智能、生物医学数字信号处理、医学图像处理"}],
+      "majorEvidence": [
+        {
+          "majorId": "major-ime",
+          "course": "机器学习与模式识别、医学图像处理、医疗大数据与数据挖掘"
+        },
+        {
+          "majorId": "major-bme",
+          "course": "医学大数据与人工智能、生物医学数字信号处理、医学图像处理"
+        }
+      ],
       "healthExample": "用合成或公开授权样例练习影像/信号预处理和误差分类，不把输出当成诊断。",
       "transferExample": "把图像分割、时序特征和误差分析迁移到工业质检、道路图像或能源趋势，重新定义标签和验收指标。",
       "sourceId": "source-ime-2025",
@@ -181,10 +452,22 @@
       "slug": "software-and-information-systems",
       "name": "软件与信息系统",
       "shortName": "把流程做成系统",
+      "navigationLabel": "把流程做成系统",
       "summary": "把数据、规则、用户操作和结果记录组织成可维护、可追溯的软件流程。",
+      "cardSummary": "把数据、规则、操作和结果组织成可追溯流程。",
+      "taskSummary": "定义数据字典、接口、异常和版本记录",
       "why": "模型或脚本只有接上输入、版本、错误处理和反馈，才成为可以被团队复核的系统。",
       "task": "定义数据字典和接口，完成小型处理流程或页面，并为异常输入、版本和权限写出说明。",
-      "majorEvidence": [{"majorId": "major-ime", "course": "程序设计基础、算法与数据结构、数据库原理、医院信息系统"}, {"majorId": "major-bme", "course": "程序设计基础、医学大数据与人工智能、生物信息学"}],
+      "majorEvidence": [
+        {
+          "majorId": "major-ime",
+          "course": "程序设计基础、算法与数据结构、数据库原理、医院信息系统"
+        },
+        {
+          "majorId": "major-bme",
+          "course": "程序设计基础、医学大数据与人工智能、生物信息学"
+        }
+      ],
       "healthExample": "为公开/合成数据建立可追溯的数据字典和处理页面，明确页面不构成医疗建议。",
       "transferExample": "把数据字典、接口和异常处理方法用于企业软件、城市公共服务或实验室信息流程，另补隐私和权限要求。",
       "sourceId": "source-ime-2025",
@@ -195,10 +478,22 @@
       "slug": "electronics-embedded-and-control",
       "name": "电子、嵌入式与智能控制",
       "shortName": "让系统感知并动作",
+      "navigationLabel": "让系统感知并动作",
       "summary": "把电路、传感、计算和执行器组成有接口、有时序、有安全边界的系统。",
+      "cardSummary": "把电路、传感、计算和执行器接成安全系统。",
+      "taskSummary": "定义输入输出、状态、异常和安全停机",
       "why": "软硬件协作要面对采样延迟、资源限制、噪声、失效和物理安全，不能只在电脑里验证。",
       "task": "画系统框图，定义输入输出和状态，完成低风险仿真或台架测试，并记录异常和停机条件。",
-      "majorEvidence": [{"majorId": "major-ime", "course": "医用电子技术、微机原理与嵌入式系统、神经工程学与医用机器人"}, {"majorId": "major-bme", "course": "电路分析、模拟电子技术、数字电子技术、微机原理与嵌入式系统"}],
+      "majorEvidence": [
+        {
+          "majorId": "major-ime",
+          "course": "医用电子技术、微机原理与嵌入式系统、神经工程学与医用机器人"
+        },
+        {
+          "majorId": "major-bme",
+          "course": "电路分析、模拟电子技术、数字电子技术、微机原理与嵌入式系统"
+        }
+      ],
       "healthExample": "在不接触人体的仿真中，把传感输入、滤波、状态提示和安全停机连成演示系统。",
       "transferExample": "把接口和状态机方法迁移到环境物联、机器人、汽车或自动化设备，并补充电气与机械安全。",
       "sourceId": "source-bme-2025",
@@ -209,10 +504,22 @@
       "slug": "biomaterials-devices-and-manufacturing",
       "name": "生物材料、器械与制造",
       "shortName": "让材料和结构可靠工作",
+      "navigationLabel": "让材料和结构可靠工作",
       "summary": "让材料、结构、工艺和使用条件共同满足功能、耐久性、可制造性与可靠性要求。",
+      "cardSummary": "把材料、结构、工艺和环境放进可靠性判断。",
+      "taskSummary": "用指标、候选对照和低风险测试验证方案",
       "why": "器械方案不仅要能工作，还要知道材料与结构在环境、重复使用和制造误差下怎样变化。",
       "task": "把功能目标转成材料/结构指标，建立候选对照表，提出低风险测试和不能直接外推的结论。",
-      "majorEvidence": [{"majorId": "major-ime", "course": "医用生物力学、生物医学光学、智能医学仪器"}, {"majorId": "major-bme", "course": "生物医学材料及其评价、微纳米加工技术、医学仪器原理与设计"}],
+      "majorEvidence": [
+        {
+          "majorId": "major-ime",
+          "course": "医用生物力学、生物医学光学、智能医学仪器"
+        },
+        {
+          "majorId": "major-bme",
+          "course": "生物医学材料及其评价、微纳米加工技术、医学仪器原理与设计"
+        }
+      ],
       "healthExample": "比较传感接触层或器械外壳的示例参数，讨论灵敏度、耐久性、清洁和使用边界。",
       "transferExample": "把材料参数、工艺和可靠性对照迁移到传感材料、精密制造或机器人部件，但要重新验证环境和标准。",
       "sourceId": "source-bme-2025",
@@ -223,10 +530,22 @@
       "slug": "design-validation-and-engineering-responsibility",
       "name": "设计验证与工程责任",
       "shortName": "让方案可测、安全、可交付",
+      "navigationLabel": "让方案可测、安全、可交付",
       "summary": "让设计目标、测试证据、解释方式、安全边界和团队责任彼此对应。",
+      "cardSummary": "让目标、证据、安全边界和责任彼此对应。",
+      "taskSummary": "写出需求、风险、测试和验收链",
       "why": "工程结果要能被复核，也要明确谁可以使用、在哪些条件下失效，以及还需要哪些专业审核。",
       "task": "写出需求—风险—测试—验收链，区分教学演示、原型验证和正式产品/研究结论。",
-      "majorEvidence": [{"majorId": "major-ime", "course": "医疗器械法规与管理、企业实习、高级项目研究"}, {"majorId": "major-bme", "course": "生物医学伦理与仪器法规、企业实习、高级项目研究"}],
+      "majorEvidence": [
+        {
+          "majorId": "major-ime",
+          "course": "医疗器械法规与管理、企业实习、高级项目研究"
+        },
+        {
+          "majorId": "major-bme",
+          "course": "生物医学伦理与仪器法规、企业实习、高级项目研究"
+        }
+      ],
       "healthExample": "为影像或生命信号练习写出数据许可、人工复核、失败提示和不作诊断的边界。",
       "transferExample": "把风险清单和验收记录迁移到工业质量、公共技术或机器人控制，补充标准、现场安全和权限管理。",
       "sourceId": "source-college-profile",
@@ -238,42 +557,153 @@
       "id": "project-signal-feature-notebook",
       "slug": "signal-feature-notebook",
       "title": "从合成信号做出可解释的分类表",
+      "navigationLabel": "合成信号分类",
       "kicker": "10 分钟导览 · 数据/AI",
       "summary": "用两类合成时序信号完成清洗、可视化和简单分类，比较指标变化，并写下数据和模型的局限。",
+      "cardSummary": "用合成信号练习清洗、特征、分类和误差说明。",
+      "taskSummary": "从波形到特征表，再看分类结果",
+      "outputSummary": "曲线、特征表、分类结果和局限说明",
+      "primaryAction": {
+        "label": "查看体验卡",
+        "href": "/projects/signal-feature-notebook"
+      },
+      "primaryResourceId": "resource-signal-feature-starter",
+      "launch": {
+        "primaryResourceId": "resource-signal-feature-starter",
+        "maxStartSeconds": 120,
+        "tenMinuteOutput": "保存一张曲线截图和三行观察"
+      },
+      "visualAssetId": "visual-signal-feature",
       "viewpoint": "数据/AI",
       "level": "try",
       "mode": "individual",
-      "majorIds": ["major-ime"],
-      "courseEvidence": [{"majorId": "major-ime", "course": "程序设计基础、算法与数据结构、机器学习与模式识别"}],
-      "capabilityIds": ["cap-signal-data-ai", "cap-math-research", "cap-design-validation"],
-      "scenarioIds": ["scenario-ai-data", "scenario-healthcare", "scenario-environment-city"],
+      "majorIds": [
+        "major-ime"
+      ],
+      "courseEvidence": [
+        {
+          "majorId": "major-ime",
+          "course": "程序设计基础、算法与数据结构、机器学习与模式识别"
+        }
+      ],
+      "capabilityIds": [
+        "cap-signal-data-ai",
+        "cap-math-research",
+        "cap-design-validation"
+      ],
+      "scenarioIds": [
+        "scenario-ai-data",
+        "scenario-healthcare",
+        "scenario-environment-city"
+      ],
       "collaborationRoles": [],
-      "data": {"kind": "synthetic", "access": "open", "sensitivity": "none"},
+      "data": {
+        "kind": "synthetic",
+        "access": "open",
+        "sensitivity": "none"
+      },
       "suitableFor": "想先体验 Python、数据可视化和基础机器学习的学生；不要求已经学过医学，但需要愿意记录假设和结果。",
       "duration": "10 分钟导览；约 90 分钟实践",
-      "durationBands": ["10 分钟", "1–2 小时"],
-      "prerequisites": ["会使用电脑和文件夹，或愿意边做边查", "知道变量、列表或表格的基本概念", "不需要真实健康数据，也不需要先安装 GPU 环境"],
-      "tools": [{"name": "Python 与 Jupyter", "officialUrl": "https://jupyter.org/"}, {"name": "NumPy", "officialUrl": "https://numpy.org/doc/stable/user/quickstart.html"}, {"name": "scikit-learn", "officialUrl": "https://scikit-learn.org/stable/getting_started.html"}],
+      "durationBands": [
+        "10 分钟",
+        "1–2 小时"
+      ],
+      "prerequisites": [
+        "会使用电脑和文件夹，或愿意边做边查",
+        "知道变量、列表或表格的基本概念",
+        "不需要真实健康数据，也不需要先安装 GPU 环境"
+      ],
+      "tools": [
+        {
+          "name": "Python 与 Jupyter",
+          "officialUrl": "https://jupyter.org/"
+        },
+        {
+          "name": "NumPy",
+          "officialUrl": "https://numpy.org/doc/stable/user/quickstart.html"
+        },
+        {
+          "name": "scikit-learn",
+          "officialUrl": "https://scikit-learn.org/stable/getting_started.html"
+        }
+      ],
       "dataAccess": "默认使用自己生成的合成信号，公开可用、无需账号；如改用 PhysioNet，必须先确认具体数据集的访问级别。",
+      "dataBoundary": "默认只生成合成信号；不下载、上传或处理真实患者数据，PhysioNet 仅作为了解数据来源的可选入口。",
       "dataSource": "用脚本生成带噪正弦波或趋势序列；PhysioNet 仅作为了解生物医学数据来源的可选入口，不下载或上传受控数据。",
       "license": "合成数据由学生生成，可用于教学；外部数据必须遵守具体数据集许可、引用和访问条件，不能把数据许可默认为开放。",
-      "steps": ["生成两类带噪信号，保存随机种子和参数。", "画出原始信号，记录缺失、噪声和采样差异。", "提取均值、波动、频域或趋势特征，做一个简单分类器。", "用固定训练/测试划分记录指标，并查看误分类样例。", "写明样本量、噪声、标签和指标不能代表什么。"],
-      "stopCondition": "完成一张含输入、处理、结果和限制的记录；如果开始接触真实健康数据或无法说明标签来源，就停在合成数据阶段。",
+      "steps": [
+        "生成两类带噪信号，保存随机种子和参数。",
+        "画出原始信号，记录缺失、噪声和采样差异。",
+        "提取均值、波动、频域或趋势特征，做一个简单分类器。",
+        "用固定训练/测试划分记录指标，并查看误分类样例。",
+        "写明样本量、噪声、标签和指标不能代表什么。"
+      ],
       "expectedOutput": "一个 Notebook 或截图包：原始/清洗后曲线、特征表、分类结果、指标解释和局限说明。",
-      "artifactId": "artifact-signal-analysis",
-      "artifactTemplate": {"label": "信号分析记录模板", "href": "/project-templates/signal-analysis-template.md", "version": "v1.0", "license": "CC BY 4.0"},
-      "reflectionPrompt": "哪一个处理步骤最影响结果？如果换一组数据或换一个场景，你会先重新核对什么？",
       "validation": "固定随机种子，保留训练/测试分割；用混淆矩阵或准确率/召回率记录结果，并解释噪声、样本量和阈值如何影响结论。",
       "nextStep": "补学概率统计与信号处理，再把同一流程改写成环境传感器趋势分析；若进入医学数据，先阅读数据集许可和标注说明。",
       "boundary": "这是数据流程练习，不是医学筛查、诊断或健康建议；不使用真实患者数据，不把一次高指标写成临床有效性。",
+      "safetyBoundary": "不把分类结果写成诊断或临床有效性；不上传真实患者数据，不在站内执行外部代码。",
       "sourceUrl": "https://physionet.org/about/",
+      "quickTry": {
+        "enabled": true,
+        "durationMinutes": 10,
+        "minimumArtifact": "一张包含曲线、特征表、分类结果和局限说明的结果表",
+        "startAction": {
+          "label": "查看 10 分钟导览",
+          "href": "/projects/signal-feature-notebook"
+        }
+      },
+      "resourceHealth": {
+        "status": "available",
+        "checkedAt": "2026-08-13",
+        "note": "官方入口已登记；项目默认不下载受控数据。"
+      },
       "sourceId": "source-physionet",
-      "lastVerified": "2026-08-18",
-      "endpointIds": ["endpoint-project-signal-primary", "endpoint-project-signal-alternative"],
+      "lastVerified": "2026-08-13",
+      "stopCondition": "完成一张含输入、处理、结果和限制的记录；如果开始接触真实健康数据或无法说明标签来源，就停在合成数据阶段。",
+      "artifactId": "artifact-signal-analysis",
+      "artifactTemplate": {
+        "label": "信号分析记录模板",
+        "href": "/project-templates/signal-analysis-template.md",
+        "version": "v1.0",
+        "license": "CC BY 4.0"
+      },
+      "reflectionPrompt": "哪一个处理步骤最影响结果？如果换一组数据或换一个场景，你会先重新核对什么？",
+      "endpointIds": [
+        "endpoint-project-signal-primary",
+        "endpoint-project-signal-alternative"
+      ],
       "previewAssets": [
-        {"src": "/project-previews/signal-entry-notebook.svg", "alt": "打开的信号分类 notebook 工作台，依次摆放导入合成信号、查看曲线和选择特征三个开始动作", "kind": "diagram", "author": "HseeHub 编辑部（基于项目步骤原创重建）", "license": "CC BY 4.0", "sourceRef": "source-physionet", "generationRef": "scripts/generate-project-previews.mjs · signal-entry-v1", "updatedAt": "2026-08-19"},
-        {"src": "/project-previews/signal-feature-process.svg", "alt": "两类合成信号从原始曲线经过分段、特征提取到分类表的三步处理过程，并标出需要复核的特征", "kind": "process", "author": "HseeHub 编辑部（固定种子合成数据生成）", "license": "CC BY 4.0", "sourceRef": "source-physionet", "generationRef": "scripts/generate-project-previews.mjs · signal-seed-17-process", "updatedAt": "2026-08-19"},
-        {"src": "/project-previews/signal-feature-notebook.svg", "alt": "两类合成时序信号的曲线和分类结果摘要，显示固定种子下的特征与误分类计数", "kind": "project_output", "author": "HseeHub 编辑部（固定种子合成数据生成）", "license": "CC BY 4.0", "sourceRef": "source-physionet", "generationRef": "scripts/generate-project-previews.mjs · signal-seed-17", "updatedAt": "2026-08-19"}
+        {
+          "src": "/project-previews/signal-entry-notebook.svg",
+          "alt": "打开的信号分类 notebook 工作台，依次摆放导入合成信号、查看曲线和选择特征三个开始动作",
+          "kind": "diagram",
+          "author": "HseeHub 编辑部（基于项目步骤原创重建）",
+          "license": "CC BY 4.0",
+          "sourceRef": "source-physionet",
+          "generationRef": "scripts/generate-project-previews.mjs · signal-entry-v1",
+          "updatedAt": "2026-08-19"
+        },
+        {
+          "src": "/project-previews/signal-feature-process.svg",
+          "alt": "两类合成信号从原始曲线经过分段、特征提取到分类表的三步处理过程，并标出需要复核的特征",
+          "kind": "process",
+          "author": "HseeHub 编辑部（固定种子合成数据生成）",
+          "license": "CC BY 4.0",
+          "sourceRef": "source-physionet",
+          "generationRef": "scripts/generate-project-previews.mjs · signal-seed-17-process",
+          "updatedAt": "2026-08-19"
+        },
+        {
+          "src": "/project-previews/signal-feature-notebook.svg",
+          "alt": "两类合成时序信号的曲线和分类结果摘要，显示固定种子下的特征与误分类计数",
+          "kind": "project_output",
+          "author": "HseeHub 编辑部（固定种子合成数据生成）",
+          "license": "CC BY 4.0",
+          "sourceRef": "source-physionet",
+          "generationRef": "scripts/generate-project-previews.mjs · signal-seed-17",
+          "updatedAt": "2026-08-19"
+        }
       ],
       "owner": "HseeHub P0 项目编辑",
       "updatedAt": "2026-08-19",
@@ -283,41 +713,170 @@
       "id": "project-sensor-alarm-prototype",
       "slug": "sensor-alarm-prototype",
       "title": "传感—采样—告警最小系统",
+      "navigationLabel": "传感采样提示",
       "kicker": "1–2 小时体验 · 传感/仪器",
       "summary": "用仿真或低压台架把一个环境传感输入变成带质量标记的提示，练习接口、采样、噪声和安全停机。",
+      "cardSummary": "用仿真输入练习采样、噪声、接口和安全停止。",
+      "taskSummary": "把传感输入接成带质量标记的提示",
+      "outputSummary": "系统框图、采样表、提示规则和测试记录",
+      "primaryAction": {
+        "label": "查看体验卡",
+        "href": "/projects/sensor-alarm-prototype"
+      },
+      "visualAssetId": "visual-sensor-alarm",
       "viewpoint": "传感/仪器",
       "level": "try",
       "mode": "cross-major",
-      "majorIds": ["major-ime", "major-bme"],
-      "courseEvidence": [{"majorId": "major-ime", "course": "程序设计基础、医用电子技术、微机原理与嵌入式系统"}, {"majorId": "major-bme", "course": "生物医学传感与检测、医学仪器原理与设计、信号与系统"}],
-      "capabilityIds": ["cap-sensing-measurement", "cap-electronics-control", "cap-software-information", "cap-design-validation"],
-      "scenarioIds": ["scenario-electronic-iot", "scenario-healthcare", "scenario-environment-city"],
-      "collaborationRoles": [{"id": "instrument-test", "title": "传感与测试角色", "suggestedMajorIds": ["major-bme"], "responsibilities": ["确定被测物理量、采样条件、量程和质量标记。"], "inputs": ["传感器或仿真输入、采样参数、噪声与安全约束。"], "outputs": ["传感与采样框图、标定记录、信号质量检查表。"], "acceptance": ["单位、采样间隔、异常读数和停止状态均有记录。"]}, {"id": "data-system", "title": "数据与信息系统角色", "suggestedMajorIds": ["major-ime"], "responsibilities": ["组织采样数据、提示规则、失败反馈和可复核的状态记录。"], "inputs": ["带单位和质量标记的采样序列、告警阈值和界面需求。"], "outputs": ["提示规则、状态说明、测试记录和可复现的处理步骤。"], "acceptance": ["正常、异常、断开输入和安全停止四类用例均可复现。"]}],
-      "data": {"kind": "synthetic", "access": "open", "sensitivity": "none"},
+      "majorIds": [
+        "major-ime",
+        "major-bme"
+      ],
+      "courseEvidence": [
+        {
+          "majorId": "major-ime",
+          "course": "程序设计基础、医用电子技术、微机原理与嵌入式系统"
+        },
+        {
+          "majorId": "major-bme",
+          "course": "生物医学传感与检测、医学仪器原理与设计、信号与系统"
+        }
+      ],
+      "capabilityIds": [
+        "cap-sensing-measurement",
+        "cap-electronics-control",
+        "cap-software-information",
+        "cap-design-validation"
+      ],
+      "scenarioIds": [
+        "scenario-electronic-iot",
+        "scenario-healthcare",
+        "scenario-environment-city"
+      ],
+      "collaborationRoles": [
+        {
+          "id": "instrument-test",
+          "title": "传感与测试角色",
+          "suggestedMajorIds": [
+            "major-bme"
+          ],
+          "responsibilities": [
+            "确定被测物理量、采样条件、量程和质量标记。"
+          ],
+          "inputs": [
+            "传感器或仿真输入、采样参数、噪声与安全约束。"
+          ],
+          "outputs": [
+            "传感与采样框图、标定记录、信号质量检查表。"
+          ],
+          "acceptance": [
+            "单位、采样间隔、异常读数和停止状态均有记录。"
+          ]
+        },
+        {
+          "id": "data-system",
+          "title": "数据与信息系统角色",
+          "suggestedMajorIds": [
+            "major-ime"
+          ],
+          "responsibilities": [
+            "组织采样数据、提示规则、失败反馈和可复核的状态记录。"
+          ],
+          "inputs": [
+            "带单位和质量标记的采样序列、告警阈值和界面需求。"
+          ],
+          "outputs": [
+            "提示规则、状态说明、测试记录和可复现的处理步骤。"
+          ],
+          "acceptance": [
+            "正常、异常、断开输入和安全停止四类用例均可复现。"
+          ]
+        }
+      ],
+      "data": {
+        "kind": "synthetic",
+        "access": "open",
+        "sensitivity": "none"
+      },
       "suitableFor": "想知道传感器、嵌入式程序和数据提示如何接在一起的学生；可以一人完成，也可以分成仪器、软件和测试角色。",
       "duration": "约 2 小时",
-      "durationBands": ["1–2 小时"],
-      "prerequisites": ["了解电压、读数或变量的基本概念", "能阅读短程序并修改一个阈值", "优先使用仿真或低压套件，不要求接触人体或市电"],
-      "tools": [{"name": "Arduino IDE", "officialUrl": "https://www.arduino.cc/en/software/"}, {"name": "Arduino 模拟输入教程", "officialUrl": "https://docs.arduino.cc/learn/microcontrollers/analog-input/"}],
+      "durationBands": [
+        "1–2 小时"
+      ],
+      "prerequisites": [
+        "了解电压、读数或变量的基本概念",
+        "能阅读短程序并修改一个阈值",
+        "优先使用仿真或低压套件，不要求接触人体或市电"
+      ],
+      "tools": [
+        {
+          "name": "Arduino IDE",
+          "officialUrl": "https://www.arduino.cc/en/software/"
+        },
+        {
+          "name": "Arduino 模拟输入教程",
+          "officialUrl": "https://docs.arduino.cc/learn/microcontrollers/analog-input/"
+        }
+      ],
       "dataAccess": "不需要外部数据；使用仿真生成的温湿度、光照或电位器读数，公开可用且不含个人信息。",
+      "dataBoundary": "只使用仿真或低压台架生成的短时序列，不采集人体信号，不连接医院、校园生产系统或联网控制设备。",
       "dataSource": "由仿真器或低压传感器现场生成短时序列；不采集人体信号，不连接医院、校园生产系统或联网控制设备。",
       "license": "自生成教学数据可用于学习；Arduino 软件、文档和示例代码按其官方许可与署名要求使用，改写代码时保留来源说明。",
-      "steps": ["画出传感器、采样板、程序、提示灯或串口输出的系统框图。", "读取一段输入，记录单位、采样间隔、缺失值和明显噪声。", "加入简单平滑或质量标记，再设置一个只用于演示的提示规则。", "改变采样频率、加入异常读数、断开输入，记录系统如何处理。", "写出正常、异常和停止状态，并给每个状态配测试用例。"],
-      "stopCondition": "正常、异常、断开输入和手动停止四类状态都能复现并记录；如果需要接入市电、人体、真实医疗设备或生产系统，就停止并换回仿真。",
+      "steps": [
+        "画出传感器、采样板、程序、提示灯或串口输出的系统框图。",
+        "读取一段输入，记录单位、采样间隔、缺失值和明显噪声。",
+        "加入简单平滑或质量标记，再设置一个只用于演示的提示规则。",
+        "改变采样频率、加入异常读数、断开输入，记录系统如何处理。",
+        "写出正常、异常和停止状态，并给每个状态配测试用例。"
+      ],
       "expectedOutput": "系统框图、仿真或代码链接、采样表、提示规则、状态说明和测试记录。",
-      "artifactId": "artifact-sensor-test-record",
-      "artifactTemplate": {"label": "传感测试记录模板", "href": "/project-templates/sensor-test-record-template.md", "version": "v1.0", "license": "CC BY 4.0"},
-      "reflectionPrompt": "哪些读数让你不再相信提示规则？你会增加哪一个质量标记或停止条件？",
       "validation": "覆盖稳定输入、噪声输入、缺失输入和手动停止四种情况；检查单位和时间戳，并说明阈值不是医学或生产安全标准。",
       "nextStep": "继续学习 ADC、滤波、嵌入式状态机和仪器标定，再迁移到环境监测或设备振动，不直接接入真实医疗场景。",
       "boundary": "只做仿真、低压电池供电或受控台架；禁止连接市电、真实医疗设备、人体、危险执行器或生产系统，禁止绕过联锁和访问控制。",
+      "safetyBoundary": "禁止接触市电、人体、真实医疗设备、危险执行器或生产系统；异常输入必须保留停止状态。",
       "sourceUrl": "https://docs.arduino.cc/learn/microcontrollers/analog-input/",
+      "quickTry": {
+        "enabled": false
+      },
+      "resourceHealth": {
+        "status": "available",
+        "checkedAt": "2026-08-13"
+      },
       "sourceId": "source-arduino",
-      "lastVerified": "2026-08-18",
-      "endpointIds": ["endpoint-project-sensor-primary", "endpoint-project-sensor-alternative"],
+      "lastVerified": "2026-08-13",
+      "stopCondition": "正常、异常、断开输入和手动停止四类状态都能复现并记录；如果需要接入市电、人体、真实医疗设备或生产系统，就停止并换回仿真。",
+      "artifactId": "artifact-sensor-test-record",
+      "artifactTemplate": {
+        "label": "传感测试记录模板",
+        "href": "/project-templates/sensor-test-record-template.md",
+        "version": "v1.0",
+        "license": "CC BY 4.0"
+      },
+      "reflectionPrompt": "哪些读数让你不再相信提示规则？你会增加哪一个质量标记或停止条件？",
+      "endpointIds": [
+        "endpoint-project-sensor-primary",
+        "endpoint-project-sensor-alternative"
+      ],
       "previewAssets": [
-        {"src": "/project-previews/sensor-bench-entry.svg", "alt": "受控低压传感台架的接线、采样读数和停止开关示意，提示先用仿真或低压输入", "kind": "diagram", "author": "HseeHub 编辑部（基于项目步骤原创重建）", "license": "CC BY 4.0", "sourceRef": "source-arduino", "generationRef": "scripts/generate-project-previews.mjs · sensor-entry-v1", "updatedAt": "2026-08-19"},
-        {"src": "/project-previews/sensor-alarm-prototype.svg", "alt": "合成传感序列的采样曲线、质量标记和正常异常停止状态条带", "kind": "project_output", "author": "HseeHub 编辑部（固定种子合成数据生成）", "license": "CC BY 4.0", "sourceRef": "source-arduino", "generationRef": "scripts/generate-project-previews.mjs · sensor-seed-23", "updatedAt": "2026-08-19"}
+        {
+          "src": "/project-previews/sensor-bench-entry.svg",
+          "alt": "受控低压传感台架的接线、采样读数和停止开关示意，提示先用仿真或低压输入",
+          "kind": "diagram",
+          "author": "HseeHub 编辑部（基于项目步骤原创重建）",
+          "license": "CC BY 4.0",
+          "sourceRef": "source-arduino",
+          "generationRef": "scripts/generate-project-previews.mjs · sensor-entry-v1",
+          "updatedAt": "2026-08-19"
+        },
+        {
+          "src": "/project-previews/sensor-alarm-prototype.svg",
+          "alt": "合成传感序列的采样曲线、质量标记和正常异常停止状态条带",
+          "kind": "project_output",
+          "author": "HseeHub 编辑部（固定种子合成数据生成）",
+          "license": "CC BY 4.0",
+          "sourceRef": "source-arduino",
+          "generationRef": "scripts/generate-project-previews.mjs · sensor-seed-23",
+          "updatedAt": "2026-08-19"
+        }
       ],
       "owner": "HseeHub P0 项目编辑",
       "updatedAt": "2026-08-19",
@@ -327,41 +886,127 @@
       "id": "project-material-test-matrix",
       "slug": "material-test-matrix",
       "title": "用示例参数做一张材料与检测选型矩阵",
+      "navigationLabel": "材料检测矩阵",
       "kicker": "1–2 小时体验 · 材料/检测",
       "summary": "把候选材料的灵敏度、耐久性、环境条件和测试成本放进同一张矩阵，练习区分筛选、测试和认证。",
+      "cardSummary": "用示例参数比较材料、环境条件、测试成本和边界。",
+      "taskSummary": "把候选材料放进一张可解释的选型矩阵",
+      "outputSummary": "选型矩阵、权重变化、测试方案和适用边界",
+      "primaryAction": {
+        "label": "查看体验卡",
+        "href": "/projects/material-test-matrix"
+      },
+      "visualAssetId": "visual-material-matrix",
       "viewpoint": "材料/检测",
       "level": "try",
       "mode": "individual",
-      "majorIds": ["major-bme"],
-      "courseEvidence": [{"majorId": "major-bme", "course": "生物医学材料及其评价、医学仪器原理与设计、设计验证与工程责任相关实践"}],
-      "capabilityIds": ["cap-materials-devices", "cap-sensing-measurement", "cap-math-research", "cap-design-validation"],
-      "scenarioIds": ["scenario-healthcare", "scenario-robotics-manufacturing", "scenario-environment-city"],
+      "majorIds": [
+        "major-bme"
+      ],
+      "courseEvidence": [
+        {
+          "majorId": "major-bme",
+          "course": "生物医学材料及其评价、医学仪器原理与设计、设计验证与工程责任相关实践"
+        }
+      ],
+      "capabilityIds": [
+        "cap-materials-devices",
+        "cap-sensing-measurement",
+        "cap-math-research",
+        "cap-design-validation"
+      ],
+      "scenarioIds": [
+        "scenario-healthcare",
+        "scenario-robotics-manufacturing",
+        "scenario-environment-city"
+      ],
       "collaborationRoles": [],
-      "data": {"kind": "synthetic", "access": "open", "sensitivity": "none"},
+      "data": {
+        "kind": "synthetic",
+        "access": "open",
+        "sensitivity": "none"
+      },
       "suitableFor": "对材料、器械、检测或产品可靠性好奇的学生；适合先用表格或 Notebook 做概念筛选，不要求进入实验室。",
       "duration": "约 90 分钟",
-      "durationBands": ["1–2 小时"],
-      "prerequisites": ["会读表格，能区分目标指标和测量指标", "了解平均值、范围或简单权重", "使用教师提供的合成参数或明确公开的示例数据"],
-      "tools": [{"name": "Python 与 pandas", "officialUrl": "https://pandas.pydata.org/docs/"}, {"name": "NIST 官方资源", "officialUrl": "https://www.nist.gov/"}],
+      "durationBands": [
+        "1–2 小时"
+      ],
+      "prerequisites": [
+        "会读表格，能区分目标指标和测量指标",
+        "了解平均值、范围或简单权重",
+        "使用教师提供的合成参数或明确公开的示例数据"
+      ],
+      "tools": [
+        {
+          "name": "Python 与 pandas",
+          "officialUrl": "https://pandas.pydata.org/docs/"
+        },
+        {
+          "name": "NIST 官方资源",
+          "officialUrl": "https://www.nist.gov/"
+        }
+      ],
       "dataAccess": "只使用自编合成参数或明确公开的示例参数；不把供应商内部数据、实验室原始数据或未授权标准文本上传到站内。",
+      "dataBoundary": "使用自编合成参数或明确公开的示例参数；不上传供应商内部数据、实验室原始数据或未授权标准文本。",
       "dataSource": "构造三种候选材料的密度、灵敏度、耐久性、环境范围和示例成本表；正式设计需回到数据表、标准原文和实验记录。",
       "license": "合成参数表可用于教学，但不能当作材料认证或产品规格；外部数据表、标准和图表按原来源许可使用并保留引用。",
-      "steps": ["写下目标用途、不可接受的风险和必须测量的指标。", "给三种候选材料建立单位、范围、来源和缺失值列。", "用不同权重生成矩阵，并保留计算公式。", "改变一个权重或环境条件，观察结论是否变化。", "为最敏感指标提出低风险测试方案，写出不能外推的结论。"],
-      "stopCondition": "矩阵能追溯到单位、假设、权重和参数来源，并完成一次敏感性检查；如果需要宣称材料安全性或医疗效果，就停止在概念筛选层。",
+      "steps": [
+        "写下目标用途、不可接受的风险和必须测量的指标。",
+        "给三种候选材料建立单位、范围、来源和缺失值列。",
+        "用不同权重生成矩阵，并保留计算公式。",
+        "改变一个权重或环境条件，观察结论是否变化。",
+        "为最敏感指标提出低风险测试方案，写出不能外推的结论。"
+      ],
       "expectedOutput": "材料/检测选型矩阵、假设和权重说明、敏感性比较、测试方案和适用边界。",
-      "artifactId": "artifact-material-matrix",
-      "artifactTemplate": {"label": "材料选型矩阵模板", "href": "/project-templates/material-matrix-template.md", "version": "v1.0", "license": "CC BY 4.0"},
-      "reflectionPrompt": "当权重或环境条件改变时，哪个结论最先变化？正式测试前还缺哪条证据？",
       "validation": "逐项检查单位、参数来源和缺失值；至少做一次权重变化和一次极端条件检查，把概念筛选与正式验证、合规认证分开。",
       "nextStep": "学习生物医学材料评价、测量不确定度和相关标准，再在合规实验条件下设计更完整的重复性测试。",
       "boundary": "不接触人体、动物或临床样本，不宣称材料生物相容性、器械安全性或医疗效果；真实实验要遵守实验室、化学品、机械和废弃物安全要求。",
+      "safetyBoundary": "不接触人体、动物或临床样本；概念矩阵不能替代材料认证、器械安全验证或合规实验。",
       "sourceUrl": "https://www.nist.gov/",
+      "quickTry": {
+        "enabled": false
+      },
+      "resourceHealth": {
+        "status": "available",
+        "checkedAt": "2026-08-13",
+        "note": "官方参考入口已登记；正式参数仍需回到具体标准或数据表。"
+      },
       "sourceId": "source-nist",
-      "lastVerified": "2026-08-18",
-      "endpointIds": ["endpoint-project-material-primary", "endpoint-project-material-alternative"],
+      "lastVerified": "2026-08-13",
+      "stopCondition": "矩阵能追溯到单位、假设、权重和参数来源，并完成一次敏感性检查；如果需要宣称材料安全性或医疗效果，就停止在概念筛选层。",
+      "artifactId": "artifact-material-matrix",
+      "artifactTemplate": {
+        "label": "材料选型矩阵模板",
+        "href": "/project-templates/material-matrix-template.md",
+        "version": "v1.0",
+        "license": "CC BY 4.0"
+      },
+      "reflectionPrompt": "当权重或环境条件改变时，哪个结论最先变化？正式测试前还缺哪条证据？",
+      "endpointIds": [
+        "endpoint-project-material-primary",
+        "endpoint-project-material-alternative"
+      ],
       "previewAssets": [
-        {"src": "/project-previews/material-samples-entry.svg", "alt": "三张材料样本卡、使用环境约束便签和待权衡指标摆在同一张实验桌上", "kind": "process", "author": "HseeHub 编辑部（基于项目步骤原创重建）", "license": "CC BY 4.0", "sourceRef": "source-nist", "generationRef": "scripts/generate-project-previews.mjs · material-entry-v1", "updatedAt": "2026-08-19"},
-        {"src": "/project-previews/material-test-matrix.svg", "alt": "三种合成材料参数在不同指标上的标准化比较矩阵，含权重变化后的排序结果", "kind": "project_output", "author": "HseeHub 编辑部（固定参数合成数据生成）", "license": "CC BY 4.0", "sourceRef": "source-nist", "generationRef": "scripts/generate-project-previews.mjs · material-seed-31", "updatedAt": "2026-08-19"}
+        {
+          "src": "/project-previews/material-samples-entry.svg",
+          "alt": "三张材料样本卡、使用环境约束便签和待权衡指标摆在同一张实验桌上",
+          "kind": "process",
+          "author": "HseeHub 编辑部（基于项目步骤原创重建）",
+          "license": "CC BY 4.0",
+          "sourceRef": "source-nist",
+          "generationRef": "scripts/generate-project-previews.mjs · material-entry-v1",
+          "updatedAt": "2026-08-19"
+        },
+        {
+          "src": "/project-previews/material-test-matrix.svg",
+          "alt": "三种合成材料参数在不同指标上的标准化比较矩阵，含权重变化后的排序结果",
+          "kind": "project_output",
+          "author": "HseeHub 编辑部（固定参数合成数据生成）",
+          "license": "CC BY 4.0",
+          "sourceRef": "source-nist",
+          "generationRef": "scripts/generate-project-previews.mjs · material-seed-31",
+          "updatedAt": "2026-08-19"
+        }
       ],
       "owner": "HseeHub P0 项目编辑",
       "updatedAt": "2026-08-19",
@@ -369,34 +1014,327 @@
     }
   ],
   "scenarios": [
-    {"id": "scenario-healthcare", "slug": "healthcare", "name": "医疗健康", "summary": "围绕生命健康、照护和医疗工程问题，把使用者、测量、数据、器械和专业责任放在同一张图里。", "sharedCapabilities": ["cap-health-user", "cap-sensing-measurement", "cap-signal-data-ai", "cap-design-validation"], "extraGate": "需要补充医学与生物学语境、伦理审查、数据治理、法规和专业人员复核；教学原型不能替代临床或器械验证。", "example": "可穿戴信号、医学影像流程、体外检测或康复辅助设备的学习型原型。", "sourceId": "source-college-profile", "lastVerified": "2026-08-13"},
-    {"id": "scenario-ai-data", "slug": "ai-and-data", "name": "AI/数据", "summary": "把数据清洗、建模、评估和解释用于不同问题，重点观察数据分布、标签、错误成本和可复现性。", "sharedCapabilities": ["cap-math-research", "cap-signal-data-ai", "cap-software-information", "cap-design-validation"], "extraGate": "需要补充统计、数据许可、隐私、偏差评估和目标领域指标；能运行模型不等于结论可靠。", "example": "合成时序分类、公开图像处理、环境趋势分析或企业数据可视化流程。", "sourceId": "source-ime-2025", "lastVerified": "2026-08-13"},
-    {"id": "scenario-software", "slug": "software-systems", "name": "软件系统", "summary": "把数据、规则、用户操作、权限和结果记录组织成可以维护和复核的应用或信息流程。", "sharedCapabilities": ["cap-software-information", "cap-signal-data-ai", "cap-health-user", "cap-design-validation"], "extraGate": "需要补充软件测试、部署、权限、隐私、可用性和故障恢复；演示页面不能接入未经授权的业务或医疗系统。", "example": "实验数据字典、公开数据故事页、设备状态面板或公共服务信息原型。", "sourceId": "source-ime-2025", "lastVerified": "2026-08-13"},
-    {"id": "scenario-electronic-iot", "slug": "electronics-and-iot", "name": "电子物联", "summary": "让传感器、嵌入式设备、网络和提示形成可观察的闭环，关注采样质量、资源限制和设备安全。", "sharedCapabilities": ["cap-sensing-measurement", "cap-electronics-control", "cap-software-information", "cap-design-validation"], "extraGate": "需要补充电气安全、网络访问、设备维护、功耗、环境干扰和数据传输边界；先用仿真或受控台架验证。", "example": "温湿度监测、设备振动采集、可穿戴外部接口或低风险智能环境节点。", "sourceId": "source-arduino", "lastVerified": "2026-08-13"},
-    {"id": "scenario-robotics-manufacturing", "slug": "robotics-and-manufacturing", "name": "机器人/制造", "summary": "把感知、结构、材料、控制和测试放进一个会与物理世界交互的工程系统。", "sharedCapabilities": ["cap-sensing-measurement", "cap-electronics-control", "cap-materials-devices", "cap-design-validation"], "extraGate": "需要补充机械和电气安全、功能安全、运动范围、维护、质量检验和现场权限；不得绕过联锁或在生产设备上直接试验。", "example": "康复辅助原型、抓取/搬运仿真、工业视觉质检或材料与部件可靠性测试。", "sourceId": "source-bme-2025", "lastVerified": "2026-08-13"},
-    {"id": "scenario-environment-city", "slug": "environment-city-public-tech", "name": "环境/城市/公共技术", "summary": "把测量、数据、软件和设备用于环境观察、城市运行或公共服务，强调开放数据、场景公平和长期维护。", "sharedCapabilities": ["cap-health-user", "cap-sensing-measurement", "cap-signal-data-ai", "cap-software-information"], "extraGate": "需要补充传感器布点、环境误差、数据公开、公共影响、隐私、运维和政策语境；样例结果不能代表整个城市或人群。", "example": "空气与温湿度趋势、公共设施状态、能源数据故事或城市交通观察。", "sourceId": "source-college-profile", "lastVerified": "2026-08-13"}
+    {
+      "id": "scenario-healthcare",
+      "slug": "healthcare",
+      "name": "医疗健康",
+      "navigationLabel": "医疗健康",
+      "summary": "围绕生命健康、照护和医疗工程问题，把使用者、测量、数据、器械和专业责任放在同一张图里。",
+      "cardSummary": "把使用者、测量、数据、器械和责任放在一起。",
+      "taskSummary": "先看共用能力，再核对医学、安全和专业复核门槛",
+      "sharedCapabilities": [
+        "cap-health-user",
+        "cap-sensing-measurement",
+        "cap-signal-data-ai",
+        "cap-design-validation"
+      ],
+      "extraGate": "需要补充医学与生物学语境、伦理审查、数据治理、法规和专业人员复核；教学原型不能替代临床或器械验证。",
+      "example": "可穿戴信号、医学影像流程、体外检测或康复辅助设备的学习型原型。",
+      "sourceId": "source-college-profile",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "scenario-ai-data",
+      "slug": "ai-and-data",
+      "name": "AI/数据",
+      "navigationLabel": "AI/数据",
+      "summary": "把数据清洗、建模、评估和解释用于不同问题，重点观察数据分布、标签、错误成本和可复现性。",
+      "cardSummary": "把清洗、建模、评估和解释接成可复现流程。",
+      "taskSummary": "比较数据分布、标签、错误成本和可复现性",
+      "sharedCapabilities": [
+        "cap-math-research",
+        "cap-signal-data-ai",
+        "cap-software-information",
+        "cap-design-validation"
+      ],
+      "extraGate": "需要补充统计、数据许可、隐私、偏差评估和目标领域指标；能运行模型不等于结论可靠。",
+      "example": "合成时序分类、公开图像处理、环境趋势分析或企业数据可视化流程。",
+      "sourceId": "source-ime-2025",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "scenario-software",
+      "slug": "software-systems",
+      "name": "软件系统",
+      "navigationLabel": "软件系统",
+      "summary": "把数据、规则、用户操作、权限和结果记录组织成可以维护和复核的应用或信息流程。",
+      "cardSummary": "把数据、规则、操作、权限和结果组织成系统。",
+      "taskSummary": "让流程可维护、可复核，并明确权限边界",
+      "sharedCapabilities": [
+        "cap-software-information",
+        "cap-signal-data-ai",
+        "cap-health-user",
+        "cap-design-validation"
+      ],
+      "extraGate": "需要补充软件测试、部署、权限、隐私、可用性和故障恢复；演示页面不能接入未经授权的业务或医疗系统。",
+      "example": "实验数据字典、公开数据故事页、设备状态面板或公共服务信息原型。",
+      "sourceId": "source-ime-2025",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "scenario-electronic-iot",
+      "slug": "electronics-and-iot",
+      "name": "电子物联",
+      "navigationLabel": "电子物联",
+      "summary": "让传感器、嵌入式设备、网络和提示形成可观察的闭环，关注采样质量、资源限制和设备安全。",
+      "cardSummary": "让传感、嵌入式、网络和提示形成可观察闭环。",
+      "taskSummary": "先用仿真或受控台架检查采样质量和设备安全",
+      "sharedCapabilities": [
+        "cap-sensing-measurement",
+        "cap-electronics-control",
+        "cap-software-information",
+        "cap-design-validation"
+      ],
+      "extraGate": "需要补充电气安全、网络访问、设备维护、功耗、环境干扰和数据传输边界；先用仿真或受控台架验证。",
+      "example": "温湿度监测、设备振动采集、可穿戴外部接口或低风险智能环境节点。",
+      "sourceId": "source-arduino",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "scenario-robotics-manufacturing",
+      "slug": "robotics-and-manufacturing",
+      "name": "机器人/制造",
+      "navigationLabel": "机器人/制造",
+      "summary": "把感知、结构、材料、控制和测试放进一个会与物理世界交互的工程系统。",
+      "cardSummary": "把感知、结构、材料、控制和测试放进物理系统。",
+      "taskSummary": "围绕安全、运动范围、维护和质量检验验证方案",
+      "sharedCapabilities": [
+        "cap-sensing-measurement",
+        "cap-electronics-control",
+        "cap-materials-devices",
+        "cap-design-validation"
+      ],
+      "extraGate": "需要补充机械和电气安全、功能安全、运动范围、维护、质量检验和现场权限；不得绕过联锁或在生产设备上直接试验。",
+      "example": "康复辅助原型、抓取/搬运仿真、工业视觉质检或材料与部件可靠性测试。",
+      "sourceId": "source-bme-2025",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "scenario-environment-city",
+      "slug": "environment-city-public-tech",
+      "name": "环境/城市/公共技术",
+      "navigationLabel": "环境/城市",
+      "summary": "把测量、数据、软件和设备用于环境观察、城市运行或公共服务，强调开放数据、场景公平和长期维护。",
+      "cardSummary": "把测量、数据、软件和设备放进公共问题。",
+      "taskSummary": "兼顾布点、环境误差、公开数据和长期运维",
+      "sharedCapabilities": [
+        "cap-health-user",
+        "cap-sensing-measurement",
+        "cap-signal-data-ai",
+        "cap-software-information"
+      ],
+      "extraGate": "需要补充传感器布点、环境误差、数据公开、公共影响、隐私、运维和政策语境；样例结果不能代表整个城市或人群。",
+      "example": "空气与温湿度趋势、公共设施状态、能源数据故事或城市交通观察。",
+      "sourceId": "source-college-profile",
+      "lastVerified": "2026-08-13"
+    }
   ],
   "faqs": [
-    {"id": "faq-shared-foundation", "slug": "shared-foundation", "question": "两个专业共同学什么？", "answer": "共同底座包括数学和自然科学、人体与生命健康基础、编程与电子、信号与系统、实验研究、数据分析、团队协作和工程责任。差异在课程组合、选修模块和典型任务的侧重，不是互斥的两条路。", "sourceId": "source-college-profile", "lastVerified": "2026-08-13", "owner": "HseeHub P0 语言编辑", "updatedAt": "2026-08-18", "reviewDueAt": "2026-09-18"},
-    {"id": "faq-not-software-hardware", "slug": "not-software-or-hardware", "question": "两个专业的区别只是软件和硬件吗？", "answer": "不是。智能医学工程更常从数据、算法、信息系统、嵌入式和智能设备集成切入；生物医学工程更常从电子、材料、医学检测、仪器设计和测试切入，但两边都需要编程、电子、信号、实验和工程责任。同一个项目通常需要把这些视角接起来。", "sourceId": "source-ime-2025", "lastVerified": "2026-08-13", "owner": "HseeHub P0 语言编辑", "updatedAt": "2026-08-18", "reviewDueAt": "2026-09-18"},
-    {"id": "faq-need-medical-background", "slug": "need-medical-background", "question": "要先学很多医学知识才能开始吗？", "answer": "不需要先成为医学专业学生，但两个专业都会学习人体、生理、生物学或医学相关基础。入门项目可以先从合成数据、环境传感或公开授权样例开始；问题进入真实健康场景后，要补充领域知识，并接受专业人员、伦理和数据规范约束。", "sourceId": "source-bme-2025", "lastVerified": "2026-08-13", "owner": "HseeHub P0 语言编辑", "updatedAt": "2026-08-18", "reviewDueAt": "2026-09-18"},
-    {"id": "faq-not-only-healthcare", "slug": "not-only-healthcare", "question": "学这两个专业以后只能做医疗健康吗？", "answer": "不只能。信号、数据、软件、传感、嵌入式、材料和验证等能力也能在 AI/数据、软件系统、电子物联、机器人/制造、环境/城市/公共技术中练习。但跨到新场景还要补领域知识、工具、标准和安全责任；HseeHub 不根据专业名称保证就业或预测录用结果。", "sourceId": "source-college-profile", "lastVerified": "2026-08-13", "owner": "HseeHub P0 语言编辑", "updatedAt": "2026-08-18", "reviewDueAt": "2026-09-18"},
-    {"id": "faq-credits-not-ranking", "slug": "credits-not-ranking", "question": "160 和 165 学分能说明哪个专业更难吗？", "answer": "不能。学分只帮助你看懂 2025 级培养结构：智能医学工程为 160 学分，生物医学工程为 165 学分，实践和学科课程的组织也不同。它们不构成难度、含金量或专业优劣排名；具体要求以对应年级正式培养方案与教务通知为准。", "sourceId": "source-ime-2025", "lastVerified": "2026-08-13", "owner": "HseeHub P0 语言编辑", "updatedAt": "2026-08-18", "reviewDueAt": "2026-09-18"},
-    {"id": "faq-real-patient-data", "slug": "real-patient-data", "question": "项目可以直接使用真实患者数据吗？", "answer": "首版项目不使用真实患者数据、病历、医学影像或可识别健康信息。优先使用合成数据或明确公开授权的数据；即使数据可以下载，也要核对许可、访问级别、去标识和允许用途。涉及人体、临床或受控数据时，必须遵守正式伦理、知情同意和数据管理流程，项目结果也不能写成诊断建议。", "sourceId": "source-physionet", "lastVerified": "2026-08-13", "owner": "HseeHub P0 语言编辑", "updatedAt": "2026-08-18", "reviewDueAt": "2026-09-18"}
+    {
+      "id": "faq-shared-foundation",
+      "slug": "shared-foundation",
+      "question": "两个专业共同学什么？",
+      "answer": "共同底座包括数学和自然科学、人体与生命健康基础、编程与电子、信号与系统、实验研究、数据分析、团队协作和工程责任。差异在课程组合、选修模块和典型任务的侧重，不是互斥的两条路。",
+      "sourceId": "source-college-profile",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "faq-not-software-hardware",
+      "slug": "not-software-or-hardware",
+      "question": "两个专业的区别只是软件和硬件吗？",
+      "answer": "不是。智能医学工程更常从数据、算法、信息系统、嵌入式和智能设备集成切入；生物医学工程更常从电子、材料、医学检测、仪器设计和测试切入，但两边都需要编程、电子、信号、实验和工程责任。同一个项目通常需要把这些视角接起来。",
+      "sourceId": "source-ime-2025",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "faq-need-medical-background",
+      "slug": "need-medical-background",
+      "question": "要先学很多医学知识才能开始吗？",
+      "answer": "不需要先成为医学专业学生，但两个专业都会学习人体、生理、生物学或医学相关基础。入门项目可以先从合成数据、环境传感或公开授权样例开始；问题进入真实健康场景后，要补充领域知识，并接受专业人员、伦理和数据规范约束。",
+      "sourceId": "source-bme-2025",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "faq-not-only-healthcare",
+      "slug": "not-only-healthcare",
+      "question": "学这两个专业以后只能做医疗健康吗？",
+      "answer": "不只能。信号、数据、软件、传感、嵌入式、材料和验证等能力也能在 AI/数据、软件系统、电子物联、机器人/制造、环境/城市/公共技术中练习。但跨到新场景还要补领域知识、工具、标准和安全责任；HseeHub 不根据专业名称保证就业或预测录用结果。",
+      "sourceId": "source-college-profile",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "faq-credits-not-ranking",
+      "slug": "credits-not-ranking",
+      "question": "160 和 165 学分能说明哪个专业更难吗？",
+      "answer": "不能。学分只帮助你看懂 2025 级培养结构：智能医学工程为 160 学分，生物医学工程为 165 学分，实践和学科课程的组织也不同。它们不构成难度、含金量或专业优劣排名；具体要求以对应年级正式培养方案与教务通知为准。",
+      "sourceId": "source-ime-2025",
+      "lastVerified": "2026-08-13"
+    },
+    {
+      "id": "faq-real-patient-data",
+      "slug": "real-patient-data",
+      "question": "项目可以直接使用真实患者数据吗？",
+      "answer": "首版项目不使用真实患者数据、病历、医学影像或可识别健康信息。优先使用合成数据或明确公开授权的数据；即使数据可以下载，也要核对许可、访问级别、去标识和允许用途。涉及人体、临床或受控数据时，必须遵守正式伦理、知情同意和数据管理流程，项目结果也不能写成诊断建议。",
+      "sourceId": "source-physionet",
+      "lastVerified": "2026-08-13"
+    }
   ],
   "sources": [
-    {"id": "source-college-profile", "title": "健康与环境工程学院概况", "kind": "official-page", "url": "https://hsee.sztu.edu.cn/xygk.htm", "version": "现行公开页面", "scope": "学院定位、两个本科专业同院关系、医工交叉与健康/环境应用背景。", "lastVerified": "2026-08-13", "authorityTier": "B"},
-    {"id": "source-ime-2025", "title": "智能医学工程专业介绍与 2025 级培养方案事实登记", "kind": "official-page-and-curriculum", "url": "https://hsee.sztu.edu.cn/info/1107/2351.htm", "version": "2025", "scope": "专业定位、课程体系、人工智能与大数据、智能仪器/传感/机器人选修；学分与实践结构以校内正式培养方案为准。", "lastVerified": "2026-08-13", "authorityTier": "B"},
-    {"id": "source-bme-2025", "title": "生物医学工程专业介绍与 2025 级培养方案事实登记", "kind": "official-page-and-curriculum", "url": "https://hsee.sztu.edu.cn/info/1107/2352.htm", "version": "2025", "scope": "专业定位、电子/材料/检测/计算机交叉、四类选修模块与仪器测试侧重；学分与实践结构以校内正式培养方案为准。", "lastVerified": "2026-08-13", "authorityTier": "B"},
-    {"id": "source-physionet", "title": "PhysioNet About", "kind": "official-data-platform", "url": "https://physionet.org/about/", "version": "current", "scope": "生物医学数据平台的公开、去标识和受控访问背景；项目默认使用合成数据。", "lastVerified": "2026-08-13", "authorityTier": "B"},
-    {"id": "source-arduino", "title": "Arduino 官方软件与模拟输入教程", "kind": "official-tutorial", "url": "https://docs.arduino.cc/learn/microcontrollers/analog-input/", "version": "current", "scope": "低风险传感、模拟输入和 Arduino 入门工具链；项目仅建议仿真或受控低压台架。", "lastVerified": "2026-08-18", "authorityTier": "B"},
-    {"id": "source-nist", "title": "NIST 官方资源", "kind": "official-reference", "url": "https://www.nist.gov/", "version": "current", "scope": "测量、材料、标准和不确定度等公共参考入口；项目参数仍需回到具体数据表或标准原文。", "lastVerified": "2026-08-13", "authorityTier": "A"},
-    {"id": "source-monai-tutorials", "title": "MONAI Tutorials", "kind": "official-tutorial-repository", "url": "https://github.com/Project-MONAI/tutorials", "version": "current", "scope": "医学影像机器学习教学示例入口；仅用于学习数据流程与评估，不作为医疗有效性或诊断依据。", "lastVerified": "2026-08-13", "authorityTier": "B"},
-    {"id": "source-slicer-training", "title": "3D Slicer Training", "kind": "official-training", "url": "https://training.slicer.org/", "version": "current", "scope": "医学影像工具学习入口；正式使用时仍需核对样例数据、版本和数据许可。", "lastVerified": "2026-08-13", "authorityTier": "B"},
-    {"id": "source-24365", "title": "国家 24365 大学生就业服务平台使用说明", "kind": "official-employment-service", "url": "https://www.moe.gov.cn/srcsite/A15/s3265/202204/t20220406_614117.html", "version": "官方入口说明", "scope": "大学生就业公共服务入口与信息核对方式；不支持岗位持续性或个人资格结论。", "lastVerified": "2026-08-13", "authorityTier": "A"},
-    {"id": "source-graduate-admissions", "title": "中国研究生招生信息网", "kind": "official-admissions-service", "url": "https://yz.chsi.com.cn/", "version": "官方入口", "scope": "研究生招生信息与当年度政策核对入口；具体单位要求仍需查看招生单位官方页面。", "lastVerified": "2026-08-13", "authorityTier": "A"},
-    {"id": "source-public-service", "title": "中央政府官方信息入口", "kind": "official-government-service", "url": "https://www.gov.cn/", "version": "官方入口", "scope": "公共服务和政务公告的稳定入口类型；不维护具体年度职位表或可报岗位清单。", "lastVerified": "2026-08-13", "authorityTier": "A"},
-    {"id": "source-cscse", "title": "教育部留学服务中心政务服务入口", "kind": "official-overseas-service", "url": "https://zwfw.cscse.edu.cn/", "version": "官方入口", "scope": "国（境）外学历学位认证等政务服务核对入口；不判断具体项目录取。", "lastVerified": "2026-08-13", "authorityTier": "A"},
-    {"id": "source-mohrss", "title": "人社部门高校毕业生就业创业政策入口", "kind": "official-employment-policy", "url": "https://job.mohrss.gov.cn/22zc/index.jhtml", "version": "官方入口", "scope": "高校毕业生就业创业政策与公共服务入口；合同、税务和具体主体义务需另行核对。", "lastVerified": "2026-08-13", "authorityTier": "A"}
+    {
+      "id": "source-college-profile",
+      "title": "健康与环境工程学院概况",
+      "kind": "official-page",
+      "accessType": "public_url",
+      "accessScope": "公开网页",
+      "url": "https://hsee.sztu.edu.cn/xygk.htm",
+      "version": "现行公开页面",
+      "scope": "学院定位、两个本科专业同院关系、医工交叉与健康/环境应用背景。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "B"
+    },
+    {
+      "id": "source-ime-2025",
+      "title": "智能医学工程专业介绍与 2025 级培养方案事实登记",
+      "kind": "official-page-and-curriculum",
+      "accessType": "public_url",
+      "accessScope": "公开专业介绍与培养方案事实登记",
+      "url": "https://hsee.sztu.edu.cn/info/1107/2351.htm",
+      "version": "2025",
+      "scope": "专业定位、课程体系、人工智能与大数据、智能仪器/传感/机器人选修；学分与实践结构以校内正式培养方案为准。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "B"
+    },
+    {
+      "id": "source-bme-2025",
+      "title": "生物医学工程专业介绍与 2025 级培养方案事实登记",
+      "kind": "official-page-and-curriculum",
+      "accessType": "public_url",
+      "accessScope": "公开专业介绍与培养方案事实登记",
+      "url": "https://hsee.sztu.edu.cn/info/1107/2352.htm",
+      "version": "2025",
+      "scope": "专业定位、电子/材料/检测/计算机交叉、四类选修模块与仪器测试侧重；学分与实践结构以校内正式培养方案为准。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "B"
+    },
+    {
+      "id": "source-physionet",
+      "title": "PhysioNet About",
+      "kind": "official-data-platform",
+      "accessType": "public_url",
+      "accessScope": "公开数据平台介绍",
+      "url": "https://physionet.org/about/",
+      "version": "current",
+      "scope": "生物医学数据平台的公开、去标识和受控访问背景；项目默认使用合成数据。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "B"
+    },
+    {
+      "id": "source-arduino",
+      "title": "Arduino 官方软件与模拟输入教程",
+      "kind": "official-tutorial",
+      "accessType": "public_url",
+      "accessScope": "公开软件与教程",
+      "url": "https://docs.arduino.cc/learn/microcontrollers/analog-input/",
+      "version": "current",
+      "scope": "低风险传感、模拟输入和 Arduino 入门工具链；项目仅建议仿真或受控低压台架。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "B"
+    },
+    {
+      "id": "source-nist",
+      "title": "NIST 官方资源",
+      "kind": "official-reference",
+      "accessType": "public_url",
+      "accessScope": "公开参考资源",
+      "url": "https://www.nist.gov/",
+      "version": "current",
+      "scope": "测量、材料、标准和不确定度等公共参考入口；项目参数仍需回到具体数据表或标准原文。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "A"
+    },
+    {
+      "id": "source-monai-tutorials",
+      "title": "MONAI Tutorials",
+      "kind": "official-tutorial-repository",
+      "accessType": "public_url",
+      "accessScope": "公开教程仓库",
+      "url": "https://github.com/Project-MONAI/tutorials",
+      "version": "current",
+      "scope": "医学影像机器学习教学示例入口；仅用于学习数据流程与评估，不作为医疗有效性或诊断依据。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "B"
+    },
+    {
+      "id": "source-slicer-training",
+      "title": "3D Slicer Training",
+      "kind": "official-training",
+      "accessType": "public_url",
+      "accessScope": "公开培训资源",
+      "url": "https://training.slicer.org/",
+      "version": "current",
+      "scope": "医学影像工具学习入口；正式使用时仍需核对样例数据、版本和数据许可。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "B"
+    },
+    {
+      "id": "source-24365",
+      "title": "国家 24365 大学生就业服务平台使用说明",
+      "kind": "official-employment-service",
+      "url": "https://www.moe.gov.cn/srcsite/A15/s3265/202204/t20220406_614117.html",
+      "version": "官方入口说明",
+      "scope": "大学生就业公共服务入口与信息核对方式；不支持岗位持续性或个人资格结论。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "A",
+      "accessType": "public_url",
+      "accessScope": "公开网页"
+    },
+    {
+      "id": "source-graduate-admissions",
+      "title": "中国研究生招生信息网",
+      "kind": "official-admissions-service",
+      "url": "https://yz.chsi.com.cn/",
+      "version": "官方入口",
+      "scope": "研究生招生信息与当年度政策核对入口；具体单位要求仍需查看招生单位官方页面。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "A",
+      "accessType": "public_url",
+      "accessScope": "公开网页"
+    },
+    {
+      "id": "source-public-service",
+      "title": "中央政府官方信息入口",
+      "kind": "official-government-service",
+      "url": "https://www.gov.cn/",
+      "version": "官方入口",
+      "scope": "公共服务和政务公告的稳定入口类型；不维护具体年度职位表或可报岗位清单。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "A",
+      "accessType": "public_url",
+      "accessScope": "公开网页"
+    },
+    {
+      "id": "source-cscse",
+      "title": "教育部留学服务中心政务服务入口",
+      "kind": "official-overseas-service",
+      "url": "https://zwfw.cscse.edu.cn/",
+      "version": "官方入口",
+      "scope": "国（境）外学历学位认证等政务服务核对入口；不判断具体项目录取。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "A",
+      "accessType": "public_url",
+      "accessScope": "公开网页"
+    },
+    {
+      "id": "source-mohrss",
+      "title": "人社部门高校毕业生就业创业政策入口",
+      "kind": "official-employment-policy",
+      "url": "https://job.mohrss.gov.cn/22zc/index.jhtml",
+      "version": "官方入口",
+      "scope": "高校毕业生就业创业政策与公共服务入口；合同、税务和具体主体义务需另行核对。",
+      "lastVerified": "2026-08-13",
+      "authorityTier": "A",
+      "accessType": "public_url",
+      "accessScope": "公开网页"
+    }
   ]
 }

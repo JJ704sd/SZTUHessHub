@@ -28,8 +28,8 @@ export function HomeFeaturedProjects({ model }: { model: HomePageModel }) {
 
 export function HomeDualMajorCase({ model }: { model: HomePageModel }) {
   if (!model.featuredDualLensCase) return null;
-  const majorMap = new Map(siteData.majors.map((major) => [major.id, major]));
-  return <section className="home-section home-dual-case" aria-labelledby="home-dual-title"><div className="page-container"><SectionHeading eyebrow="同一道题，两种工程视角" title="两边各做什么，最后怎么接起来" titleId="home-dual-title" description={`共同目标：${model.featuredDualLensCase.sharedGoal}`} action={<ArrowLink href="/majors/compare#dual-lens">看完整专业对照</ArrowLink>} /><DualLensCard item={model.featuredDualLensCase} majorMap={majorMap} /></div></section>;
+  const majorLinks = siteData.majors.map((major) => ({ id: major.id, slug: major.slug }));
+  return <section className="home-section home-dual-case" aria-labelledby="home-dual-title"><div className="page-container"><SectionHeading eyebrow="同一道题，两种工程视角" title="两边各做什么，最后怎么接起来" titleId="home-dual-title" description={`共同目标：${model.featuredDualLensCase.sharedGoal}`} action={<ArrowLink href="/majors/compare#dual-lens">看完整专业对照</ArrowLink>} /><DualLensCard item={model.featuredDualLensCase} majorLinks={majorLinks} /></div></section>;
 }
 
 export function HomeArtifactPaths({ model }: { model: HomePageModel }) {

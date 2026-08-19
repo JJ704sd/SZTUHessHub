@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { siteData, type Capability, type DualLensCase, type Major, type Project, type Scenario, type Source } from '@/lib/content';
-import { getProjectResourceState } from '@/lib/content/project-resources';
+import type { Capability, DualLensCase, Major, Project, Scenario, Source } from '@/lib/content/schema';
 import { siteConfig } from '@/lib/site-config';
+import { Badge } from '@/components/ui/primitives';
+
+export { Badge } from '@/components/ui/primitives';
 
 export function SectionHeading({ eyebrow, title, description, action, titleId }: { eyebrow?: string; title: string; description?: string; action?: ReactNode; titleId?: string }) {
   return (
@@ -18,11 +20,8 @@ export function SectionHeading({ eyebrow, title, description, action, titleId }:
 }
 
 export function ArrowLink({ href, children, subtle = false }: { href: string; children: ReactNode; subtle?: boolean }) {
-  return <Link className={subtle ? 'text-link subtle-link' : 'text-link'} href={href}>{children}<span aria-hidden="true">↗</span></Link>;
-}
-
-export function Badge({ children, tone = 'blue' }: { children: ReactNode; tone?: 'blue' | 'teal' | 'amber' | 'muted' | 'dark' }) {
-  return <span className={`badge badge-${tone}`}>{children}</span>;
+  const external = /^https?:\/\//i.test(href);
+  return <Link className={subtle ? 'text-link subtle-link' : 'text-link'} href={href}>{children}<span aria-hidden="true">{external ? '↗' : '→'}</span></Link>;
 }
 
 export function SourceLine({ source, label = '来源' }: { source?: Source; label?: string }) {
@@ -31,7 +30,7 @@ export function SourceLine({ source, label = '来源' }: { source?: Source; labe
     <div className="source-line">
       <span className="source-dot" aria-hidden="true" />
       <span>{label}：{source.title}</span>
-      <span className="source-meta">{source.version} · 核验于 {source.lastVerified}{source.authorityTier ? ` · ${source.authorityTier} 级来源` : ''}</span>
+      <span className="source-meta">{source.version} · {source.accessType === 'public_url' ? '公开入口' : '校内正式文件 · 无公开入口'} · 核验于 {source.lastVerified}</span>
     </div>
   );
 }
@@ -54,62 +53,61 @@ export function MajorProfileCard({ major }: { major: Major }) {
   );
 }
 
-export function DualLensCard({ item, majorMap }: { item: DualLensCase; majorMap: Map<string, Major> }) {
-  const needsReview = item.reviewDueAt < new Date().toISOString().slice(0, 10);
+export function DualLensCard({ item, majorLinks = [] }: { item: DualLensCase; majorLinks?: Array<{ id: string; slug: string }> }) {
+  const majorSlugById = new Map(majorLinks.map((major) => [major.id, major.slug]));
   return (
-    <article className="dual-card">
+    <article className="dual-card" id={item.slug}>
       <div className="card-topline"><Badge tone="amber">同题双解</Badge><span className="card-kicker">{item.sharedGoal}</span></div>
       <h3>{item.title}</h3>
       <p className="card-summary">{item.problem}</p>
-      {needsReview ? <div className="review-notice" role="status"><strong>需要复核</strong><span>这条案例已过复核日期，开始引用前请重新核对来源与边界。</span></div> : null}
       <div className="lens-grid">
         {item.lenses.map((lens) => <div className="lens" key={lens.majorId}>
-          <div className="lens-heading"><span className="lens-dot" aria-hidden="true" /><strong>{lens.label}</strong></div>
+          <div className="lens-heading"><span className="lens-dot" aria-hidden="true" />{majorSlugById.has(lens.majorId) ? <Link href={`/majors/${majorSlugById.get(lens.majorId)}`}>{lens.label}</Link> : <strong>{lens.label}</strong>}</div>
           <p>{lens.contribution}</p>
           <span className="lens-role">角色：{lens.role}</span>
-          <dl className="lens-facts"><div><dt>输入</dt><dd>{lens.input}</dd></div><div><dt>输出</dt><dd>{lens.output}</dd></div><div><dt>接口</dt><dd>{lens.interface}</dd></div></dl>
+          <details className="lens-disclosure"><summary>展开输入、输出与接口 <span aria-hidden="true">＋</span></summary><dl className="lens-facts"><div><dt>输入</dt><dd>{lens.input}</dd></div><div><dt>输出</dt><dd>{lens.output}</dd></div><div><dt>接口</dt><dd>{lens.interface}</dd></div></dl></details>
         </div>)}
       </div>
-      <div className="dual-footer"><div><span>共同产物：{item.sharedArtifact}</span><span>验收：{item.validation}</span><span>风险边界：{item.riskBoundary}</span></div><ArrowLink href={`/majors/compare#${item.slug}`}>查看接口与验收</ArrowLink></div>
+      <div className="dual-footer"><div><span>共同产物：{item.sharedArtifact}</span><span>验收：{item.validation}</span></div><details className="risk-disclosure"><summary>查看风险边界</summary><p>{item.riskBoundary}</p></details><ArrowLink href={`/majors#${item.slug}`}>查看接口与验收</ArrowLink></div>
     </article>
   );
 }
 
-export function CapabilityCard({ capability, index, majorMap }: { capability: Capability; index: number; majorMap: Map<string, Major> }) {
+export function CapabilityCard({ capability, index }: { capability: Capability; index: number }) {
   return (
     <article className="capability-card">
       <div className="capability-number">0{index + 1}</div>
-      <h3>{capability.name}</h3>
-      <p>{capability.summary}</p>
-      <div className="capability-task"><span>典型任务</span><strong>{capability.task}</strong></div>
-      <div className="card-footer"><span>{capability.transferExample}</span><ArrowLink href={`/capabilities/${capability.slug}`}>看课程与场景</ArrowLink></div>
+      <h3><Link href={`/capabilities/${capability.slug}`}>{capability.navigationLabel}</Link></h3>
+      <p>{capability.cardSummary}</p>
+      <div className="capability-task"><span>典型任务</span><strong>{capability.taskSummary}</strong></div>
+      <div className="card-footer"><span>课程证据、项目和场景</span><ArrowLink href={`/capabilities/${capability.slug}`}>看课程与场景</ArrowLink></div>
     </article>
   );
 }
 
-export function ProjectCapsuleCard({ project, majorMap }: { project: Project; majorMap: Map<string, Major> }) {
-  const resourceState = getProjectResourceState(project);
+export function ProjectCapsuleCard({ project, majorLabels }: { project: Project; majorLabels: string[] }) {
   return (
     <article className="project-card">
-      <div className="project-visual"><img src={project.previewAssets[0].src} alt={project.previewAssets[0].alt} width="560" height="360" loading="lazy" /></div>
+      <div className="project-visual" aria-hidden="true"><span>{project.viewpoint.slice(0, 2)}</span><i /><i /><i /></div>
       <div className="project-content">
         <div className="card-topline"><Badge tone={project.majorIds.length > 1 ? 'amber' : 'teal'}>{project.kicker}</Badge><span className="card-kicker">{project.duration}</span></div>
         <h3>{project.title}</h3>
-        <p className="project-card-line"><strong>适合谁</strong>{project.suitableFor}</p>
-        <p className="project-card-line"><strong>会留下</strong>{project.expectedOutput}</p>
-        <dl className="project-meta-grid"><div><dt>时长</dt><dd>{project.duration}</dd></div><div><dt>最低基础</dt><dd>{project.prerequisites[0]}</dd></div><div><dt>资源</dt><dd className={`resource-state resource-state-${resourceState.key}`}><span aria-hidden="true">{resourceState.key === 'ready' ? '●' : resourceState.key === 'alternative' ? '↗' : '!'}</span>{resourceState.label}</dd></div></dl>
-        <div className="card-footer"><span className={`resource-state resource-state-${resourceState.key}`} title={resourceState.description}>{resourceState.description}</span><ArrowLink href={`/projects/${project.slug}`}>看看怎么开始</ArrowLink></div>
+        <p className="card-summary">{project.summary}</p>
+        <div className="tag-row">{majorLabels.map((label) => <Badge key={label} tone="muted">{label}</Badge>)}<Badge tone="muted">{project.viewpoint}</Badge></div>
+        <div className="project-meta"><span>适合：{project.suitableFor}</span><span>产出：{project.expectedOutput}</span></div>
+        <div className="card-footer"><span className="status-ready">● 可先看清成本与边界</span><ArrowLink href={`/projects/${project.slug}`}>打开体验卡</ArrowLink></div>
       </div>
     </article>
   );
 }
 
-export function ScenarioCard({ scenario, index }: { scenario: Scenario; index: number }) {
+export function ScenarioCard({ scenario, index, capabilityLinks = [] }: { scenario: Scenario; index: number; capabilityLinks?: Array<{ id: string; slug: string; name: string }> }) {
   return (
     <article className="scenario-card">
       <div className="scenario-index">{String(index + 1).padStart(2, '0')}</div>
       <h3><Link href={`/scenarios/${scenario.slug}`}>{scenario.name}</Link></h3>
-      <p>{scenario.summary}</p>
+      <p>{scenario.cardSummary}</p>
+      <div className="scenario-boundary"><strong>可迁移</strong><span>{capabilityLinks.slice(0, 1).map((item) => <Link key={item.id} href={`/capabilities/${item.slug}`}>{item.name}</Link>)}</span><strong>需补门槛</strong><span>{scenario.taskSummary}</span></div>
       <div className="scenario-bottom"><span>共用能力 {scenario.sharedCapabilities.length} 项</span><ArrowLink href={`/scenarios/${scenario.slug}`} subtle>看额外门槛</ArrowLink></div>
     </article>
   );
@@ -146,7 +144,7 @@ export function FilterPill({ children, active = false }: { children: ReactNode; 
   return <span className={active ? 'filter-pill is-active' : 'filter-pill'}>{children}</span>;
 }
 
-export function SiteFooter() {
+export function SiteFooter({ capabilityCount = 8 }: { capabilityCount?: number }) {
   return (
     <footer className="site-footer">
       <div className="page-container footer-inner">
@@ -154,7 +152,7 @@ export function SiteFooter() {
           <Link className="brand" href="/" aria-label="HseeHub 首页"><span className="brand-mark" aria-hidden="true">H</span><span className="brand-copy"><strong>HseeHub</strong><span>健康工程探索站</span></span></Link>
           <p>给健康工程学生的探索桌面：先看懂两个专业，试一个小项目，留下一份别人能看懂你做过什么的记录。</p>
         </div>
-        <div className="footer-col"><strong>从这里开始</strong><Link href="/majors/compare">5 分钟看懂两个专业</Link><Link href="/capabilities">{siteData.capabilities.length} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
+        <div className="footer-col"><strong>从这里开始</strong><Link href="/majors/compare">5 分钟看懂两个专业</Link><Link href="/capabilities">{capabilityCount} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
         <div className="footer-col"><strong>来源与边界</strong><Link href="/sources">来源、版本与核验</Link><Link href="/majors/faq">学生常问</Link><Link href="/about">关于本站</Link></div>
       </div>
       <div className="page-container footer-bottom"><span>默认内容版本：{siteConfig.currentCohort} 级 · 依据与更新时间：{siteConfig.contentBaseline}</span><span>项目优先使用合成/公开数据；不处理真实患者数据</span></div>

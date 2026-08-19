@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-08-13",
+  "source": "content/site-data.json project.resourceHealth",
+  "projects": {
+    "project-signal-feature-notebook": { "status": "available", "checkedAt": "2026-08-13" },
+    "project-sensor-alarm-prototype": { "status": "available", "checkedAt": "2026-08-13" },
+    "project-material-test-matrix": { "status": "available", "checkedAt": "2026-08-13" }
+  }
+}

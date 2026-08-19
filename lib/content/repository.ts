@@ -1,7 +1,9 @@
+import 'server-only';
+
 import rawPathwayData from '../../content/pathways.json';
-import { siteData, type Capability, type Project, type Scenario, type Source } from '../content';
-import { evidenceData, getClaim, getClaimStatus, getLinkStatus, hashClaimContent, type FactStatus, type LinkStatus } from './evidence';
-import { parsePathwayData, type EvidenceTransformation, type Pathway, type PathwayData } from './schema';
+import rawSiteData from '../../content/site-data.json';
+import { aggregateProjectResourceHealth, evidenceData, getClaim, getClaimStatus, getLinkStatus, hashClaimContent, type FactStatus, type LinkStatus } from './evidence';
+import { parsePathwayData, parseSiteData, type Capability, type EvidenceTransformation, type Major, type Pathway, type PathwayData, type Project, type Scenario, type SiteData } from './schema';
 
 function ids<T extends { id: string }>(items: T[]): Set<string> {
   return new Set(items.map((item) => item.id));
@@ -116,11 +118,11 @@ export function getPathwayTransformation(pathwayId: string): EvidenceTransformat
 export type PathwayEvidenceView = {
   claimStatus: FactStatus;
   linkStatuses: Array<{ endpointId: string; status: LinkStatus; url: string }>;
-  sources: Array<Pick<Source, 'id' | 'title' | 'url' | 'version' | 'scope' | 'lastVerified' | 'authorityTier'>>;
+  sources: Array<{ id: string; title: string; url: string; version: string; scope: string; lastVerified: string; authorityTier?: 'A' | 'B' | 'C' | 'D' }>;
 };
 
 export function getPathwayEvidence(pathway: Pathway): PathwayEvidenceView {
-  const claim = getClaim('pathway', pathway.id, 'eligibilityBoundary');
+  const claim = getClaim(siteData, 'pathway', pathway.id, 'eligibilityBoundary');
   const evidenceEndpoints = evidenceData.endpoints.filter((endpoint) => pathway.endpointIds.includes(endpoint.id));
   return {
     claimStatus: claim ? getClaimStatus(claim) : 'unverified',
@@ -128,6 +130,7 @@ export function getPathwayEvidence(pathway: Pathway): PathwayEvidenceView {
     sources: pathway.sourceIds.map((id) => {
       const source = siteData.sources.find((item) => item.id === id);
       if (!source) throw new Error(`路径来源缺失：${id}`);
+      if (source.accessType !== 'public_url') throw new Error(`路径来源不是公开 URL：${id}`);
       return { id: source.id, title: source.title, url: source.url, version: source.version, scope: source.scope, lastVerified: source.lastVerified, authorityTier: source.authorityTier };
     }),
   };
@@ -143,4 +146,35 @@ export function getRelatedProjects(pathway: Pathway): Project[] {
 
 export function getRelatedScenarios(pathway: Pathway): Scenario[] {
   return pathway.scenarioIds.map((id) => siteData.scenarios.find((item) => item.id === id)).filter((item): item is Scenario => Boolean(item));
+}
+
+const parsedSiteData = parseSiteData(rawSiteData);
+
+export const siteData: SiteData = {
+  ...parsedSiteData,
+  projects: parsedSiteData.projects.map((project) => ({ ...project, resourceHealth: aggregateProjectResourceHealth(project.id) })),
+};
+
+export function getSiteData(): SiteData {
+  return siteData;
+}
+
+export function getEvidenceData() {
+  return evidenceData;
+}
+
+export function getMajorBySlug(slug: string): Major | undefined {
+  return siteData.majors.find((item) => item.slug === slug);
+}
+
+export function getCapabilityBySlug(slug: string): Capability | undefined {
+  return siteData.capabilities.find((item) => item.slug === slug);
+}
+
+export function getProjectBySlug(slug: string): Project | undefined {
+  return siteData.projects.find((item) => item.slug === slug);
+}
+
+export function getScenarioBySlug(slug: string): Scenario | undefined {
+  return siteData.scenarios.find((item) => item.slug === slug);
 }

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">材料与检测选型矩阵</title>
+  <desc id="desc">三行候选材料和四列工程指标组成对照矩阵，突出筛选和测试不是认证。</desc>
+  <rect width="640" height="360" rx="24" fill="#fff7eb"/>
+  <rect x="58" y="72" width="524" height="218" rx="16" fill="#fff" stroke="#ead5af" stroke-width="2"/>
+  <path d="M58 124h524M58 180h524M58 236h524M188 72v218M318 72v218M448 72v218" stroke="#ead5af" stroke-width="2"/>
+  <rect x="58" y="72" width="524" height="52" rx="16" fill="#fff0d4"/><path d="M58 124h524" stroke="#ead5af" stroke-width="2"/>
+  <g font-family="sans-serif" font-size="16" fill="#694a19"><text x="84" y="105" font-weight="700">候选</text><text x="214" y="105" font-weight="700">灵敏度</text><text x="344" y="105" font-weight="700">耐久性</text><text x="474" y="105" font-weight="700">测试成本</text>
+    <text x="84" y="158">材料 A</text><text x="214" y="158">高</text><text x="344" y="158">中</text><text x="474" y="158">低</text>
+    <text x="84" y="214">材料 B</text><text x="214" y="214">中</text><text x="344" y="214">高</text><text x="474" y="214">中</text>
+    <text x="84" y="270">材料 C</text><text x="214" y="270">低</text><text x="344" y="270">高</text><text x="474" y="270">高</text></g>
+  <path d="M112 320h416" stroke="#d59c3e" stroke-width="3" stroke-linecap="round"/><text x="320" y="344" fill="#694a19" font-family="sans-serif" font-size="15" text-anchor="middle">筛选 → 测试 → 不能直接等同于认证</text>
+</svg>

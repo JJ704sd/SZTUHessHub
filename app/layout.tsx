@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { GlobalHeader } from '@/components/global-header';
 import { SiteFooter } from '@/components/site';
+import { SkipLink } from '@/components/shell/skip-link';
 import { siteData } from '@/lib/content';
 import { siteConfig } from '@/lib/site-config';
 import './globals.css';
@@ -9,8 +10,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: { default: siteData.siteMeta.title, template: '%s｜HseeHub' },
   description: siteData.siteMeta.description,
-  alternates: { canonical: '/' },
-  openGraph: { title: 'HseeHub｜健康工程学生探索桌面', description: '先看懂两个专业，试一个小项目，留下可复核的东西，再决定下一步。', type: 'website' },
+  alternates: siteConfig.isProduction ? { canonical: '/' } : undefined,
+  robots: siteConfig.isProduction ? undefined : { index: false, follow: false },
+  openGraph: { title: 'HseeHub｜健康工程学生探索桌面', description: '先看懂两个专业，试一个小项目，留下一份别人能看懂你做过什么的记录。', type: 'website' },
 };
 
 const themeScript = `(() => { try { const saved = localStorage.getItem('hseehub-theme'); const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); document.documentElement.dataset.theme = theme; } catch (error) {} })()`;
@@ -19,7 +21,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
-      <body><a className="skip-link" href="#main-content">跳到主要内容</a><GlobalHeader /><main id="main-content" tabIndex={-1}>{children}</main><SiteFooter /></body>
+      <body><SkipLink /><GlobalHeader /><main id="main-content" tabIndex={-1}>{children}</main><SiteFooter capabilityCount={siteData.capabilities.length} /></body>
     </html>
   );
 }

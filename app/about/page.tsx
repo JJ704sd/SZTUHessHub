@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { siteData } from '@/lib/content';
+import { siteConfig } from '@/lib/site-config';
 import { PageIntro, SectionHeading } from '@/components/site';
 
 export const metadata: Metadata = {
   title: '关于本站',
   description: '了解 HseeHub Release B 的定位、内容边界和更新原则。',
-  alternates: { canonical: '/about' },
+  alternates: siteConfig.isProduction ? { canonical: '/about' } : undefined,
 };
 
 export default function AboutPage() {

@@ -4,6 +4,7 @@ import { getPathways } from '@/lib/content/repository';
 import { siteConfig } from '@/lib/site-config';
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  if (!siteConfig.isProduction) return [];
   const base = siteConfig.siteUrl;
   const staticRoutes = ['/', '/majors', '/majors/compare', '/majors/faq', '/capabilities', '/projects', '/scenarios', '/sources', '/about', '/pathways', '/pathways/explore'];
   return [

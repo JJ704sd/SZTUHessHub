@@ -52,7 +52,6 @@ export function GlobalHeader() {
     media.addEventListener('change', closeOnWideScreen);
     return () => media.removeEventListener('change', closeOnWideScreen);
   }, []);
-
   function toggleTheme() {
     const next = theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
@@ -88,7 +87,7 @@ export function GlobalHeader() {
             <span className="theme-icon" aria-hidden="true">{theme === 'dark' ? '☼' : '◐'}</span>
             <span className="theme-label">{theme === 'dark' ? '亮色' : '暗色'}</span>
           </button>
-          <button ref={menuButtonRef} className="menu-button" type="button" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-controls="mobile-navigation">
+          <button ref={menuButtonRef} className="menu-button" type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? '关闭菜单' : '打开菜单'} aria-expanded={menuOpen} aria-controls="mobile-navigation">
             <span className="menu-icon" aria-hidden="true">{menuOpen ? '×' : '☰'}</span>
             <span>菜单</span>
           </button>

@@ -171,7 +171,10 @@ function findRelationTarget(propertyName, targets) {
 
   for (const target of targets) {
     for (const alias of target.aliases) {
-      if (stem === alias || stem.endsWith(alias) || stem.includes(alias)) {
+      // `primaryResourceId` is a runtime-resource reference, not a `sources`
+      // evidence reference. Avoid the lexical `resource` -> `source` collision.
+      if (alias === 'source' && stem.endsWith('resource')) continue;
+      if (stem === alias || stem.endsWith(alias)) {
         return target;
       }
     }
@@ -258,7 +261,9 @@ function validateProjectLinks(value, path, linkContext = false) {
 
     if (linkContext) {
       if (trimmed.startsWith('/')) {
-        if (!trimmed.startsWith('/project-templates/')) addError(`${formatPath(path)} 内部模板地址必须位于 /project-templates/：${trimmed}`);
+        if (!trimmed.startsWith('/project-templates/') && !trimmed.startsWith('/projects/')) {
+          addError(`${formatPath(path)} 项目内部链接只能指向项目详情或模板：${trimmed}`);
+        }
       } else {
         validateHttpsUrl(trimmed, path);
       }
@@ -279,7 +284,9 @@ function validateProjectLinks(value, path, linkContext = false) {
     if (isLinkField && typeof propertyValue === 'string' && propertyValue.trim()) {
       const linkValue = propertyValue.trim();
       if (linkValue.startsWith('/')) {
-        if (!linkValue.startsWith('/project-templates/')) addError(`${formatPath(propertyPath)} 内部链接只能指向 /project-templates/：${linkValue}`);
+        if (!linkValue.startsWith('/project-templates/') && !linkValue.startsWith('/projects/')) {
+          addError(`${formatPath(propertyPath)} 项目内部链接只能指向项目详情或模板：${linkValue}`);
+        }
       } else {
         validateHttpsUrl(linkValue, propertyPath);
       }
@@ -575,7 +582,7 @@ function validateRequiredCollections(data) {
 
       validatePrimaryMetadata(record, recordPath);
 
-      if (['projects', 'dualLensCases', 'faqs'].includes(rule.key)) {
+      if (rule.key === 'projects') {
         if (!hasValue(record.owner)) addError(`${formatPath([...recordPath, 'owner'])} 为首页内容必填项`);
         for (const field of ['updatedAt', 'reviewDueAt']) {
           if (!hasValue(record[field])) addError(`${formatPath([...recordPath, field])} 为首页内容必填项`);

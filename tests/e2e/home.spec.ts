@@ -1,5 +1,10 @@
 import { expect, test } from '@playwright/test';
-import { evidenceData, getProjectResourceState, type LinkStatus } from '../../lib/content/evidence';
+import rawEvidence from '../../content/evidence.json';
+import { getProjectResourceState } from '../../lib/content/project-resource-state';
+import type { EvidenceData, LinkAvailability } from '../../lib/content/schema';
+
+const evidenceData = rawEvidence as EvidenceData;
+type LinkStatus = LinkAvailability['status'];
 
 const projectHeadings = '.project-list-card h2';
 const coreRoutes = [

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">信号、特征与结果</title>
+  <desc id="desc">一条波形经过特征点和结果表，表示从信号到分类结果的教学流程。</desc>
+  <rect width="640" height="360" rx="24" fill="#eef4ff"/>
+  <path d="M45 214h150M45 214V92" stroke="#9bb6ee" stroke-width="2"/>
+  <path d="M48 202c15-67 26 48 41-23s26-38 40 18 25-65 40-29 25 40 38 3" fill="none" stroke="#2563eb" stroke-width="5" stroke-linecap="round"/>
+  <path d="M236 154h72" stroke="#0f766e" stroke-width="4" stroke-linecap="round"/>
+  <path d="m296 142 18 12-18 12" fill="none" stroke="#0f766e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="340" y="80" width="242" height="202" rx="16" fill="#fff" stroke="#d3ddec" stroke-width="2"/>
+  <path d="M366 123h190M366 161h190M366 199h190M366 237h190M430 101v154M494 101v154" stroke="#dce5f4" stroke-width="2"/>
+  <path d="M366 101h190" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="400" cy="161" r="8" fill="#0f766e"/><circle cx="464" cy="199" r="8" fill="#2563eb"/><circle cx="528" cy="237" r="8" fill="#0f766e"/>
+  <text x="45" y="62" fill="#17336e" font-family="sans-serif" font-size="18" font-weight="700">采样波形</text>
+  <text x="340" y="55" fill="#17336e" font-family="sans-serif" font-size="18" font-weight="700">特征表 / 结果</text>
+</svg>

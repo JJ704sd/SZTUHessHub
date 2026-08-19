@@ -62,7 +62,10 @@ try {
   await waitForServer();
   await runPlaywright('E2E', ['tests/e2e/home.spec.ts', 'tests/e2e/release-a-baseline.spec.ts', '--project=desktop-light', '--project=mobile-light', '--project=narrow-light']);
   await runPlaywright('accessibility', ['tests/e2e/a11y.spec.ts', '--project=desktop-light']);
-  await runPlaywright('visual', ['tests/e2e/visual.spec.ts']);
+  // visual.spec.ts owns the viewport/theme matrix; run it once with the
+  // desktop-light project so Playwright does not multiply that matrix by all
+  // configured projects and create duplicate environment-suffixed snapshots.
+  await runPlaywright('visual', ['tests/e2e/visual.spec.ts', '--project=desktop-light']);
 } finally {
   stopServer(server.pid);
 }
