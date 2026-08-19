@@ -8,7 +8,7 @@ type LinkStatus = LinkAvailability['status'];
 
 const projectHeadings = '.project-list-card h2';
 const coreRoutes = [
-  { path: '/', heading: '先别急着选。动手试一次。' },
+  { path: '/', heading: '今天先碰一个小问题。' },
   { path: '/projects', heading: '你今天想先碰哪一种任务？' },
   { path: '/projects/signal-feature-notebook', heading: '从合成信号做出可解释的分类表' },
 ];
@@ -17,11 +17,9 @@ test('首页只有三个动作，项目完整展示不重复', async ({ page }) 
   await page.goto('/');
   const actions = page.getByRole('navigation', { name: '开始探索' }).getByRole('link');
   await expect(actions).toHaveCount(3);
-  await expect(actions).toHaveText([/两个专业到底差在哪/, /给我一个能马上试的项目/, /我还没想好/]);
-  await expect(page.locator('.home-project-teaser')).toHaveCount(1);
-  await expect(page.locator('.home-feature-project')).toHaveCount(1);
-  await expect(page.locator('.home-compact-project')).toHaveCount(2);
-  await expect(page.locator('.home-featured-projects .project-meta-grid')).toHaveCount(1);
+  await expect(actions).toHaveText([/看两个专业怎么分工/, /做一次 10 分钟 Starter/, /我还没想好/]);
+  await expect(page.locator('.home-project-teaser, .home-feature-project, .home-compact-project')).toHaveCount(0);
+  await expect(page.locator('section').filter({ has: page.getByRole('heading', { name: '三个任务，只保留影响开始的事实' }) }).locator('article')).toHaveCount(3);
 });
 
 test('意图只改变顺序，不隐藏三个项目', async ({ page }) => {
@@ -67,12 +65,12 @@ test('资源状态聚合覆盖主入口、替代入口、待核验和不可用',
   expect(stateFor('unavailable', 'unavailable')).toBe('unavailable');
 });
 
-test('代表项目的开始动作由已登记资源状态决定', async ({ page }) => {
+test('代表项目以内部 Starter 为主动作并诚实显示待复核', async ({ page }) => {
   await page.goto('/projects/signal-feature-notebook');
-  const startAction = page.locator('.project-hero-action').getByRole('link', { name: /打开主入口/ });
-  await expect(startAction).toHaveAttribute('href', 'https://physionet.org/about/');
-  await expect(page.locator('.project-hero-action .resource-state')).toHaveText('可开始');
-  await expect(page.locator('.project-hero-action')).not.toContainText('先核验入口');
+  const startAction = page.locator('.project-hero-action').getByRole('link').first();
+  await expect(startAction).toHaveAttribute('href', '/projects/signal-feature-notebook/starter');
+  await expect(page.locator('.project-hero-action')).toContainText('人工待复核');
+  await expect(page.locator('.project-hero-action')).toContainText('不标记“可直接开始”');
 });
 
 test('skip link 是首个焦点，当前导航使用 aria-current', async ({ page }) => {

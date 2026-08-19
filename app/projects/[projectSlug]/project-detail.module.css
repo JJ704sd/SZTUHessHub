@@ -1,0 +1,9 @@
+.startPanel { display: grid; gap: 14px; width: min(100%, 820px); }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.reference { min-height: 44px; display: inline-flex; align-items: center; color: var(--color-brand); font-weight: 750; }
+.statuses { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.statuses div { padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 10px; background: var(--color-surface-raised); }
+.statuses dt { color: var(--color-text-secondary); font-size: 12px; }
+.statuses dd { margin: 3px 0 0; font-weight: 750; }
+.pending { margin: 0 !important; color: var(--color-text-secondary); font-size: 13px !important; }
+@media (max-width: 640px) { .actions { display: grid; } .statuses { grid-template-columns: 1fr; } }

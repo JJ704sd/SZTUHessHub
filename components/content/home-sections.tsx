@@ -1,46 +1,35 @@
 import Link from 'next/link';
-import { ArrowLink, Badge, DualLensCard, FAQList, SectionHeading } from '@/components/site';
 import type { HomePageModel } from '@/lib/content/view-models';
 import { getProjectResourceState } from '@/lib/content/project-resources';
-import { siteData, type Project } from '@/lib/content';
+import { siteConfig } from '@/lib/site-config';
+import styles from './home-sections.module.css';
 
-function ProjectTeaser({ project }: { project: Project }) {
-  const asset = project.previewAssets[0];
-  return <article className="home-project-teaser"><div className="home-project-teaser-visual"><img src={asset.src} alt={asset.alt} width="560" height="360" /></div><div><span className="eyebrow">今天可以先看</span><h2>{project.title}</h2><p className="teaser-time">10 分钟预览 · 约 90 分钟实践</p><p><strong>会留下：</strong>{project.expectedOutput}</p><Link className="text-link" href={`/projects/${project.slug}`}>看看今天怎么开始 <span aria-hidden="true">→</span></Link></div></article>;
-}
+const starterHref = '/projects/signal-feature-notebook/starter';
 
 export function HomeTaskLaunchpad({ model }: { model: HomePageModel }) {
-  const firstProject = model.featuredProjects[0];
-  return <section className="home-launch release-b-home-launch" aria-labelledby="home-launch-title"><div className="page-container home-launch-grid"><div className="home-launch-copy"><p className="eyebrow">给健康工程学生的探索桌面</p><h1 id="home-launch-title">先别急着选。动手试一次。</h1><p className="home-launch-lede">看懂两个专业在做什么，挑一个小项目，留下一份别人能看懂你做过什么的作品。</p><nav className="home-task-list" aria-label="开始探索">{model.taskEntries.map((entry) => <Link className={entry.primary ? 'home-task-entry is-primary' : 'home-task-entry'} href={entry.id === 'project' ? '/projects?intent=quick-look' : entry.href} key={entry.id}><span><strong>{entry.id === 'compare' ? '两个专业到底差在哪' : entry.id === 'project' ? '给我一个能马上试的项目' : '我还没想好，从这里开始'}</strong><small>{entry.summary}</small></span><span className="home-task-arrow" aria-hidden="true">→</span></Link>)}</nav></div>{firstProject ? <ProjectTeaser project={firstProject} /> : null}</div></section>;
-}
-
-function ProjectFacts({ project }: { project: Project }) {
-  const state = getProjectResourceState(project);
-  return <dl className="project-meta-grid"><div><dt>时长</dt><dd>{project.duration}</dd></div><div><dt>最低基础</dt><dd>{project.prerequisites[0]}</dd></div><div><dt>现在能否开始</dt><dd className={`resource-state resource-state-${state.key}`}>{state.label}</dd></div></dl>;
-}
-
-export function HomeFeaturedProjects({ model }: { model: HomePageModel }) {
-  const [featured, ...compact] = model.featuredProjects;
-  if (!featured) return null;
-  const asset = featured.previewAssets[0];
-  return <section className="home-section home-projects" aria-labelledby="home-projects-title"><div className="page-container"><SectionHeading eyebrow="今天先试一个" title="先看会做出什么，再决定要不要开始" titleId="home-projects-title" description="一个重点项目和两个紧凑条目。每项只保留影响决定的时间、基础、产物和真实资源状态。" action={<ArrowLink href="/projects">按意图比较全部</ArrowLink>} /><div className="home-featured-projects"><article className="home-feature-project"><img src={asset.src} alt={asset.alt} width="720" height="460" loading="lazy" /><div><Badge tone="teal">{featured.kicker}</Badge><h3>{featured.title}</h3><p>{featured.suitableFor}</p><p><strong>会留下：</strong>{featured.expectedOutput}</p><ProjectFacts project={featured} /><Link className="button button-primary" href={`/projects/${featured.slug}`}>看看今天怎么开始 <span aria-hidden="true">→</span></Link></div></article><div className="home-compact-projects">{compact.map((project) => { const preview = project.previewAssets[0]; const state = getProjectResourceState(project); return <article className="home-compact-project" key={project.id}><img src={preview.src} alt="" width="180" height="120" loading="lazy" /><div><span className="eyebrow">{project.viewpoint}</span><h3>{project.title}</h3><p>{project.duration} · {project.expectedOutput}</p><span className={`resource-state resource-state-${state.key}`}>{state.label}</span><Link className="text-link" href={`/projects/${project.slug}`}>看看怎么开始 <span aria-hidden="true">→</span></Link></div></article>; })}</div></div></div></section>;
+  const project = model.featuredProjects.find((item) => item.slug === 'signal-feature-notebook');
+  const preview = project?.previewAssets.find((asset) => asset.kind === 'project_output') ?? project?.previewAssets[0];
+  return <section className={styles.launch} aria-labelledby="home-launch-title"><div className={`page-container ${styles.launchGrid}`}><div><p className="eyebrow">给健康工程学生的低风险实验桌</p><h1 id="home-launch-title">今天先碰一个小问题。</h1><p className={styles.lede}>不用先选专业，也不用先装环境。看懂差异，或花 10 分钟试一次。</p><nav className={styles.taskList} aria-label="开始探索"><Link data-home-task-entry="true" className={styles.secondaryTask} href="/majors/compare#dual-lens"><span><strong>看两个专业怎么分工</strong><small>用同一道题看两种工程视角</small></span><span aria-hidden="true">→</span></Link><Link data-home-task-entry="true" className={styles.primaryTask} href={starterHref}><span><strong>做一次 10 分钟 Starter</strong><small>无账号、零安装、只用合成信号</small></span><span aria-hidden="true">→</span></Link><Link data-home-task-entry="true" className={styles.secondaryTask} href="/pathways/explore"><span><strong>我还没想好</strong><small>用两条短任务做一周比较</small></span><span aria-hidden="true">→</span></Link></nav></div>{preview ? <figure className={styles.resultPreview}><img src={preview.src} alt={preview.alt} width="720" height="460" /><figcaption><strong>做完会留下：曲线与三行观察</strong><span>10 分钟 · 可本地保存 · 不含真实健康数据</span><small>确定性合成预览，不代表真实学生参与。</small></figcaption></figure> : null}</div></section>;
 }
 
 export function HomeDualMajorCase({ model }: { model: HomePageModel }) {
-  if (!model.featuredDualLensCase) return null;
-  const majorLinks = siteData.majors.map((major) => ({ id: major.id, slug: major.slug }));
-  return <section className="home-section home-dual-case" aria-labelledby="home-dual-title"><div className="page-container"><SectionHeading eyebrow="同一道题，两种工程视角" title="两边各做什么，最后怎么接起来" titleId="home-dual-title" description={`共同目标：${model.featuredDualLensCase.sharedGoal}`} action={<ArrowLink href="/majors/compare#dual-lens">看完整专业对照</ArrowLink>} /><DualLensCard item={model.featuredDualLensCase} majorLinks={majorLinks} /></div></section>;
+  const item = model.featuredDualLensCase;
+  if (!item) return null;
+  return <section className={styles.section} aria-labelledby="home-dual-title"><div className="page-container"><div className={styles.heading}><div><p className="eyebrow">30 秒看懂专业侧重</p><h2 id="home-dual-title">同一道题，两边主要负责什么</h2><p>共同问题：{item.problem}</p></div><Link href="/majors/compare#dual-lens">看完整分工与接口 →</Link></div><div className={styles.dualStrip}>{item.lenses.map((lens) => <article key={lens.majorId}><strong>{lens.label}</strong><p>{lens.role}</p></article>)}<p className={styles.shared}><strong>共同产物：</strong>{item.sharedArtifact}</p></div></div></section>;
+}
+
+export function HomeFeaturedProjects({ model }: { model: HomePageModel }) {
+  return <section className={styles.section} aria-labelledby="home-projects-title"><div className="page-container"><div className={styles.heading}><div><p className="eyebrow">挑一个能完成的小项目</p><h2 id="home-projects-title">三个任务，只保留影响开始的事实</h2></div><Link href="/projects?intent=quick-look">看全部小项目 →</Link></div><div className={styles.projectList}>{model.featuredProjects.map((project) => { const representative = project.slug === 'signal-feature-notebook'; const external = getProjectResourceState(project); return <article data-home-project-entry="true" key={project.id}><div><h3>{project.title}</h3><p>{project.duration} · {project.prerequisites[0]} · 会留下 {project.expectedOutput}</p><span>内部起点：{representative ? '10 分钟 Starter（待人工复核）' : '只有开始说明'} · 外部资源：{external.label}</span></div><Link className={representative ? 'button button-primary' : styles.rowAction} href={representative ? starterHref : `/projects/${project.slug}`}>{representative ? '直接做 10 分钟 Starter' : '先看怎么开始'} <span aria-hidden="true">→</span></Link></article>; })}</div></div></section>;
 }
 
 export function HomeArtifactPaths({ model }: { model: HomePageModel }) {
-  const project = model.featuredProjects.find((item) => item.slug === model.evidence.artifact.projectSlug);
-  if (!project) return null;
-  const result = project.previewAssets.find((asset) => asset.kind === 'project_output') ?? project.previewAssets.at(-1)!;
-  const pathwayMap = new Map(model.pathways.map((pathway) => [pathway.id, pathway]));
-  const transformations = model.evidence.transformations.slice(0, 3);
-  return <section className="home-section home-artifact" aria-labelledby="home-artifact-title"><div className="page-container"><SectionHeading eyebrow="做完以后，你会留下什么" title="一份别人能看懂你做过什么的记录" titleId="home-artifact-title" description="先展示作品本身，再看它如何诚实地改写成下一步证据。" /><div className="home-artifact-release-b"><figure><img src={result.src} alt={result.alt} width="720" height="460" loading="lazy" /><figcaption>基于本站项目步骤生成的确定性预览，不代表真实学生参与。</figcaption></figure><div><dl className="artifact-annotations"><div><dt>问题</dt><dd>{project.summary}</dd></div><div><dt>输入</dt><dd>{project.dataSource}</dd></div><div><dt>做法</dt><dd>{project.steps.slice(0, 2).join('；')}</dd></div><div><dt>结果</dt><dd>{project.expectedOutput}</dd></div><div><dt>限制</dt><dd>{project.boundary}</dd></div></dl><div className="home-artifact-rewrites">{transformations.map((item) => { const pathway = pathwayMap.get(item.pathwayId); return pathway ? <article key={item.pathwayId}><strong>{pathway.title}</strong><p>{item.truthfulFraming}</p><Link className="text-link" href={pathway.href}>看怎么继续 <span aria-hidden="true">→</span></Link></article> : null; })}</div></div></div></div></section>;
+  const project = model.featuredProjects.find((item) => item.slug === 'signal-feature-notebook');
+  const result = project?.previewAssets.find((asset) => asset.kind === 'project_output') ?? project?.previewAssets.at(-1);
+  if (!project || !result) return null;
+  return <section className={styles.section} aria-labelledby="home-artifact-title"><div className="page-container"><div className={styles.heading}><div><p className="eyebrow">做完会留下什么</p><h2 id="home-artifact-title">一张曲线、三行观察和一条限制</h2></div></div><div className={styles.artifact}><figure><img src={result.src} alt={result.alt} width="720" height="460" loading="lazy" /><figcaption>固定合成信号，不代表真实学生参与或医学数据。</figcaption></figure><div><ol><li>我看到了什么形状或噪声。</li><li>哪个特征发生了变化。</li><li>这个结果不能外推成什么结论。</li></ol><p><strong>安全边界：</strong>{project.safetyBoundary}</p><nav aria-label="作品后的下一步"><Link href="/pathways/employment">做工程相关工作</Link><Link href="/pathways/domestic-postgraduate">继续读研</Link><Link href="/pathways/explore">还没决定，做双路径实验</Link></nav></div></div></div></section>;
 }
 
 export function HomeRecent({ model }: { model: HomePageModel }) {
-  return <section className="home-section home-recent" aria-labelledby="home-recent-title"><div className="page-container"><SectionHeading eyebrow="最近整理了这些" title="真实更新和会影响下一步的问题" titleId="home-recent-title" description="更新只记录可追溯的内容变化；来源与边界继续放在需要核对的位置。" action={<ArrowLink href="/sources">依据与更新时间</ArrowLink>} />{model.updates.length ? <div className="home-update-list">{model.updates.map((update) => <article key={update.id}><time dateTime={update.publishedAt}>{update.publishedAt}</time><div><strong>{update.entityTitle}</strong><p>{update.summary}</p><Link className="text-link" href={update.href}>查看变化影响的页面 <span aria-hidden="true">→</span></Link></div></article>)}</div> : null}<div className="home-faq-compact"><FAQList items={model.faqs} /><Link className="text-link" href="/majors/faq">查看全部 FAQ <span aria-hidden="true">→</span></Link></div></div></section>;
+  const representative = model.featuredProjects.find((item) => item.slug === 'signal-feature-notebook');
+  return <section className={styles.trust} aria-labelledby="home-trust-title"><div className="page-container"><div><p className="eyebrow">依据与最近核验</p><h2 id="home-trust-title">把“可达”和“已复核”分开说</h2></div><dl><div><dt>培养版本</dt><dd>{siteConfig.currentCohort} 级</dd></div><div><dt>内容基线</dt><dd>{siteConfig.contentBaseline}</dd></div><div><dt>代表 Starter</dt><dd>{representative ? '机器可达 · 人工与许可待复核' : '待登记'}</dd></div></dl><p><Link href="/sources">看来源与边界 →</Link><Link href="/majors/faq">看学生常问 →</Link></p></div></section>;
 }

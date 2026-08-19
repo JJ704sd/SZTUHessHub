@@ -13,8 +13,15 @@ const projects = read('components/project-browser.tsx');
 const projectsPage = read('app/projects/page.tsx');
 const failures = [];
 const expect = (condition, message) => { if (!condition) failures.push(message); };
+const releaseCHome = homeSections.includes("./home-sections.module.css") && homeSections.includes("const starterHref = '/projects/signal-feature-notebook/starter'");
 const releaseBHome = home.includes('HomeTaskLaunchpad') && homeSections.includes('release-b-home-launch');
-if (releaseBHome) {
+if (releaseCHome) {
+  const homeRender = home.slice(home.indexOf('return <>'));
+  expect((home.match(/<Home(?:TaskLaunchpad|FeaturedProjects|DualMajorCase|ArtifactPaths|Recent)/g) ?? []).length === 5, 'Release C 首页必须输出五个有明确角色的服务端模块');
+  expect(homeRender.indexOf('HomeTaskLaunchpad') < homeRender.indexOf('HomeDualMajorCase') && homeRender.indexOf('HomeDualMajorCase') < homeRender.indexOf('HomeFeaturedProjects'), 'Release C 首页顺序必须是任务、专业比较、项目、产物、依据');
+  expect(homeSections.includes('做一次 10 分钟 Starter') && homeSections.includes('内部起点：') && homeSections.includes('机器可达 · 人工与许可待复核'), 'Release C 首页必须公开 Starter 主动作、项目内部起点和三维信任语义');
+  expect(!homeSections.includes('FAQList') && !homeSections.includes('model.updates') && !homeSections.includes('model.faqs'), 'Release C 首页不得展开完整 FAQ 或更新列表');
+} else if (releaseBHome) {
   expect((home.match(/<Home(?:TaskLaunchpad|FeaturedProjects|DualMajorCase|ArtifactPaths|Recent)/g) ?? []).length === 5, 'Release B 首页必须输出五个服务端模块');
   expect(homeSections.includes('model.taskEntries') && homeSections.includes('home-featured-projects') && homeSections.includes('home-compact-projects'), 'Release B 首页必须有三动作与 1+2 项目层级');
   expect(homeSections.includes('model.updates') && homeSections.includes('model.faqs'), 'Release B 首页必须由模型输出更新与三条 FAQ');
@@ -30,4 +37,4 @@ expect(css.includes('min-width: 0') && css.includes('overflow-wrap: anywhere'), 
 expect(majors.includes('id="dual-lens"') && majors.includes('DualLensCard') && majorCompare.includes('共同') && majorCompare.includes('协作'), '专业对照必须保留共同底座、真实任务和协作接口');
 expect(!/<select\b/i.test(projects) && projectsPage.includes('parseLegacyProjectFilters'), 'P0 项目浏览器不得输出筛选控件，必须保留旧参数解析');
 if (failures.length) { console.error('Phase 1.1 structure check failed.'); failures.forEach((failure) => console.error(`- ${failure}`)); process.exit(1); }
-console.log(`${releaseBHome ? 'Release B' : 'Phase 1.1'} structure check passed (home modules, header, comparison, legacy projects).`);
+console.log(`${releaseCHome ? 'Release C' : releaseBHome ? 'Release B' : 'Phase 1.1'} structure check passed (home modules, header, comparison, legacy projects).`);

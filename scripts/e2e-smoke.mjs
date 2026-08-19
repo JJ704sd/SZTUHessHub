@@ -15,12 +15,11 @@ function count(html, pattern) {
 
 try {
   const home = await page('/');
-  assert.equal(count(home, /class="home-task-entry/g), 3, 'home exposes three task entry links');
+  assert.equal(count(home, /data-home-task-entry="true"/g), 3, 'home exposes three task entry links');
   assert.match(home, /href="\/majors\/compare"/);
-  assert.match(home, /href="\/projects\?intent=quick-look"/);
+  assert.match(home, /href="\/projects\/signal-feature-notebook\/starter"/);
   assert.match(home, /href="\/pathways\/explore"/);
-  assert.match(home, /class="home-featured-projects/g);
-  assert.equal(count(home, /class="home-compact-project"/g), 2, 'home exposes two compact project entries');
+  assert.equal(count(home, /data-home-project-entry="true"/g), 3, 'home exposes three project entries');
 
   const projects = await page('/projects');
   assert.equal(count(projects, /class="project-list-card/g), 3, 'project catalog shows all three cards by default');
