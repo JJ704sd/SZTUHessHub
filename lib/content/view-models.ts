@@ -1,7 +1,7 @@
 import { siteConfig } from '../site-config';
 import { evidenceData, getClaimStatus, getLinkStatus, type FactStatus, type LinkStatus } from './evidence';
 import { getPathwayData, getPathwayEvidence, getRelatedCapabilities, getRelatedProjects, getRelatedScenarios } from './repository';
-import { siteData, type DualLensCase, type FaqItem, type Project } from '../content';
+import { contentUpdates, siteData, type ContentUpdate, type DualLensCase, type FaqItem, type Project } from '../content';
 import type { ActionHorizon, EvidenceTransformation, Pathway, PathwayArtifact, PathwayKind, StartMode } from './schema';
 
 const startModeCopy: Record<StartMode, { label: string; summary: string; href: string }> = {
@@ -41,6 +41,7 @@ export type HomePageModel = {
   featuredProjects: Project[];
   featuredDualLensCase?: DualLensCase;
   faqs: FaqItem[];
+  updates: Array<ContentUpdate & { entityTitle: string; href: string }>;
   pathways: PathwaySummaryView[];
   evidence: {
     artifact: Pick<PathwayArtifact, 'id' | 'title' | 'description' | 'owner' | 'updatedAt' | 'reviewDueAt'> & { projectSlug: string };
@@ -96,6 +97,23 @@ function isEditoriallyCurrent(item: { reviewDueAt: string }) {
   return item.reviewDueAt >= new Date().toISOString().slice(0, 10);
 }
 
+function getUpdateEntity(update: ContentUpdate): { title: string; href: string } | undefined {
+  if (update.entityType === 'project') {
+    const project = siteData.projects.find((item) => item.id === update.entityId);
+    return project ? { title: project.title, href: `/projects/${project.slug}` } : undefined;
+  }
+  if (update.entityType === 'faq') {
+    const faq = siteData.faqs.find((item) => item.id === update.entityId);
+    return faq ? { title: faq.question, href: `/majors/faq#${faq.slug}` } : undefined;
+  }
+  if (update.entityType === 'dual-lens-case') {
+    const dualLensCase = siteData.dualLensCases.find((item) => item.id === update.entityId);
+    return dualLensCase ? { title: dualLensCase.title, href: `/majors/compare#${dualLensCase.slug}` } : undefined;
+  }
+  const source = siteData.sources.find((item) => item.id === update.entityId);
+  return source ? { title: source.title, href: `/sources#${source.id}` } : undefined;
+}
+
 export function getHomePageModel(): HomePageModel {
   const pathwayData = getPathwayData();
   const homePlan = siteData.siteMeta.home;
@@ -133,10 +151,16 @@ export function getHomePageModel(): HomePageModel {
     .filter((project): project is Project => Boolean(project))
     .filter(isEditoriallyCurrent)
     .slice(0, 3);
-  const currentFaqs = siteData.faqs.filter(isEditoriallyCurrent).slice(0, 4);
+  const currentFaqs = siteData.faqs.filter(isEditoriallyCurrent).slice(0, 3);
+  const updates = contentUpdates
+    .map((update) => ({ update, entity: getUpdateEntity(update) }))
+    .filter((item): item is { update: ContentUpdate; entity: { title: string; href: string } } => Boolean(item.entity))
+    .sort((a, b) => b.update.publishedAt.localeCompare(a.update.publishedAt) || a.update.id.localeCompare(b.update.id))
+    .slice(0, 3)
+    .map(({ update, entity }) => ({ ...update, entityTitle: entity.title, href: entity.href }));
   const featuredDualLensCase = siteData.dualLensCases.find((item) => item.id === homePlan?.featuredDualLensCaseId && isEditoriallyCurrent(item)) ?? siteData.dualLensCases.find(isEditoriallyCurrent);
   if (featuredProjects.length < 3) throw new Error('首页精选项目当前内容少于 3 项');
-  if (currentFaqs.length < 4) throw new Error('首页 FAQ 当前内容少于 4 项');
+  if (currentFaqs.length < 3) throw new Error('首页 FAQ 当前内容少于 3 项');
   if (!featuredDualLensCase) throw new Error('首页没有当前双专业案例');
   return {
     startModes: pathwayData.homePlan.pathwayLaunch.startModeOrder.map((id) => ({ id, ...startModeCopy[id] })),
@@ -148,6 +172,7 @@ export function getHomePageModel(): HomePageModel {
     featuredProjects,
     featuredDualLensCase,
     faqs: currentFaqs,
+    updates,
     pathways: summaries,
     evidence: {
       artifact: { id: featuredArtifact.id, title: featuredArtifact.title, description: featuredArtifact.description, projectSlug: project.slug, owner: featuredArtifact.owner, updatedAt: featuredArtifact.updatedAt, reviewDueAt: featuredArtifact.reviewDueAt },

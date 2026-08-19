@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { HomeArtifactPaths, HomeDualMajorCase, HomeFaq, HomeFeaturedProjects, HomeTaskLaunchpad } from '@/components/content/home-sections';
+import { HomeArtifactPaths, HomeDualMajorCase, HomeFeaturedProjects, HomeRecent, HomeTaskLaunchpad } from '@/components/content/home-sections';
 import { getHomePageModel } from '@/lib/content/view-models';
 
 export const metadata: Metadata = {
@@ -15,6 +15,6 @@ export default function HomePage() {
     <HomeFeaturedProjects model={model} />
     <HomeDualMajorCase model={model} />
     <HomeArtifactPaths model={model} />
-    <HomeFaq model={model} />
+    <HomeRecent model={model} />
   </>;
 }

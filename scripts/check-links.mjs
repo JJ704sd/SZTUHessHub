@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -8,6 +8,24 @@ const data = JSON.parse(content);
 const pathwayData = JSON.parse(readFileSync(resolve(root, 'content/pathways.json'), 'utf8'));
 const evidenceData = JSON.parse(readFileSync(resolve(root, 'content/evidence.json'), 'utf8'));
 const failures = [];
+
+const internalTargets = [
+  {
+    href: '/pathways/explore',
+    target: 'app/pathways/explore/page.tsx',
+    references: [
+      'app/sitemap.ts',
+      'app/pathways/page.tsx',
+      'components/content/pathway-sections.tsx',
+      'lib/content/view-models.ts',
+    ],
+  },
+  {
+    href: '/pathway-review-template.txt',
+    target: 'public/pathway-review-template.txt',
+    references: ['app/pathways/explore/page.tsx'],
+  },
+];
 
 function checkUrl(value, label) {
   try {
@@ -40,6 +58,21 @@ for (const pathway of pathwayData.pathways ?? []) {
   }
 }
 for (const endpoint of evidenceData.endpoints ?? []) checkUrl(endpoint.url, `evidence.endpoints.${endpoint.id}.url`);
+
+for (const internalTarget of internalTargets) {
+  const targetPath = resolve(root, internalTarget.target);
+  if (!existsSync(targetPath)) failures.push(`站内目标不存在：${internalTarget.href} -> ${internalTarget.target}`);
+
+  for (const reference of internalTarget.references) {
+    const referencePath = resolve(root, reference);
+    if (!existsSync(referencePath)) {
+      failures.push(`站内引用文件不存在：${reference}`);
+      continue;
+    }
+    const source = readFileSync(referencePath, 'utf8');
+    if (!source.includes(internalTarget.href)) failures.push(`${reference} 缺少站内引用：${internalTarget.href}`);
+  }
+}
 
 const routeSources = [
   readFileSync(resolve(root, 'app/page.tsx'), 'utf8'),

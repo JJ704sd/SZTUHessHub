@@ -29,8 +29,7 @@ export function GlobalHeader() {
     if (!menuOpen) return;
     const nav = mobileNavRef.current;
     if (!nav) return;
-    const focusable = () => Array.from(nav.querySelectorAll<HTMLElement>('a[href]'));
-    const firstLink = focusable()[0];
+    const firstLink = nav.querySelector<HTMLElement>('a[href]');
     window.requestAnimationFrame(() => firstLink?.focus());
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -38,18 +37,6 @@ export function GlobalHeader() {
         event.preventDefault();
         setMenuOpen(false);
         window.requestAnimationFrame(() => menuButtonRef.current?.focus());
-        return;
-      }
-      if (event.key !== 'Tab') return;
-      const links = focusable();
-      if (links.length === 0) return;
-      const currentIndex = links.indexOf(document.activeElement as HTMLElement);
-      if (event.shiftKey && currentIndex <= 0) {
-        event.preventDefault();
-        links[links.length - 1]?.focus();
-      } else if (!event.shiftKey && currentIndex === links.length - 1) {
-        event.preventDefault();
-        links[0]?.focus();
       }
     }
 
@@ -90,14 +77,14 @@ export function GlobalHeader() {
 
         <nav className="desktop-nav" aria-label="主导航">
           {siteConfig.navItems.map((item) => (
-            <Link key={item.href} className={isActive(item.href) ? 'nav-link is-active' : 'nav-link'} href={item.href}>
+            <Link key={item.href} className={isActive(item.href) ? 'nav-link is-active' : 'nav-link'} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
               {item.label}
             </Link>
           ))}
         </nav>
 
         <div className="header-actions">
-          <button className="theme-switch" type="button" onClick={toggleTheme} aria-label={`切换到${theme === 'dark' ? '亮色' : '暗色'}主题`} aria-pressed={theme === 'dark'}>
+          <button className="theme-switch theme-switch-desktop" type="button" onClick={toggleTheme} aria-label={`切换到${theme === 'dark' ? '亮色' : '暗色'}主题`} aria-pressed={theme === 'dark'}>
             <span className="theme-icon" aria-hidden="true">{theme === 'dark' ? '☼' : '◐'}</span>
             <span className="theme-label">{theme === 'dark' ? '亮色' : '暗色'}</span>
           </button>
@@ -110,11 +97,15 @@ export function GlobalHeader() {
 
       <nav ref={mobileNavRef} id="mobile-navigation" className={menuOpen ? 'mobile-nav is-open page-container' : 'mobile-nav page-container'} aria-label="移动端主导航" aria-hidden={!menuOpen}>
         {siteConfig.navItems.map((item) => (
-          <Link key={item.href} className={isActive(item.href) ? 'mobile-nav-link is-active' : 'mobile-nav-link'} href={item.href} tabIndex={menuOpen ? 0 : -1}>
+          <Link key={item.href} className={isActive(item.href) ? 'mobile-nav-link is-active' : 'mobile-nav-link'} href={item.href} tabIndex={menuOpen ? 0 : -1} aria-current={isActive(item.href) ? 'page' : undefined}>
             <span>{item.label}</span>
             <span aria-hidden="true">↗</span>
           </Link>
         ))}
+        <button className="mobile-theme-switch" type="button" onClick={toggleTheme} tabIndex={menuOpen ? 0 : -1} aria-label={`切换到${theme === 'dark' ? '亮色' : '暗色'}主题`} aria-pressed={theme === 'dark'}>
+          <span><span className="theme-icon" aria-hidden="true">{theme === 'dark' ? '☼' : '◐'}</span> 外观</span>
+          <span>{theme === 'dark' ? '切换到亮色' : '切换到暗色'}</span>
+        </button>
       </nav>
     </header>
   );

@@ -8,9 +8,9 @@ export const siteConfig = {
     sensitivity: { none: '无敏感信息', personal: '个人信息', health: '健康信息', commercial: '商业敏感信息', 'security-relevant': '安全相关信息' },
   },
   navItems: [
-    { href: '/majors', label: '专业与课程' },
-    { href: '/projects', label: '做个项目' },
-    { href: '/capabilities', label: '能力地图' },
-    { href: '/pathways', label: '选下一步' },
+    { href: '/majors', label: '专业' },
+    { href: '/projects', label: '小项目' },
+    { href: '/capabilities', label: '能力' },
+    { href: '/pathways', label: '下一步' },
   ],
 } as const;

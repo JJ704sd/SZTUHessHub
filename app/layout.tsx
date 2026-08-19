@@ -19,7 +19,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
-      <body><GlobalHeader /><a className="skip-link" href="#main-content">跳到主要内容</a><main id="main-content" tabIndex={-1}>{children}</main><SiteFooter /></body>
+      <body><a className="skip-link" href="#main-content">跳到主要内容</a><GlobalHeader /><main id="main-content" tabIndex={-1}>{children}</main><SiteFooter /></body>
     </html>
   );
 }

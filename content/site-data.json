@@ -2,7 +2,7 @@
   "siteMeta": {
     "title": "HseeHub｜健康工程学生探索桌面",
     "tagline": "先看任务，再试一个小项目",
-    "description": "给健康工程学生的探索桌面：先看懂智能医学工程与生物医学工程，试一个小项目，留下可复核的东西，再决定下一步。内容以 2025 级事实为当前入口，不替代正式培养方案、教务通知或个人资格判断。",
+    "description": "给健康工程学生的探索桌面：先看懂智能医学工程与生物医学工程，试一个小项目，留下能讲清过程与限制的作品，再决定下一步。内容以 2025 级事实为当前入口，不替代正式培养方案、教务通知或个人资格判断。",
     "home": {
       "primaryJourneyId": "compare",
       "majorIds": ["major-ime", "major-bme"],
@@ -270,10 +270,14 @@
       "sourceId": "source-physionet",
       "lastVerified": "2026-08-18",
       "endpointIds": ["endpoint-project-signal-primary", "endpoint-project-signal-alternative"],
-      "preview": {"src": "/project-previews/signal-feature-notebook.svg", "alt": "两类合成时序信号的曲线和分类结果摘要，显示固定种子下的特征与误分类计数", "kind": "project_output", "author": "HseeHub 编辑部（固定种子合成数据生成）", "license": "CC BY 4.0", "sourceRef": "source-physionet", "generationRef": "scripts/generate-project-previews.mjs · signal-seed-17"},
+      "previewAssets": [
+        {"src": "/project-previews/signal-entry-notebook.svg", "alt": "打开的信号分类 notebook 工作台，依次摆放导入合成信号、查看曲线和选择特征三个开始动作", "kind": "diagram", "author": "HseeHub 编辑部（基于项目步骤原创重建）", "license": "CC BY 4.0", "sourceRef": "source-physionet", "generationRef": "scripts/generate-project-previews.mjs · signal-entry-v1", "updatedAt": "2026-08-19"},
+        {"src": "/project-previews/signal-feature-process.svg", "alt": "两类合成信号从原始曲线经过分段、特征提取到分类表的三步处理过程，并标出需要复核的特征", "kind": "process", "author": "HseeHub 编辑部（固定种子合成数据生成）", "license": "CC BY 4.0", "sourceRef": "source-physionet", "generationRef": "scripts/generate-project-previews.mjs · signal-seed-17-process", "updatedAt": "2026-08-19"},
+        {"src": "/project-previews/signal-feature-notebook.svg", "alt": "两类合成时序信号的曲线和分类结果摘要，显示固定种子下的特征与误分类计数", "kind": "project_output", "author": "HseeHub 编辑部（固定种子合成数据生成）", "license": "CC BY 4.0", "sourceRef": "source-physionet", "generationRef": "scripts/generate-project-previews.mjs · signal-seed-17", "updatedAt": "2026-08-19"}
+      ],
       "owner": "HseeHub P0 项目编辑",
-      "updatedAt": "2026-08-18",
-      "reviewDueAt": "2026-09-18"
+      "updatedAt": "2026-08-19",
+      "reviewDueAt": "2026-09-19"
     },
     {
       "id": "project-sensor-alarm-prototype",
@@ -311,10 +315,13 @@
       "sourceId": "source-arduino",
       "lastVerified": "2026-08-18",
       "endpointIds": ["endpoint-project-sensor-primary", "endpoint-project-sensor-alternative"],
-      "preview": {"src": "/project-previews/sensor-alarm-prototype.svg", "alt": "合成传感序列的采样曲线、质量标记和正常异常停止状态条带", "kind": "process", "author": "HseeHub 编辑部（固定种子合成数据生成）", "license": "CC BY 4.0", "sourceRef": "source-arduino", "generationRef": "scripts/generate-project-previews.mjs · sensor-seed-23"},
+      "previewAssets": [
+        {"src": "/project-previews/sensor-bench-entry.svg", "alt": "受控低压传感台架的接线、采样读数和停止开关示意，提示先用仿真或低压输入", "kind": "diagram", "author": "HseeHub 编辑部（基于项目步骤原创重建）", "license": "CC BY 4.0", "sourceRef": "source-arduino", "generationRef": "scripts/generate-project-previews.mjs · sensor-entry-v1", "updatedAt": "2026-08-19"},
+        {"src": "/project-previews/sensor-alarm-prototype.svg", "alt": "合成传感序列的采样曲线、质量标记和正常异常停止状态条带", "kind": "project_output", "author": "HseeHub 编辑部（固定种子合成数据生成）", "license": "CC BY 4.0", "sourceRef": "source-arduino", "generationRef": "scripts/generate-project-previews.mjs · sensor-seed-23", "updatedAt": "2026-08-19"}
+      ],
       "owner": "HseeHub P0 项目编辑",
-      "updatedAt": "2026-08-18",
-      "reviewDueAt": "2026-09-18"
+      "updatedAt": "2026-08-19",
+      "reviewDueAt": "2026-09-19"
     },
     {
       "id": "project-material-test-matrix",
@@ -352,10 +359,13 @@
       "sourceId": "source-nist",
       "lastVerified": "2026-08-18",
       "endpointIds": ["endpoint-project-material-primary", "endpoint-project-material-alternative"],
-      "preview": {"src": "/project-previews/material-test-matrix.svg", "alt": "三种合成材料参数在不同指标上的标准化比较矩阵，含权重变化后的排序结果", "kind": "project_output", "author": "HseeHub 编辑部（固定参数合成数据生成）", "license": "CC BY 4.0", "sourceRef": "source-nist", "generationRef": "scripts/generate-project-previews.mjs · material-seed-31"},
+      "previewAssets": [
+        {"src": "/project-previews/material-samples-entry.svg", "alt": "三张材料样本卡、使用环境约束便签和待权衡指标摆在同一张实验桌上", "kind": "process", "author": "HseeHub 编辑部（基于项目步骤原创重建）", "license": "CC BY 4.0", "sourceRef": "source-nist", "generationRef": "scripts/generate-project-previews.mjs · material-entry-v1", "updatedAt": "2026-08-19"},
+        {"src": "/project-previews/material-test-matrix.svg", "alt": "三种合成材料参数在不同指标上的标准化比较矩阵，含权重变化后的排序结果", "kind": "project_output", "author": "HseeHub 编辑部（固定参数合成数据生成）", "license": "CC BY 4.0", "sourceRef": "source-nist", "generationRef": "scripts/generate-project-previews.mjs · material-seed-31", "updatedAt": "2026-08-19"}
+      ],
       "owner": "HseeHub P0 项目编辑",
-      "updatedAt": "2026-08-18",
-      "reviewDueAt": "2026-09-18"
+      "updatedAt": "2026-08-19",
+      "reviewDueAt": "2026-09-19"
     }
   ],
   "scenarios": [

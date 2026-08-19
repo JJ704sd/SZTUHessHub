@@ -1,101 +1,46 @@
 import Link from 'next/link';
-import { ArrowLink, DualLensCard, FAQList, ProjectCapsuleCard, SectionHeading, SourceLine } from '@/components/site';
+import { ArrowLink, Badge, DualLensCard, FAQList, SectionHeading } from '@/components/site';
 import type { HomePageModel } from '@/lib/content/view-models';
-import { siteData } from '@/lib/content';
+import { getProjectResourceState } from '@/lib/content/project-resources';
+import { siteData, type Project } from '@/lib/content';
+
+function ProjectTeaser({ project }: { project: Project }) {
+  const asset = project.previewAssets[0];
+  return <article className="home-project-teaser"><div className="home-project-teaser-visual"><img src={asset.src} alt={asset.alt} width="560" height="360" /></div><div><span className="eyebrow">今天可以先看</span><h2>{project.title}</h2><p className="teaser-time">10 分钟预览 · 约 90 分钟实践</p><p><strong>会留下：</strong>{project.expectedOutput}</p><Link className="text-link" href={`/projects/${project.slug}`}>看看今天怎么开始 <span aria-hidden="true">→</span></Link></div></article>;
+}
 
 export function HomeTaskLaunchpad({ model }: { model: HomePageModel }) {
   const firstProject = model.featuredProjects[0];
-  const majorMap = new Map(siteData.majors.map((major) => [major.id, major]));
+  return <section className="home-launch release-b-home-launch" aria-labelledby="home-launch-title"><div className="page-container home-launch-grid"><div className="home-launch-copy"><p className="eyebrow">给健康工程学生的探索桌面</p><h1 id="home-launch-title">先别急着选。动手试一次。</h1><p className="home-launch-lede">看懂两个专业在做什么，挑一个小项目，留下一份别人能看懂你做过什么的作品。</p><nav className="home-task-list" aria-label="开始探索">{model.taskEntries.map((entry) => <Link className={entry.primary ? 'home-task-entry is-primary' : 'home-task-entry'} href={entry.id === 'project' ? '/projects?intent=quick-look' : entry.href} key={entry.id}><span><strong>{entry.id === 'compare' ? '两个专业到底差在哪' : entry.id === 'project' ? '给我一个能马上试的项目' : '我还没想好，从这里开始'}</strong><small>{entry.summary}</small></span><span className="home-task-arrow" aria-hidden="true">→</span></Link>)}</nav></div>{firstProject ? <ProjectTeaser project={firstProject} /> : null}</div></section>;
+}
 
-  return (
-    <section className="home-launch section-first" aria-labelledby="home-launch-title">
-      <div className="page-container home-launch-grid">
-        <div className="home-launch-copy">
-          <p className="eyebrow">HseeHub / 健康工程探索桌面</p>
-          <h1 id="home-launch-title">今天想先弄明白什么？</h1>
-          <p className="home-launch-lede">先看一个真实任务，或者动手试一次。不用今天就决定未来：看懂两个专业，留下一个小成果，再决定下一步。</p>
-          <nav className="home-task-list" aria-label="开始探索">
-            {model.taskEntries.map((entry) => (
-              <Link className={entry.primary ? 'home-task-entry is-primary' : 'home-task-entry'} href={entry.href} key={entry.id}>
-                <span className="home-task-index" aria-hidden="true">{entry.id === 'compare' ? '01' : entry.id === 'project' ? '02' : '03'}</span>
-                <span><strong>{entry.label}</strong><small>{entry.summary}</small></span>
-                <span className="home-task-arrow" aria-hidden="true">↗</span>
-              </Link>
-            ))}
-          </nav>
-        </div>
-        {firstProject ? <div className="home-launch-project"><div className="home-section-kicker"><span>现在就能试</span><span>首发项目</span></div><ProjectCapsuleCard project={firstProject} majorMap={majorMap} /></div> : null}
-      </div>
-    </section>
-  );
+function ProjectFacts({ project }: { project: Project }) {
+  const state = getProjectResourceState(project);
+  return <dl className="project-meta-grid"><div><dt>时长</dt><dd>{project.duration}</dd></div><div><dt>最低基础</dt><dd>{project.prerequisites[0]}</dd></div><div><dt>现在能否开始</dt><dd className={`resource-state resource-state-${state.key}`}>{state.label}</dd></div></dl>;
 }
 
 export function HomeFeaturedProjects({ model }: { model: HomePageModel }) {
-  const majorMap = new Map(siteData.majors.map((major) => [major.id, major]));
-  return (
-    <section className="home-section home-projects" aria-labelledby="home-projects-title">
-      <div className="page-container">
-        <SectionHeading eyebrow="B / 这周可以做" title="挑一个小项目，先看能留下什么" titleId="home-projects-title" description="三张卡都先写清楚适合谁、会留下什么、需要多久和入口状态。完整步骤、许可和停止条件在详情里。" action={<ArrowLink href="/projects">查看全部项目</ArrowLink>} />
-        <div className="home-project-grid">{model.featuredProjects.map((project) => <ProjectCapsuleCard key={project.id} project={project} majorMap={majorMap} />)}</div>
-      </div>
-    </section>
-  );
+  const [featured, ...compact] = model.featuredProjects;
+  if (!featured) return null;
+  const asset = featured.previewAssets[0];
+  return <section className="home-section home-projects" aria-labelledby="home-projects-title"><div className="page-container"><SectionHeading eyebrow="今天先试一个" title="先看会做出什么，再决定要不要开始" titleId="home-projects-title" description="一个重点项目和两个紧凑条目。每项只保留影响决定的时间、基础、产物和真实资源状态。" action={<ArrowLink href="/projects">按意图比较全部</ArrowLink>} /><div className="home-featured-projects"><article className="home-feature-project"><img src={asset.src} alt={asset.alt} width="720" height="460" loading="lazy" /><div><Badge tone="teal">{featured.kicker}</Badge><h3>{featured.title}</h3><p>{featured.suitableFor}</p><p><strong>会留下：</strong>{featured.expectedOutput}</p><ProjectFacts project={featured} /><Link className="button button-primary" href={`/projects/${featured.slug}`}>看看今天怎么开始 <span aria-hidden="true">→</span></Link></div></article><div className="home-compact-projects">{compact.map((project) => { const preview = project.previewAssets[0]; const state = getProjectResourceState(project); return <article className="home-compact-project" key={project.id}><img src={preview.src} alt="" width="180" height="120" loading="lazy" /><div><span className="eyebrow">{project.viewpoint}</span><h3>{project.title}</h3><p>{project.duration} · {project.expectedOutput}</p><span className={`resource-state resource-state-${state.key}`}>{state.label}</span><Link className="text-link" href={`/projects/${project.slug}`}>看看怎么开始 <span aria-hidden="true">→</span></Link></div></article>; })}</div></div></div></section>;
 }
 
 export function HomeDualMajorCase({ model }: { model: HomePageModel }) {
   if (!model.featuredDualLensCase) return null;
   const majorMap = new Map(siteData.majors.map((major) => [major.id, major]));
-  return (
-    <section className="home-section home-dual-case" aria-labelledby="home-dual-title">
-      <div className="page-container">
-        <SectionHeading eyebrow="C / 同一个问题，两种做法" title="差异不是二选一，项目要把接口接起来" titleId="home-dual-title" description="先看两个专业各自会处理什么，再看输入、输出和共同验收怎样交接。" action={<ArrowLink href="/majors/compare#dual-lens">看两个案例</ArrowLink>} />
-        <DualLensCard item={model.featuredDualLensCase} majorMap={majorMap} />
-      </div>
-    </section>
-  );
+  return <section className="home-section home-dual-case" aria-labelledby="home-dual-title"><div className="page-container"><SectionHeading eyebrow="同一道题，两种工程视角" title="两边各做什么，最后怎么接起来" titleId="home-dual-title" description={`共同目标：${model.featuredDualLensCase.sharedGoal}`} action={<ArrowLink href="/majors/compare#dual-lens">看完整专业对照</ArrowLink>} /><DualLensCard item={model.featuredDualLensCase} majorMap={majorMap} /></div></section>;
 }
 
 export function HomeArtifactPaths({ model }: { model: HomePageModel }) {
   const project = model.featuredProjects.find((item) => item.slug === model.evidence.artifact.projectSlug);
-  const preferred = ['path-employment', 'path-domestic-postgraduate', 'path-independent-work'];
-  const preferredTransformations = preferred.map((id) => model.evidence.transformations.find((item) => item.pathwayId === id)).filter(Boolean);
-  const transformations = (preferredTransformations.length >= 2 ? preferredTransformations : model.evidence.transformations.slice(0, 3)) as HomePageModel['evidence']['transformations'];
-  if (transformations.length === 0) return null;
+  if (!project) return null;
+  const result = project.previewAssets.find((asset) => asset.kind === 'project_output') ?? project.previewAssets.at(-1)!;
   const pathwayMap = new Map(model.pathways.map((pathway) => [pathway.id, pathway]));
-
-  return (
-    <section className="home-section home-artifact" aria-labelledby="home-artifact-title">
-      <div className="page-container">
-        <SectionHeading eyebrow="D / 做完能带去哪" title="同一份小成果，可以换三种说法" titleId="home-artifact-title" description="作品先说明问题、过程、结果和限制，再按目标方向改写重点；它不是录取、录用或资格结论。" action={<ArrowLink href="/pathways">看看几条可能的路</ArrowLink>} />
-        <div className="home-artifact-layout">
-          <article className="home-artifact-card">
-            <span className="home-artifact-mark" aria-hidden="true">↳</span>
-            <p className="eyebrow">一份可复核的项目记录</p>
-            <h3 id="featured-artifact-title">{model.evidence.artifact.title}</h3>
-            <p>{model.evidence.artifact.description}</p>
-            {project ? <><span className="home-artifact-source">来自：{project.title}</span><Link className="text-link" href={`/projects/${project.slug}#artifact-template`}>看产物模板 <span aria-hidden="true">↗</span></Link></> : null}
-          </article>
-          <div className="home-artifact-paths">
-            {transformations.map((transformation) => {
-              const pathway = pathwayMap.get(transformation.pathwayId);
-              if (!pathway) return null;
-              return <article className="home-artifact-path" key={transformation.pathwayId}><div><strong>{pathway.title}</strong><span>{transformation.evidenceUse[0]}</span></div><p>{transformation.truthfulFraming}</p><Link className="text-link subtle-link" href={pathway.href}>看这条路怎么继续 <span aria-hidden="true">↗</span></Link></article>;
-            })}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+  const transformations = model.evidence.transformations.slice(0, 3);
+  return <section className="home-section home-artifact" aria-labelledby="home-artifact-title"><div className="page-container"><SectionHeading eyebrow="做完以后，你会留下什么" title="一份别人能看懂你做过什么的记录" titleId="home-artifact-title" description="先展示作品本身，再看它如何诚实地改写成下一步证据。" /><div className="home-artifact-release-b"><figure><img src={result.src} alt={result.alt} width="720" height="460" loading="lazy" /><figcaption>基于本站项目步骤生成的确定性预览，不代表真实学生参与。</figcaption></figure><div><dl className="artifact-annotations"><div><dt>问题</dt><dd>{project.summary}</dd></div><div><dt>输入</dt><dd>{project.dataSource}</dd></div><div><dt>做法</dt><dd>{project.steps.slice(0, 2).join('；')}</dd></div><div><dt>结果</dt><dd>{project.expectedOutput}</dd></div><div><dt>限制</dt><dd>{project.boundary}</dd></div></dl><div className="home-artifact-rewrites">{transformations.map((item) => { const pathway = pathwayMap.get(item.pathwayId); return pathway ? <article key={item.pathwayId}><strong>{pathway.title}</strong><p>{item.truthfulFraming}</p><Link className="text-link" href={pathway.href}>看怎么继续 <span aria-hidden="true">→</span></Link></article> : null; })}</div></div></div></div></section>;
 }
 
-export function HomeFaq({ model }: { model: HomePageModel }) {
-  return (
-    <section className="home-section home-faq" aria-labelledby="home-faq-title">
-      <div className="page-container home-faq-inner">
-        <SectionHeading eyebrow="E / 同学常问" title="先回答会影响下一步的问题" titleId="home-faq-title" description="以下是编辑部整理的常见问题，不是未经授权的学生原话。" action={<ArrowLink href="/majors/faq">查看全部 FAQ</ArrowLink>} />
-        <FAQList items={model.faqs} />
-        <div className="home-faq-source"><SourceLine source={siteData.sources[0]} label="事实基线" /></div>
-      </div>
-    </section>
-  );
+export function HomeRecent({ model }: { model: HomePageModel }) {
+  return <section className="home-section home-recent" aria-labelledby="home-recent-title"><div className="page-container"><SectionHeading eyebrow="最近整理了这些" title="真实更新和会影响下一步的问题" titleId="home-recent-title" description="更新只记录可追溯的内容变化；来源与边界继续放在需要核对的位置。" action={<ArrowLink href="/sources">依据与更新时间</ArrowLink>} />{model.updates.length ? <div className="home-update-list">{model.updates.map((update) => <article key={update.id}><time dateTime={update.publishedAt}>{update.publishedAt}</time><div><strong>{update.entityTitle}</strong><p>{update.summary}</p><Link className="text-link" href={update.href}>查看变化影响的页面 <span aria-hidden="true">→</span></Link></div></article>)}</div> : null}<div className="home-faq-compact"><FAQList items={model.faqs} /><Link className="text-link" href="/majors/faq">查看全部 FAQ <span aria-hidden="true">→</span></Link></div></div></section>;
 }

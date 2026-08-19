@@ -54,26 +54,30 @@ async function main() {
 
   try {
     await waitForServer(`${baseUrl}/`);
-    const profileDir = mkdtempSync(join(tmpdir(), 'hseehub-lighthouse-'));
-    const chrome = await launchChrome({
-      userDataDir: profileDir,
-      chromeFlags: ['--headless=new', '--no-sandbox', '--disable-gpu'],
-    });
-    try {
-      const results = [];
-      for (const route of routes) {
+    const results = [];
+    for (const route of routes) {
         const scores = [];
         const lcpValues = [];
         const clsValues = [];
         for (let run = 1; run <= runsPerRoute; run += 1) {
-          const report = await lighthouse(`${baseUrl}${route}`, {
-            port: chrome.port,
-            logLevel: 'error',
-            output: 'json',
-            onlyCategories: ['performance'],
-            formFactor: 'mobile',
-            screenEmulation: { mobile: true, width: 390, height: 844, deviceScaleFactor: 1, disabled: false },
-          });
+          const profileDir = mkdtempSync(join(tmpdir(), 'hseehub-lighthouse-'));
+          const chrome = await launchChrome({ userDataDir: profileDir, chromeFlags: ['--headless=new', '--no-sandbox', '--disable-gpu', '--disable-background-networking'] });
+          let report;
+          try {
+            report = await lighthouse(`${baseUrl}${route}`, {
+              port: chrome.port,
+              logLevel: 'error',
+              output: 'json',
+              onlyCategories: ['performance'],
+              formFactor: 'mobile',
+              disableStorageReset: false,
+              screenEmulation: { mobile: true, width: 390, height: 844, deviceScaleFactor: 1, disabled: false },
+            });
+          } finally {
+            try { chrome.kill(); } catch {}
+            await delay(500);
+            try { rmSync(profileDir, { recursive: true, force: true, maxRetries: 30, retryDelay: 250 }); } catch (error) { console.warn(`Lighthouse profile cleanup warning: ${error instanceof Error ? error.message : error}`); }
+          }
           const score = Math.round((report.lhr.categories.performance.score ?? 0) * 100);
           const lcpMs = report.lhr.audits['largest-contentful-paint']?.numericValue ?? Number.POSITIVE_INFINITY;
           const cls = report.lhr.audits['cumulative-layout-shift']?.numericValue ?? Number.POSITIVE_INFINITY;
@@ -91,28 +95,11 @@ async function main() {
           cls: clsValues.map((value) => Number(value.toFixed(3))),
           clsMedian: Number(median(clsValues).toFixed(3)),
         });
-      }
-      console.log(`Lighthouse mobile median (${runsPerRoute} runs per route)`);
-      console.table(results);
-      const failures = results.filter((result) => result.lcpMedianMs > lcpBudgetMs || result.clsMedian > clsBudget);
-      if (failures.length > 0) {
-        throw new Error(
-          `Lighthouse mobile budgets exceeded: ${failures.map((result) => `${result.route} (LCP ${result.lcpMedianMs}ms, CLS ${result.clsMedian})`).join(', ')}`,
-        );
-      }
-    } finally {
-      try {
-        chrome.kill();
-      } catch (error) {
-        console.warn(`Chrome cleanup warning: ${error instanceof Error ? error.message : error}`);
-      }
-      await delay(5_000);
-      try {
-        rmSync(profileDir, { recursive: true, force: true, maxRetries: 30, retryDelay: 250 });
-      } catch (error) {
-        console.warn(`Lighthouse profile cleanup warning: ${error instanceof Error ? error.message : error}`);
-      }
     }
+    console.log(`Lighthouse mobile median (${runsPerRoute} cold runs per route)`);
+    console.table(results);
+    const failures = results.filter((result) => result.lcpMedianMs > lcpBudgetMs || result.clsMedian > clsBudget);
+    if (failures.length > 0) throw new Error(`Lighthouse mobile budgets exceeded: ${failures.map((result) => `${result.route} (LCP ${result.lcpMedianMs}ms, CLS ${result.clsMedian})`).join(', ')}`);
   } finally {
     if (server) {
       try {

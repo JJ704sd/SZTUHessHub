@@ -1,4 +1,5 @@
 import rawSiteData from "../content/site-data.json";
+import rawUpdates from "../content/updates.json";
 import type { HomePlan } from './content/schema';
 
 export type SiteMeta = {
@@ -112,6 +113,7 @@ export type ProjectPreview = {
   license: string;
   sourceRef: string;
   generationRef: string;
+  updatedAt: string;
 };
 
 export type ProjectCollaborationRole = {
@@ -160,6 +162,8 @@ export type Project = {
   sourceId: string;
   lastVerified: string;
   endpointIds: string[];
+  previewAssets: ProjectPreview[];
+  /** @deprecated 兼容尚未迁移的消费者；内容源只写 previewAssets。 */
   preview: ProjectPreview;
   owner: string;
   updatedAt: string;
@@ -212,6 +216,16 @@ export type SiteData = {
   sources: Source[];
 };
 
+export type ContentUpdate = {
+  id: string;
+  entityType: 'project' | 'faq' | 'dual-lens-case' | 'source';
+  entityId: string;
+  kind: 'content-update' | 'source-reverification';
+  summary: string;
+  publishedAt: string;
+  owner: string;
+};
+
 function assertRecord(value: unknown, label: string): asserts value is Record<string, unknown> {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
     throw new Error(`Invalid content record: ${label}`);
@@ -258,7 +272,50 @@ function parseSiteData(input: unknown): SiteData {
     });
   }
 
-  return input as SiteData;
+  assertArray(input.projects, 'projects');
+  const normalizedProjects = input.projects.map((project, index) => {
+    assertRecord(project, `projects[${index}]`);
+    const legacyPreview = project.preview;
+    const assets = project.previewAssets ?? (legacyPreview ? [legacyPreview] : undefined);
+    assertArray(assets, `projects[${index}].previewAssets`);
+    if (assets.length === 0) throw new Error(`Invalid empty preview assets: projects[${index}].previewAssets`);
+    const legacyCompatiblePreview = assets.find((asset) => {
+      assertRecord(asset, `projects[${index}].previewAssets item`);
+      return asset.kind === 'project_output';
+    }) ?? assets[0];
+    return { ...project, previewAssets: assets, preview: legacyCompatiblePreview };
+  });
+
+  return { ...input, projects: normalizedProjects } as SiteData;
 }
 
 export const siteData: SiteData = parseSiteData(rawSiteData);
+
+function parseContentUpdates(input: unknown, data: SiteData): ContentUpdate[] {
+  assertArray(input, 'updates');
+  const allowedKinds = new Set<ContentUpdate['kind']>(['content-update', 'source-reverification']);
+  const entityIds: Record<ContentUpdate['entityType'], Set<string>> = {
+    project: new Set(data.projects.map((item) => item.id)),
+    faq: new Set(data.faqs.map((item) => item.id)),
+    'dual-lens-case': new Set(data.dualLensCases.map((item) => item.id)),
+    source: new Set(data.sources.map((item) => item.id)),
+  };
+  const seenIds = new Set<string>();
+  return input.map((item, index) => {
+    assertRecord(item, `updates[${index}]`);
+    for (const field of ['id', 'entityType', 'entityId', 'kind', 'summary', 'publishedAt', 'owner']) {
+      assertString(item[field], `updates[${index}].${field}`);
+    }
+    const update = item as ContentUpdate;
+    if (seenIds.has(update.id)) throw new Error(`Duplicate update id: ${update.id}`);
+    seenIds.add(update.id);
+    if (!allowedKinds.has(update.kind)) throw new Error(`Invalid update kind: updates[${index}].kind`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(update.publishedAt)) throw new Error(`Invalid update date: updates[${index}].publishedAt`);
+    if (!entityIds[update.entityType]?.has(update.entityId)) {
+      throw new Error(`Invalid update entity: updates[${index}] -> ${update.entityType}.${update.entityId}`);
+    }
+    return update;
+  });
+}
+
+export const contentUpdates = parseContentUpdates(rawUpdates, siteData);

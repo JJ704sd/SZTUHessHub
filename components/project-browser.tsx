@@ -2,76 +2,57 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import type { Major, Project, Scenario, Capability } from '@/lib/content';
+import type { Project } from '@/lib/content';
 import type { ProjectResourceState } from '@/lib/content/project-resources';
 import { Badge } from '@/components/site';
+import { projectIntents, type ProjectIntent } from '@/lib/content/project-intents';
 
-type Props = {
-  projects: Project[];
-  majors: Major[];
-  capabilities: Capability[];
-  scenarios: Scenario[];
-  resourceStates: Record<string, ProjectResourceState>;
-  initialFilters?: { major?: string; capability?: string; scenario?: string; viewpoint?: string; duration?: string };
+type LegacyFilters = { major?: string; capability?: string; scenario?: string; viewpoint?: string; duration?: string };
+
+const intentCopy: Record<ProjectIntent, { label: string; feedback: string; order: string[] }> = {
+  'quick-look': { label: '我先看 10 分钟', feedback: '先把合成信号分类放在前面。这是 10 分钟导览；完整实践约 90 分钟。', order: ['project-signal-feature-notebook', 'project-sensor-alarm-prototype', 'project-material-test-matrix'] },
+  'data-ai': { label: '我想碰数据 / AI', feedback: '先看数据、特征和结果解释会做什么；三个项目仍然都可以比较。', order: ['project-signal-feature-notebook', 'project-sensor-alarm-prototype', 'project-material-test-matrix'] },
+  sensor: { label: '我想动手接传感器', feedback: '先看传感—采样—告警。优先使用仿真或低压台架，完整实践约 2 小时。', order: ['project-sensor-alarm-prototype', 'project-signal-feature-notebook', 'project-material-test-matrix'] },
+  portfolio: { label: '我想做一份能展示的作品', feedback: '三个项目都会留下作品记录；先比较时间、媒介和你愿意讲清楚的过程。', order: ['project-signal-feature-notebook', 'project-material-test-matrix', 'project-sensor-alarm-prototype'] },
 };
 
-export function ProjectBrowser({ projects, majors, capabilities, scenarios, resourceStates, initialFilters = {} }: Props) {
-  const [major, setMajor] = useState(initialFilters.major ?? 'all');
-  const [capability, setCapability] = useState(initialFilters.capability ?? 'all');
-  const [scenario, setScenario] = useState(initialFilters.scenario ?? 'all');
-  const [viewpoint, setViewpoint] = useState(initialFilters.viewpoint ?? 'all');
-  const [duration, setDuration] = useState(initialFilters.duration ?? 'all');
+type Props = { projects: Project[]; resourceStates: Record<string, ProjectResourceState>; initialIntent?: ProjectIntent; legacyFilters?: LegacyFilters; legacyNotice?: 'active' | 'invalid' };
 
-  const filtered = useMemo(() => projects.filter((project) => {
-    const majorMatch = major === 'all' || project.majorIds.includes(major);
-    const capabilityMatch = capability === 'all' || project.capabilityIds.includes(capability);
-    const scenarioMatch = scenario === 'all' || project.scenarioIds.includes(scenario);
-    const viewpointMatch = viewpoint === 'all' || project.viewpoint === viewpoint;
-    const durationMatch = duration === 'all' || project.durationBands.includes(duration);
-    return majorMatch && capabilityMatch && scenarioMatch && viewpointMatch && durationMatch;
-  }), [capability, duration, major, projects, scenario, viewpoint]);
+function matchesLegacy(project: Project, filters: LegacyFilters) {
+  return (!filters.major || project.majorIds.includes(filters.major))
+    && (!filters.capability || project.capabilityIds.includes(filters.capability))
+    && (!filters.scenario || project.scenarioIds.includes(filters.scenario))
+    && (!filters.viewpoint || project.viewpoint === filters.viewpoint)
+    && (!filters.duration || project.durationBands.includes(filters.duration));
+}
 
-  const updateUrl = (next: { major?: string; capability?: string; scenario?: string; viewpoint?: string; duration?: string }) => {
-    const params = new URLSearchParams();
-    const values = { major, capability, scenario, viewpoint, duration, ...next };
-    Object.entries(values).forEach(([key, value]) => { if (value && value !== 'all') params.set(key, value); });
-    window.history.replaceState(null, '', params.toString() ? `/projects?${params.toString()}` : '/projects');
-  };
+export function ProjectBrowser({ projects, resourceStates, initialIntent, legacyFilters = {}, legacyNotice }: Props) {
+  const [intent, setIntent] = useState<ProjectIntent | undefined>(initialIntent);
+  const [showLegacy, setShowLegacy] = useState(Boolean(legacyNotice));
+  const [useLegacy, setUseLegacy] = useState(legacyNotice === 'active');
+  const visibleProjects = useMemo(() => {
+    if (useLegacy) return projects.filter((project) => matchesLegacy(project, legacyFilters));
+    if (!intent) return projects;
+    const order = intentCopy[intent].order;
+    return [...projects].sort((left, right) => order.indexOf(left.id) - order.indexOf(right.id));
+  }, [intent, legacyFilters, projects, useLegacy]);
 
-  const setFilter = (key: 'major' | 'capability' | 'scenario' | 'viewpoint' | 'duration', value: string) => {
-    if (key === 'major') setMajor(value);
-    if (key === 'capability') setCapability(value);
-    if (key === 'scenario') setScenario(value);
-    if (key === 'viewpoint') setViewpoint(value);
-    if (key === 'duration') setDuration(value);
-    updateUrl({ [key]: value });
-  };
-
-  function clearFilters() {
-    setMajor('all'); setCapability('all'); setScenario('all'); setViewpoint('all'); setDuration('all');
+  function chooseIntent(nextIntent: ProjectIntent) {
+    setIntent(nextIntent); setUseLegacy(false); setShowLegacy(false);
+    window.history.replaceState(null, '', `/projects?intent=${nextIntent}`);
+  }
+  function clearCompatibility() {
+    setUseLegacy(false); setShowLegacy(false); setIntent(undefined);
     window.history.replaceState(null, '', '/projects');
   }
 
-  const activeCount = [major, capability, scenario, viewpoint, duration].filter((value) => value !== 'all').length;
-
-  return (
-    <>
-      <div className="filter-panel" aria-label="项目筛选">
-        <div className="filter-panel-head"><div><p className="eyebrow">按你的下一步来找</p><strong>先看清成本，再决定要不要打开外部工具</strong></div>{activeCount > 0 ? <button className="clear-button" type="button" onClick={clearFilters}>清除 {activeCount} 个条件</button> : null}</div>
-        <div className="filter-grid">
-          <label className="filter-control" htmlFor="filter-major"><span>专业透镜</span><select id="filter-major" value={major} onChange={(event) => setFilter('major', event.target.value)}><option value="all">全部专业</option>{majors.map((item) => <option key={item.id} value={item.id}>{item.shortName}</option>)}</select></label>
-          <label className="filter-control" htmlFor="filter-capability"><span>能力</span><select id="filter-capability" value={capability} onChange={(event) => setFilter('capability', event.target.value)}><option value="all">全部能力</option>{capabilities.map((item) => <option key={item.id} value={item.id}>{item.shortName}</option>)}</select></label>
-          <label className="filter-control" htmlFor="filter-scenario"><span>场景</span><select id="filter-scenario" value={scenario} onChange={(event) => setFilter('scenario', event.target.value)}><option value="all">全部场景</option>{scenarios.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
-          <label className="filter-control" htmlFor="filter-viewpoint"><span>项目视角</span><select id="filter-viewpoint" value={viewpoint} onChange={(event) => setFilter('viewpoint', event.target.value)}><option value="all">全部视角</option>{Array.from(new Set(projects.map((item) => item.viewpoint))).map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
-          <label className="filter-control" htmlFor="filter-duration"><span>预计时长</span><select id="filter-duration" value={duration} onChange={(event) => setFilter('duration', event.target.value)}><option value="all">全部时长</option>{Array.from(new Set(projects.flatMap((item) => item.durationBands))).map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
-        </div>
-      </div>
-
-      <div className="result-summary" aria-live="polite"><strong>{filtered.length}</strong> 张体验卡 {activeCount > 0 ? '符合当前条件' : '可供选择'}</div>
-      {filtered.length > 0 ? <div className="project-list">{filtered.map((project) => {
-        const status = resourceStates[project.id];
-        return <article className="project-list-card" key={project.id}><div><div className="card-topline"><Badge tone={project.majorIds.length > 1 ? 'amber' : 'teal'}>{project.kicker}</Badge><span className="card-kicker">{project.duration}</span></div><h2><Link href={`/projects/${project.slug}`}>{project.title}</Link></h2><p className="project-card-line"><strong>适合谁</strong>{project.suitableFor}</p><p className="project-card-line"><strong>会留下</strong>{project.expectedOutput}</p><dl className="project-meta-grid"><div><dt>时长</dt><dd>{project.duration}</dd></div><div><dt>最低基础</dt><dd>{project.prerequisites[0]}</dd></div><div><dt>资源</dt><dd className={`resource-state resource-state-${status.key}`}><span aria-hidden="true">{status.key === 'ready' ? '●' : status.key === 'alternative' ? '↗' : '!'}</span>{status.label}</dd></div></dl></div><div className="project-list-side"><span className="project-viewpoint">{project.viewpoint}</span><span>{status.description}</span><Link className="button button-secondary" href={`/projects/${project.slug}`}>看看怎么开始 <span aria-hidden="true">→</span></Link></div></article>;
-      })}</div> : <div className="empty-state"><span className="empty-icon" aria-hidden="true">⌁</span><h2>暂时没有匹配的体验卡</h2><p>换一个专业或时长条件，或者清除筛选回到全部项目。</p><button className="button button-secondary" type="button" onClick={clearFilters}>回到全部项目</button></div>}
-    </>
-  );
+  return <>
+    {showLegacy ? <div className="legacy-filter-notice" role="status"><div><strong>{legacyNotice === 'active' ? '正在使用旧筛选链接' : '这个链接里的筛选或意图值已经无法识别'}</strong><span>{legacyNotice === 'active' ? '结果仍按原条件展示；你也可以切换到新的学生意图入口。' : '为了不把页面静默清空，现已展示全部项目。'}</span></div><button type="button" className="clear-button" onClick={clearCompatibility}>关闭并看全部</button></div> : null}
+    <nav className="intent-picker" aria-label="按现在想做的事选择项目">{projectIntents.map((item) => <Link key={item} href={`/projects?intent=${item}`} className={intent === item && !useLegacy ? 'intent-link is-active' : 'intent-link'} aria-current={intent === item && !useLegacy ? 'page' : undefined} onClick={(event) => { event.preventDefault(); chooseIntent(item); }}>{intentCopy[item].label}</Link>)}</nav>
+    <p className="intent-feedback" aria-live="polite">{useLegacy ? `旧链接找到 ${visibleProjects.length} 个项目。兼容期内仍按原条件展示。` : intent ? intentCopy[intent].feedback : '先选一句最像你现在想法的话。它只改变顺序，不会替你隐藏其他项目。'}</p>
+    {visibleProjects.length > 0 ? <div className="project-list release-b-project-list">{visibleProjects.map((project, index) => {
+      const status = resourceStates[project.id]; const preview = project.previewAssets[0];
+      return <article className={index === 0 && !useLegacy ? 'project-list-card is-featured' : 'project-list-card'} key={project.id}><div className="project-list-visual"><img src={preview.src} alt={preview.alt} width="560" height="360" loading={index === 0 ? 'eager' : 'lazy'} /></div><div className="project-list-body"><div className="card-topline"><Badge tone={project.majorIds.length > 1 ? 'amber' : 'teal'}>{project.kicker}</Badge><span className="card-kicker">{project.viewpoint}</span></div><h2><Link href={`/projects/${project.slug}`}>{project.title}</Link></h2><p className="project-card-line"><strong>适合谁</strong>{project.suitableFor}</p><p className="project-card-line"><strong>会留下</strong>{project.expectedOutput}</p><dl className="project-meta-grid"><div><dt>时长</dt><dd>{project.duration}</dd></div><div><dt>最低基础</dt><dd>{project.prerequisites[0]}</dd></div><div><dt>现在能否开始</dt><dd className={`resource-state resource-state-${status.key}`}>{status.label}</dd></div></dl><div className="project-card-action"><span>{status.description}</span><Link className="button button-secondary" href={`/projects/${project.slug}`}>看看今天怎么开始 <span aria-hidden="true">→</span></Link></div></div></article>;
+    })}</div> : <div className="empty-state"><h2>旧筛选暂时没有匹配项目</h2><p>兼容链接仍被正确解析；你可以关闭旧筛选，回到三个项目。</p><button className="button button-secondary" type="button" onClick={clearCompatibility}>回到全部项目</button></div>}
+  </>;
 }

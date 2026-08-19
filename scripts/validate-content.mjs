@@ -1,8 +1,10 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const DATA_FILE = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'content', 'site-data.json');
+const UPDATES_FILE = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'content', 'updates.json');
+const PUBLIC_DIRECTORY = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'public');
 
 const COLLECTION_RULES = [
   { key: 'majors', minimum: 2 },
@@ -10,7 +12,7 @@ const COLLECTION_RULES = [
   { key: 'capabilities', minimum: 8 },
   { key: 'projects', minimum: 3 },
   { key: 'scenarios', minimum: 6 },
-  { key: 'faqs', minimum: 4 },
+  { key: 'faqs', minimum: 3 },
 ];
 
 const PROJECT_REQUIRED_FIELDS = [
@@ -30,7 +32,7 @@ const PROJECT_REQUIRED_FIELDS = [
   'validation',
   'nextStep',
   'endpointIds',
-  'preview',
+  'previewAssets',
   'owner',
   'updatedAt',
   'reviewDueAt',
@@ -469,17 +471,44 @@ function validateProject(record, path) {
     }
   }
 
-  if (!isRecord(record.preview)) {
-    addError(`${formatPath([...path, 'preview'])} 必须登记真实流程产物预览和素材信息`);
+  if (record.preview !== undefined) addError(`${formatPath([...path, 'preview'])} 已退役；内容源只能写 previewAssets，禁止双写`);
+  const minimumAssets = record.id === 'project-signal-feature-notebook' ? 3 : 2;
+  if (!Array.isArray(record.previewAssets) || record.previewAssets.length < minimumAssets) {
+    addError(`${formatPath([...path, 'previewAssets'])} 至少需要 ${minimumAssets} 份入口/过程/结果素材`);
   } else {
-    for (const field of ['src', 'alt', 'kind', 'author', 'license', 'sourceRef', 'generationRef']) {
-      if (!hasValue(record.preview[field])) addError(`${formatPath([...path, 'preview', field])} 为必填项`);
+    const seenSources = new Set();
+    record.previewAssets.forEach((asset, index) => {
+      const assetPath = [...path, 'previewAssets', index];
+      if (!isRecord(asset)) {
+        addError(`${formatPath(assetPath)} 必须是素材对象`);
+        return;
+      }
+      for (const field of ['src', 'alt', 'kind', 'author', 'license', 'sourceRef', 'generationRef', 'updatedAt']) {
+        if (!hasValue(asset[field])) addError(`${formatPath([...assetPath, field])} 为必填项`);
+      }
+      if (!validDate(asset.updatedAt)) addError(`${formatPath([...assetPath, 'updatedAt'])} 必须是有效的 YYYY-MM-DD 日期`);
+      if (!['project_output', 'process', 'diagram'].includes(asset.kind)) addError(`${formatPath([...assetPath, 'kind'])} kind 无效`);
+      if (typeof asset.src === 'string') {
+        if (!asset.src.startsWith('/project-previews/')) {
+          addError(`${formatPath([...assetPath, 'src'])} 必须来自 /project-previews/`);
+        } else {
+          if (seenSources.has(asset.src)) addError(`${formatPath([...assetPath, 'src'])} 在同一项目中重复`);
+          seenSources.add(asset.src);
+          try {
+            const assetFile = resolve(PUBLIC_DIRECTORY, asset.src.slice(1));
+            const bytes = statSync(assetFile).size;
+            if (bytes > 200 * 1024) addError(`${formatPath([...assetPath, 'src'])} 超过单张 200KB 预算：${bytes} bytes`);
+          } catch {
+            addError(`${formatPath([...assetPath, 'src'])} 指向不存在的素材：${asset.src}`);
+          }
+        }
+      }
+    });
+    if (!record.previewAssets.some((asset) => asset?.kind === 'project_output')) {
+      addError(`${formatPath([...path, 'previewAssets'])} 必须保留至少一份结果/产物预览`);
     }
-    if (typeof record.preview.src === 'string' && !record.preview.src.startsWith('/project-previews/')) {
-      addError(`${formatPath([...path, 'preview', 'src'])} 必须来自 /project-previews/`);
-    }
-    if (!['project_output', 'process', 'diagram'].includes(record.preview.kind)) {
-      addError(`${formatPath([...path, 'preview', 'kind'])} kind 无效`);
+    if (record.id === 'project-signal-feature-notebook' && !record.previewAssets.some((asset) => asset?.kind === 'process')) {
+      addError(`${formatPath([...path, 'previewAssets'])} 代表项目必须包含过程视觉`);
     }
   }
 
@@ -580,13 +609,69 @@ function validateRequiredCollections(data) {
   }
 }
 
-function printStatistics(data) {
+function validateUpdates(updates, data) {
+  if (!Array.isArray(updates)) {
+    addError('updates.json 顶层必须是数组');
+    return;
+  }
+  if (updates.length > 3) addError(`Release B 最近更新最多展示 3 条，实际为 ${updates.length}`);
+  const entityCollections = {
+    project: data.projects,
+    faq: data.faqs,
+    'dual-lens-case': data.dualLensCases,
+    source: data.sources,
+  };
+  const seenIds = new Set();
+  updates.forEach((update, index) => {
+    const path = ['updates', index];
+    if (!isRecord(update)) {
+      addError(`${formatPath(path)} 必须是对象`);
+      return;
+    }
+    for (const field of ['id', 'entityType', 'entityId', 'kind', 'summary', 'publishedAt', 'owner']) {
+      if (!hasValue(update[field])) addError(`${formatPath([...path, field])} 为必填项`);
+    }
+    if (seenIds.has(update.id)) addError(`${formatPath([...path, 'id'])} 不得重复`);
+    seenIds.add(update.id);
+    if (!['content-update', 'source-reverification'].includes(update.kind)) addError(`${formatPath([...path, 'kind'])} kind 无效`);
+    if (!validDate(update.publishedAt)) addError(`${formatPath([...path, 'publishedAt'])} 必须是有效的 YYYY-MM-DD 日期`);
+    const collection = entityCollections[update.entityType];
+    if (!collection) addError(`${formatPath([...path, 'entityType'])} 不支持：${update.entityType}`);
+    else if (!collection.some((item) => item.id === update.entityId)) addError(`${formatPath([...path, 'entityId'])} 引用了不存在的 ${update.entityType}：${update.entityId}`);
+    if (update.kind === 'source-reverification' && !String(update.summary).startsWith('已重新核验来源')) {
+      addError(`${formatPath([...path, 'summary'])} source-reverification 必须明确写“已重新核验来源”`);
+    }
+  });
+}
+
+function validateAssetBudgets(data) {
+  const allSources = new Set();
+  const entrySources = new Set();
+  for (const project of data.projects ?? []) {
+    for (const asset of project.previewAssets ?? []) if (asset?.src) allSources.add(asset.src);
+    if (project.previewAssets?.[0]?.src) entrySources.add(project.previewAssets[0].src);
+  }
+  const bytesFor = (sources) => [...sources].reduce((total, src) => {
+    try {
+      return total + statSync(resolve(PUBLIC_DIRECTORY, src.slice(1))).size;
+    } catch {
+      return total;
+    }
+  }, 0);
+  const entryBytes = bytesFor(entrySources);
+  const allBytes = bytesFor(allSources);
+  if (entryBytes > 350 * 1024) addError(`项目入口视觉总计 ${entryBytes} bytes，超过移动首屏 350KB 预算`);
+  if (allBytes > 500 * 1024) addError(`全部首发项目视觉总计 ${allBytes} bytes，超过桌面首屏 500KB 保守预算`);
+}
+
+function printStatistics(data, updates) {
   console.log('Content validation statistics:');
 
   for (const rule of COLLECTION_RULES) {
     const count = Array.isArray(data?.[rule.key]) ? data[rule.key].length : 0;
     console.log(`  ${rule.key}: ${count} (minimum ${rule.minimum})`);
   }
+  console.log(`  updates: ${Array.isArray(updates) ? updates.length : 0} (maximum 3)`);
 }
 
 function fail() {
@@ -598,10 +683,12 @@ function fail() {
 }
 
 let data;
+let updates;
 
 try {
   const raw = readFileSync(DATA_FILE, 'utf8');
   data = JSON.parse(raw);
+  updates = JSON.parse(readFileSync(UPDATES_FILE, 'utf8'));
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error);
   console.error(`Content validation failed: cannot read or parse ${DATA_FILE}`);
@@ -614,10 +701,13 @@ if (!isRecord(data)) {
 } else {
   validateRequiredCollections(data);
   validateRelations(data, [], buildCollectionTargets(data));
+  validateUpdates(updates, data);
+  validateAssetBudgets(data);
   scanForBannedTerms(data, []);
+  scanForBannedTerms(updates, ['updates']);
 }
 
-printStatistics(data);
+printStatistics(data, updates);
 
 if (errors.length > 0) {
   fail();

@@ -12,11 +12,15 @@
     "validate:content": "node scripts/validate-content.mjs",
     "pathways:check": "node scripts/validate-pathways.mjs",
     "content:check": "npm run validate:content && npm run pathways:check",
+    "content:release-b-test": "node scripts/test-release-b-content.mjs",
     "links:check": "node scripts/check-links.mjs",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test tests/e2e/home.spec.ts tests/e2e/release-a-baseline.spec.ts --project=desktop-light --project=mobile-light --project=narrow-light",
+    "test:a11y": "playwright test tests/e2e/a11y.spec.ts --project=desktop-light",
     "test:visual": "playwright test tests/e2e/visual.spec.ts",
+    "test:release-b-browser": "node scripts/run-release-b-browser-checks.mjs",
     "lighthouse": "node scripts/lighthouse-mobile.mjs",
-    "check": "npm run lint && npm run content:check && npm run links:check && npm run typecheck && npm run build"
+    "check": "npm run lint && npm run content:check && npm run links:check && npm run typecheck && npm run build",
+    "check:release-b": "npm run check && npm run content:release-b-test && npm run test:release-b-browser"
   },
   "dependencies": {
     "next": "14.2.35",

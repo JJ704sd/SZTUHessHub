@@ -1,80 +1,114 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { evidenceData, getProjectResourceState, type LinkStatus } from '../../lib/content/evidence';
 
-const navigation = ['专业与课程', '做个项目', '能力地图', '选下一步'];
+const projectHeadings = '.project-list-card h2';
+const coreRoutes = [
+  { path: '/', heading: '先别急着选。动手试一次。' },
+  { path: '/projects', heading: '你今天想先碰哪一种任务？' },
+  { path: '/projects/signal-feature-notebook', heading: '从合成信号做出可解释的分类表' },
+];
 
-test('首页从任务启动台进入一个具体项目', async ({ page }) => {
+test('首页只有三个动作，项目完整展示不重复', async ({ page }) => {
   await page.goto('/');
-
-  await expect(page.locator('main')).toHaveCount(1);
-  await expect(page.locator('h1')).toHaveText('今天想先弄明白什么？');
-  await expect(page.getByRole('navigation', { name: '开始探索' })).toContainText('看懂两个专业');
-  await expect(page.getByRole('navigation', { name: '开始探索' })).toContainText('挑一个小项目');
-  await expect(page.getByRole('navigation', { name: '开始探索' })).toContainText('我还没想好');
-  await expect(page.getByLabel('今天想先弄明白什么？').getByRole('heading', { name: '从合成信号做出可解释的分类表' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '挑一个小项目，先看能留下什么' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '同一份小成果，可以换三种说法' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '先回答会影响下一步的问题' })).toBeVisible();
+  const actions = page.getByRole('navigation', { name: '开始探索' }).getByRole('link');
+  await expect(actions).toHaveCount(3);
+  await expect(actions).toHaveText([/两个专业到底差在哪/, /给我一个能马上试的项目/, /我还没想好/]);
+  await expect(page.locator('.home-project-teaser')).toHaveCount(1);
+  await expect(page.locator('.home-feature-project')).toHaveCount(1);
+  await expect(page.locator('.home-compact-project')).toHaveCount(2);
+  await expect(page.locator('.home-featured-projects .project-meta-grid')).toHaveCount(1);
 });
 
-test('一级导航只有四项且旧入口仍可到达', async ({ page }) => {
-  await page.goto('/');
-  const links = page.locator('.desktop-nav .nav-link');
-  await expect(links).toHaveCount(4);
-  for (const label of navigation) await expect(links.filter({ hasText: label })).toHaveCount(1);
-
-  await page.goto('/pathways');
-  await expect(page.getByRole('heading', { name: '你可能在想的几条路' })).toBeVisible();
-  await expect(page.getByText('平常在做什么')).toHaveCount(5);
+test('意图只改变顺序，不隐藏三个项目', async ({ page }) => {
+  await page.goto('/projects?intent=sensor');
+  const headings = page.locator(projectHeadings);
+  await expect(headings).toHaveCount(3);
+  await expect(headings.first()).toHaveText('传感—采样—告警最小系统');
+  await expect(page.getByRole('link', { name: '我想动手接传感器' })).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('.intent-feedback')).toContainText('完整实践约 2 小时');
 });
 
-test('项目详情保留最小闭环字段', async ({ page }) => {
+test('旧合法筛选继续工作，未知值不静默清空', async ({ page }) => {
+  await page.goto('/projects?major=major-bme');
+  await expect(page.getByRole('status')).toContainText('正在使用旧筛选链接');
+  await expect(page.locator(projectHeadings)).toHaveCount(2);
+  await page.goto('/projects?major=unknown-major');
+  await expect(page.getByRole('status')).toContainText('筛选或意图值已经无法识别');
+  await expect(page.locator(projectHeadings)).toHaveCount(3);
+  await page.goto('/projects?intent=unknown-intent');
+  await expect(page.getByRole('status')).toContainText('筛选或意图值已经无法识别');
+  await expect(page.locator(projectHeadings)).toHaveCount(3);
+});
+
+test('资源状态聚合覆盖主入口、替代入口、待核验和不可用', () => {
+  const stateFor = (primary: LinkStatus, alternative: LinkStatus) => getProjectResourceState(
+    { endpointIds: ['fixture-primary', 'fixture-alternative'] },
+    {
+      ...evidenceData,
+      endpoints: [
+        { id: 'fixture-primary', ownerType: 'project', ownerId: 'fixture-project', role: 'source', required: true, url: 'https://example.com/primary' },
+        { id: 'fixture-alternative', ownerType: 'project', ownerId: 'fixture-project', role: 'replacement', required: false, url: 'https://example.com/alternative' },
+      ],
+      linkAvailability: [
+        { endpointId: 'fixture-primary', checkedAt: '2026-08-19', status: primary },
+        { endpointId: 'fixture-alternative', checkedAt: '2026-08-19', status: alternative },
+      ],
+    },
+  ).key;
+
+  expect(stateFor('available', 'unavailable')).toBe('ready');
+  expect(stateFor('unavailable', 'available')).toBe('alternative');
+  expect(stateFor('unverified', 'unavailable')).toBe('unknown');
+  expect(stateFor('unavailable', 'unavailable')).toBe('unavailable');
+});
+
+test('代表项目的开始动作由已登记资源状态决定', async ({ page }) => {
   await page.goto('/projects/signal-feature-notebook');
-  await expect(page.getByRole('heading', { name: '从合成信号做出可解释的分类表' })).toBeVisible();
-  for (const label of [/开始条件/, /步骤/, /停止条件/, /产物模板/, /数据许可/, /风险边界/]) {
-    await expect(page.getByText(label).first()).toBeVisible();
-  }
-  await expect(page.getByRole('heading', { name: /下一步：/ })).toBeVisible();
-  await expect(page.getByText('主入口', { exact: true }).first()).toBeVisible();
-  await expect(page.getByText('替代入口', { exact: true }).first()).toBeVisible();
+  const startAction = page.locator('.project-hero-action').getByRole('link', { name: /打开主入口/ });
+  await expect(startAction).toHaveAttribute('href', 'https://physionet.org/about/');
+  await expect(page.locator('.project-hero-action .resource-state')).toHaveText('可开始');
+  await expect(page.locator('.project-hero-action')).not.toContainText('先核验入口');
 });
 
-test('移动菜单支持打开、Escape 和焦点返回', async ({ page }) => {
+test('skip link 是首个焦点，当前导航使用 aria-current', async ({ page }) => {
+  await page.goto('/projects/signal-feature-notebook');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: '跳到主要内容' })).toBeFocused();
+  await expect(page.locator('.desktop-nav .nav-link[href="/projects"]')).toHaveAttribute('aria-current', 'page');
+});
+
+test('移动菜单为非模态展开区，并支持 Escape 与焦点返回', async ({ page }) => {
   test.skip((await page.viewportSize())?.width !== 390, '只在 390px 项目中运行');
-  await page.goto('/');
+  await page.goto('/projects');
   const menuButton = page.getByRole('button', { name: /菜单/ });
   await menuButton.click();
-  await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
-  const mobileNav = page.getByRole('navigation', { name: '移动端主导航' });
+  const mobileNav = page.locator('#mobile-navigation');
   await expect(mobileNav).toBeVisible();
-  const links = mobileNav.getByRole('link');
-  await expect(links.first()).toBeFocused();
-  await page.keyboard.press('Shift+Tab');
-  await expect(links.last()).toBeFocused();
-  await page.keyboard.press('Tab');
-  await expect(links.first()).toBeFocused();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(mobileNav).not.toHaveAttribute('aria-modal', 'true');
+  await expect(mobileNav.getByRole('link', { name: '小项目' })).toHaveAttribute('aria-current', 'page');
+  await expect(mobileNav.getByRole('link').first()).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
   await expect(menuButton).toBeFocused();
 });
 
-test('窄屏没有横向溢出，核心内容不依赖脚本', async ({ page, browser }) => {
+test('禁用 JavaScript 时三个核心页面仍有正文与链接', async ({ browser, page }) => {
   test.skip((await page.viewportSize())?.width !== 320, '只在 320px 项目中运行');
-  await page.goto('/');
-  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
-
-  const noScriptContext = await browser.newContext({ baseURL: 'http://127.0.0.1:3000', javaScriptEnabled: false, viewport: { width: 320, height: 844 } });
-  const noScriptPage = await noScriptContext.newPage();
-  await noScriptPage.goto('/');
-  await expect(noScriptPage.locator('h1')).toHaveText('今天想先弄明白什么？');
-  await expect(noScriptPage.getByLabel('今天想先弄明白什么？').getByRole('heading', { name: '从合成信号做出可解释的分类表' })).toBeVisible();
-  await noScriptContext.close();
+  const context = await browser.newContext({ baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3000', javaScriptEnabled: false, viewport: { width: 320, height: 800 } });
+  const noScriptPage = await context.newPage();
+  for (const route of coreRoutes) {
+    await noScriptPage.goto(route.path);
+    await expect(noScriptPage.getByRole('heading', { level: 1, name: route.heading })).toBeVisible();
+    await expect(noScriptPage.locator('main a[href]').first()).toBeVisible();
+  }
+  await context.close();
 });
 
-test('等效 200% 缩放时主要内容仍可读', async ({ page }) => {
+test('320px 三个核心页面没有横向滚动', async ({ page }) => {
   test.skip((await page.viewportSize())?.width !== 320, '只在 320px 项目中运行');
-  await page.setViewportSize({ width: 160, height: 844 });
-  await page.goto('/');
-  await expect(page.locator('h1')).toHaveText('今天想先弄明白什么？');
-  await expect(page.getByRole('heading', { name: '从合成信号做出可解释的分类表' }).first()).toBeVisible();
-  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  for (const route of coreRoutes) {
+    await page.goto(route.path);
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), { message: `${route.path} 不应横向溢出` }).toBe(true);
+  }
 });

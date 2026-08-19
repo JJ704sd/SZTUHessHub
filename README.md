@@ -1,11 +1,11 @@
 # HseeHub · 健康工程学生探索桌面
 
-HseeHub 帮学生先看懂智能医学工程与生物医学工程，再试一个低风险小项目，留下可复核的产物，最后决定下一步往哪里走。
+HseeHub 帮学生先看懂智能医学工程与生物医学工程，再试一个低风险小项目，留下能讲清过程与限制的作品，最后决定下一步往哪里走。
 
 主线是：
 
 ```text
-看懂专业 → 试一个小项目 → 留下可复核作品 → 再看下一步方向
+看懂专业 → 试一个小项目 → 留下真实作品 → 再看下一步方向
 ```
 
 首页服务第一次来的学生，不是培养方案镜像、资格判断工具或社区。卡面先说动作和成本，详情页再说明步骤、许可、停止条件和风险；来源、版本与核验记录集中在来源页和相关详情中。
@@ -15,20 +15,22 @@ HseeHub 帮学生先看懂智能医学工程与生物医学工程，再试一个
 | 入口 | 用途 |
 | --- | --- |
 | [`/majors`](app/majors/page.tsx) | 专业与课程：共同底座、课程侧重、培养方案入口 |
-| [`/projects`](app/projects/page.tsx) | 做个项目：三张体验卡、筛选、资源状态和产物模板 |
+| [`/projects`](app/projects/page.tsx) | 做个项目：按四类行动意图进入、查看真实资源状态和产物模板 |
 | [`/capabilities`](app/capabilities/page.tsx) | 能力地图：课程、工程任务与可迁移场景 |
 | [`/pathways`](app/pathways/page.tsx) | 选下一步：日常任务、15 分钟动作和关键门槛 |
+| [`/pathways/explore`](app/pathways/explore/page.tsx) | 还没想好：一周双路径短实验与本地复盘单 |
 | [`/scenarios`](app/scenarios/page.tsx) | 跨场景关系页，从能力或项目进入 |
 | [`/sources`](app/sources/page.tsx) | 来源、版本、许可与最后核验 |
 
 已传播的旧路由继续保留，包括专业详情、课程版本、项目资源、场景详情和路径详情；本轮不建设登录、评论、社区、投稿、个人足迹或治理后台。
 
-## Release A / P0 内容
+## Release B / P0 内容
 
-- 首页依次呈现任务启动台、3 个精选项目、1 个同题双专业案例、1 个产物到 3 条路径的改写示例、4 个编辑部整理的常见问题和内容边界页尾。
-- 项目卡固定展示适合谁、会留下什么、时长/最低基础/资源状态；项目详情补齐步骤、停止条件、模板、数据许可、风险边界和下一步。
+- 首页先给出三个动作，再呈现 1 个重点项目与 2 个紧凑条目、同题双专业案例、产物到 3 条路径的改写、最近更新和 3 个常见问题。
+- 项目列表以 `?intent=` 的四类学生意图排序而不隐藏项目；已传播的五维筛选 URL 保留一个兼容周期，未知值回退到全部并给出说明。
+- 项目卡固定展示适合谁、会留下什么、时长/最低基础/资源状态；项目详情按真实 endpoint 状态决定开始动作，并补齐步骤、过程图、作品注释、停止条件、模板、数据许可、风险边界和下一步。
 - 三个项目都登记主入口、替代入口和 `linkAvailability`；状态只由 `content/evidence.json` 的 endpoint 数据聚合，不从文案猜测“可开始”。
-- 三份预览来自确定性合成流程，素材登记了 `alt`、作者、许可、来源和生成脚本；不使用真实患者数据。
+- 七份入口、过程与结果预览来自确定性合成流程，素材登记了角色、`alt`、作者、许可、来源、更新时间和生成脚本；不使用真实患者数据。
 - `/pathways` 只做轻量比较，完整行动、来源、时效和证据改写下沉到路径详情。
 
 ## 技术栈与内容源
@@ -37,6 +39,7 @@ HseeHub 帮学生先看懂智能医学工程与生物医学工程，再试一个
 - JSON 内容事实源、类型化读取层、构建期关系与链接校验
 - 语义 CSS token、亮暗主题、reduced-motion、服务端输出核心文字
 - `content/site-data.json`：专业、能力、项目、场景、FAQ 和来源
+- `content/updates.json`：经过编辑确认的最近更新，不从更新时间自动推断事件
 - `content/pathways.json`：路径、产物和方向改写
 - `content/evidence.json`：claims、endpoint 与 `linkAvailability`
 - `lib/content.ts`、`lib/content/`：类型、关系读取和事实状态
@@ -50,10 +53,10 @@ npm run dev
 
 打开 `http://localhost:3000`。
 
-提交前运行完整门禁：
+提交前运行 Release B 完整门禁：
 
 ```bash
-npm run check
+npm run check:release-b
 ```
 
 也可以按需运行：
@@ -61,11 +64,14 @@ npm run check
 ```bash
 npm run lint          # 源码规范与 token 使用检查
 npm run content:check # 内容、路径、项目 endpoint 和产物关系
+npm run content:release-b-test # FAQ 与 Release B 内容契约负向回归
 npm run links:check   # 来源、项目工具和 endpoint URL 协议
 npm run typecheck     # TypeScript 检查
 npm run build         # Next.js production build
 npm run test:e2e      # Playwright 关键路径
+npm run test:a11y     # axe 核心页面检查
 npm run test:visual   # Playwright 视觉基线
+npm run test:release-b-browser # 单一生产服务器上顺序运行 E2E、axe 与视觉
 npm run lighthouse    # production build 下三页各运行三次取中位
 ```
 
@@ -87,6 +93,7 @@ Playwright 正式快照放在 `tests/e2e/__screenshots__/`；临时运行产物�
 
 ## 相关文档
 
-- [下一阶段产品与体验重构 Spec](docs/HseeHub-next-stage-experience-spec.md)
+- [Release B 产品与网页体验深化 Spec（当前）](docs/HseeHub-release-b-experience-spec.md)
+- [Release A 产品与体验重构 Spec（历史设计）](docs/HseeHub-next-stage-experience-spec.md)
 - [网站架构与产品规划](docs/HseeHub-website-architecture-spec.md)
 - [第一版质量检查点](docs/HseeHub-v1-quality-checkpoints.md)

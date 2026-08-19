@@ -91,7 +91,7 @@ export function ProjectCapsuleCard({ project, majorMap }: { project: Project; ma
   const resourceState = getProjectResourceState(project);
   return (
     <article className="project-card">
-      <div className="project-visual"><img src={project.preview.src} alt={project.preview.alt} width="560" height="360" /></div>
+      <div className="project-visual"><img src={project.previewAssets[0].src} alt={project.previewAssets[0].alt} width="560" height="360" loading="lazy" /></div>
       <div className="project-content">
         <div className="card-topline"><Badge tone={project.majorIds.length > 1 ? 'amber' : 'teal'}>{project.kicker}</Badge><span className="card-kicker">{project.duration}</span></div>
         <h3>{project.title}</h3>
@@ -152,12 +152,12 @@ export function SiteFooter() {
       <div className="page-container footer-inner">
         <div className="footer-brand">
           <Link className="brand" href="/" aria-label="HseeHub 首页"><span className="brand-mark" aria-hidden="true">H</span><span className="brand-copy"><strong>HseeHub</strong><span>健康工程探索站</span></span></Link>
-          <p>给健康工程学生的探索桌面：先看懂两个专业，试一个小项目，留下可复核的东西，再决定下一步。</p>
+          <p>给健康工程学生的探索桌面：先看懂两个专业，试一个小项目，留下一份别人能看懂你做过什么的记录。</p>
         </div>
         <div className="footer-col"><strong>从这里开始</strong><Link href="/majors/compare">5 分钟看懂两个专业</Link><Link href="/capabilities">{siteData.capabilities.length} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
         <div className="footer-col"><strong>来源与边界</strong><Link href="/sources">来源、版本与核验</Link><Link href="/majors/faq">学生常问</Link><Link href="/about">关于本站</Link></div>
       </div>
-      <div className="page-container footer-bottom"><span>默认内容版本：{siteConfig.currentCohort} 级 · 最近一次内容复核：{siteConfig.contentBaseline}</span><span>项目优先使用合成/公开数据；不处理真实患者数据</span></div>
+      <div className="page-container footer-bottom"><span>默认内容版本：{siteConfig.currentCohort} 级 · 依据与更新时间：{siteConfig.contentBaseline}</span><span>项目优先使用合成/公开数据；不处理真实患者数据</span></div>
     </footer>
   );
 }

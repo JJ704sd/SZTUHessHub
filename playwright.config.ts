@@ -1,5 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3000';
+
 export default defineConfig({
   testDir: './tests/e2e',
   outputDir: './test-results/playwright',
@@ -14,7 +16,7 @@ export default defineConfig({
   reporter: [['list'], ['html', { outputFolder: 'test-results/playwright-report', open: 'never' }]],
   snapshotPathTemplate: '{testDir}/__screenshots__/{projectName}/{testFilePath}/{arg}{ext}',
   use: {
-    baseURL: 'http://127.0.0.1:3000',
+    baseURL,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'off',
@@ -22,13 +24,15 @@ export default defineConfig({
   projects: [
     { name: 'desktop-light', use: { browserName: 'chromium', viewport: { width: 1440, height: 900 }, colorScheme: 'light' } },
     { name: 'desktop-dark', use: { browserName: 'chromium', viewport: { width: 1440, height: 900 }, colorScheme: 'dark' } },
-    { name: 'tablet-light', use: { browserName: 'chromium', viewport: { width: 768, height: 900 }, colorScheme: 'light' } },
+    { name: 'tablet-light', use: { browserName: 'chromium', viewport: { width: 768, height: 1024 }, colorScheme: 'light' } },
+    { name: 'tablet-dark', use: { browserName: 'chromium', viewport: { width: 768, height: 1024 }, colorScheme: 'dark' } },
     { name: 'mobile-light', use: { browserName: 'chromium', viewport: { width: 390, height: 844 }, colorScheme: 'light' } },
-    { name: 'narrow-light', use: { browserName: 'chromium', viewport: { width: 320, height: 844 }, colorScheme: 'light' } },
+    { name: 'mobile-dark', use: { browserName: 'chromium', viewport: { width: 390, height: 844 }, colorScheme: 'dark' } },
+    { name: 'narrow-light', use: { browserName: 'chromium', viewport: { width: 320, height: 800 }, colorScheme: 'light' } },
   ],
   webServer: {
     command: 'npm run start',
-    url: 'http://127.0.0.1:3000',
+    url: baseURL,
     reuseExistingServer: true,
     timeout: 120_000,
   },

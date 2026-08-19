@@ -1,0 +1,29 @@
+[
+  {
+    "id": "update-signal-visual-story",
+    "entityType": "project",
+    "entityId": "project-signal-feature-notebook",
+    "kind": "content-update",
+    "summary": "为合成信号分类补齐入口、过程和结果三张项目视觉，开始前可以先看清会经历什么。",
+    "publishedAt": "2026-08-19",
+    "owner": "HseeHub Release B 项目编辑"
+  },
+  {
+    "id": "update-material-entry-visual",
+    "entityType": "project",
+    "entityId": "project-material-test-matrix",
+    "kind": "content-update",
+    "summary": "新增材料样本、约束便签和权衡过程入口视觉，并保留原有结果矩阵。",
+    "publishedAt": "2026-08-19",
+    "owner": "HseeHub Release B 项目编辑"
+  },
+  {
+    "id": "update-sensor-entry-visual",
+    "entityType": "project",
+    "entityId": "project-sensor-alarm-prototype",
+    "kind": "content-update",
+    "summary": "新增低压台架、接线和阈值测试入口视觉，并保留原有采样状态结果。",
+    "publishedAt": "2026-08-19",
+    "owner": "HseeHub Release B 项目编辑"
+  }
+]
