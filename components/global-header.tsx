@@ -12,7 +12,7 @@ export function GlobalHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>('light');
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const firstMobileLinkRef = useRef<HTMLAnchorElement>(null);
+  const mobileNavRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const stored = window.localStorage.getItem('hseehub-theme') as Theme | null;
@@ -26,21 +26,32 @@ export function GlobalHeader() {
   }, [pathname]);
 
   useEffect(() => {
-    if (menuOpen) {
-      firstMobileLinkRef.current?.focus();
-    }
+    if (!menuOpen) return;
+    const nav = mobileNavRef.current;
+    if (!nav) return;
+    const firstLink = nav.querySelector<HTMLElement>('a[href]');
+    window.requestAnimationFrame(() => firstLink?.focus());
 
-    function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === 'Escape' && menuOpen) {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
         setMenuOpen(false);
-        menuButtonRef.current?.focus();
+        window.requestAnimationFrame(() => menuButtonRef.current?.focus());
       }
     }
 
-    document.addEventListener('keydown', closeOnEscape);
-    return () => document.removeEventListener('keydown', closeOnEscape);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [menuOpen]);
 
+  useEffect(() => {
+    function closeOnWideScreen(event: MediaQueryListEvent) {
+      if (event.matches) setMenuOpen(false);
+    }
+    const media = window.matchMedia('(min-width: 861px)');
+    media.addEventListener('change', closeOnWideScreen);
+    return () => media.removeEventListener('change', closeOnWideScreen);
+  }, []);
   function toggleTheme() {
     const next = theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
@@ -65,31 +76,35 @@ export function GlobalHeader() {
 
         <nav className="desktop-nav" aria-label="主导航">
           {siteConfig.navItems.map((item) => (
-            <Link key={item.href} className={isActive(item.href) ? 'nav-link is-active' : 'nav-link'} href={item.href} aria-current={pathname === item.href ? 'page' : undefined}>
+            <Link key={item.href} className={isActive(item.href) ? 'nav-link is-active' : 'nav-link'} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
               {item.label}
             </Link>
           ))}
         </nav>
 
         <div className="header-actions">
-          <button className="theme-switch" type="button" onClick={toggleTheme} aria-label={`切换到${theme === 'dark' ? '亮色' : '暗色'}主题`} aria-pressed={theme === 'dark'}>
+          <button className="theme-switch theme-switch-desktop" type="button" onClick={toggleTheme} aria-label={`切换到${theme === 'dark' ? '亮色' : '暗色'}主题`} aria-pressed={theme === 'dark'}>
             <span className="theme-icon" aria-hidden="true">{theme === 'dark' ? '☼' : '◐'}</span>
             <span className="theme-label">{theme === 'dark' ? '亮色' : '暗色'}</span>
           </button>
-          <button ref={menuButtonRef} className="menu-button" type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? '关闭主导航' : '打开主导航'} aria-expanded={menuOpen} aria-controls="mobile-navigation">
+          <button ref={menuButtonRef} className="menu-button" type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? '关闭菜单' : '打开菜单'} aria-expanded={menuOpen} aria-controls="mobile-navigation">
             <span className="menu-icon" aria-hidden="true">{menuOpen ? '×' : '☰'}</span>
             <span>菜单</span>
           </button>
         </div>
       </div>
 
-      <nav id="mobile-navigation" className={menuOpen ? 'mobile-nav is-open page-container' : 'mobile-nav page-container'} aria-label="移动端主导航" aria-hidden={!menuOpen}>
+      <nav ref={mobileNavRef} id="mobile-navigation" className={menuOpen ? 'mobile-nav is-open page-container' : 'mobile-nav page-container'} aria-label="移动端主导航" aria-hidden={!menuOpen}>
         {siteConfig.navItems.map((item) => (
-          <Link key={item.href} ref={item === siteConfig.navItems[0] ? firstMobileLinkRef : undefined} className={isActive(item.href) ? 'mobile-nav-link is-active' : 'mobile-nav-link'} href={item.href} aria-current={pathname === item.href ? 'page' : undefined} tabIndex={menuOpen ? 0 : -1}>
+          <Link key={item.href} className={isActive(item.href) ? 'mobile-nav-link is-active' : 'mobile-nav-link'} href={item.href} tabIndex={menuOpen ? 0 : -1} aria-current={isActive(item.href) ? 'page' : undefined}>
             <span>{item.label}</span>
             <span aria-hidden="true">↗</span>
           </Link>
         ))}
+        <button className="mobile-theme-switch" type="button" onClick={toggleTheme} tabIndex={menuOpen ? 0 : -1} aria-label={`切换到${theme === 'dark' ? '亮色' : '暗色'}主题`} aria-pressed={theme === 'dark'}>
+          <span><span className="theme-icon" aria-hidden="true">{theme === 'dark' ? '☼' : '◐'}</span> 外观</span>
+          <span>{theme === 'dark' ? '切换到亮色' : '切换到暗色'}</span>
+        </button>
       </nav>
     </header>
   );

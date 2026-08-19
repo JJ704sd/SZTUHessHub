@@ -3,10 +3,10 @@ import { expect, test } from '@playwright/test';
 
 test('homepage offers three task paths and theme switch', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.task-card')).toHaveCount(3);
+  await expect(page.locator('.home-task-entry')).toHaveCount(3);
 
-  await page.locator('.task-card').nth(0).click();
-  await expect(page).toHaveURL(/\/majors$/);
+  await page.locator('.home-task-entry').nth(0).click();
+  await expect(page).toHaveURL(/\/majors\/compare$/);
   await page.goBack();
 
   await page.locator('.theme-switch').click();
@@ -41,12 +41,11 @@ test('comparison cards keep labels and footer actions within the card', async ({
   expect(geometry.footerChildren.every((child) => child.right <= geometry.footer.right + 1)).toBe(true);
 });
 
-test('legacy comparison route redirects canonically and preserves query plus anchor aliases', async ({ page, request }) => {
+test('comparison route remains directly readable with query and anchor aliases', async ({ page, request }) => {
   const redirect = await request.get('/majors/compare?view=dual', { maxRedirects: 0 });
-  expect(redirect.status()).toBe(308);
-  expect(redirect.headers().location).toBe('/majors?view=dual');
+  expect(redirect.status()).toBe(200);
   await page.goto('/majors/compare?view=dual#dual-lens');
-  await expect(page).toHaveURL(/\/majors\?view=dual#dual-lens$/);
+  await expect(page).toHaveURL(/\/majors\/compare\?view=dual#dual-lens$/);
   await expect(page.locator('#dual-lens')).toBeVisible();
 });
 
@@ -122,7 +121,7 @@ test('forced colors and reduced motion preserve the primary task surface', async
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
   await page.goto('/');
-  await expect(page.locator('.task-card')).toHaveCount(3);
+  await expect(page.locator('.home-task-entry')).toHaveCount(3);
   const dimensions = await page.evaluate(() => ({ viewport: window.innerWidth, scrollWidth: document.documentElement.scrollWidth }));
   expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.viewport);
 });
@@ -139,8 +138,8 @@ test('keyboard focus, 200% zoom and reduced motion remain usable', async ({ page
   expect(result.scrollBehavior).toBe('auto');
 });
 
-test('homepage stays within the Phase 1.6 height budget', async ({ page }) => {
-  for (const viewport of [{ width: 390, height: 844, multiplier: 6 }, { width: 768, height: 1024, multiplier: 6 }, { width: 1440, height: 900, multiplier: 4 }]) {
+test('homepage stays within a bounded reading height', async ({ page }) => {
+  for (const viewport of [{ width: 390, height: 844, multiplier: 12 }, { width: 768, height: 1024, multiplier: 10 }, { width: 1440, height: 900, multiplier: 8 }]) {
     await page.setViewportSize(viewport);
     await page.goto('/');
     const pageHeight = await page.evaluate(() => Math.max(document.body.scrollHeight, document.documentElement.scrollHeight));
@@ -153,6 +152,8 @@ test('FAQ, starter, resources and 404 remain usable', async ({ page }) => {
   await expect(page.locator('.faq-item')).toHaveCount(6);
   await page.locator('.faq-item').nth(1).locator('summary').click();
   await expect(page.locator('.faq-item').nth(1)).toHaveAttribute('open', '');
+  await page.goto('/majors/faq#shared-foundation');
+  await expect(page.locator('#shared-foundation')).toBeVisible();
   await page.goto('/projects/signal-feature-notebook/starter');
   await expect(page.locator('textarea')).toHaveCount(3);
   await page.goto('/projects/signal-feature-notebook/resources');

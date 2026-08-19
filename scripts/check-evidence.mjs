@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 
 const data = JSON.parse(readFileSync(new URL('../content/site-data.json', import.meta.url), 'utf8'));
+const pathwayData = JSON.parse(readFileSync(new URL('../content/pathways.json', import.meta.url), 'utf8'));
 const evidence = JSON.parse(readFileSync(new URL('../content/evidence.json', import.meta.url), 'utf8'));
 const errors = [];
 const sourceIds = new Set(data.sources.map((source) => source.id));
@@ -22,7 +23,8 @@ function findValue(claim) {
   if (claim.key === 'major_comparison:major-comparison:sharedFoundation') return data.siteMeta.home.sharedFoundation;
   const subject = claim.subjectType === 'major' ? data.majors.find((item) => item.id === claim.subjectId)
     : claim.subjectType === 'dual_lens_case' ? data.dualLensCases.find((item) => item.id === claim.subjectId)
-      : claim.subjectType === 'project' ? data.projects.find((item) => item.id === claim.subjectId) : undefined;
+      : claim.subjectType === 'project' ? data.projects.find((item) => item.id === claim.subjectId)
+        : claim.subjectType === 'pathway' ? pathwayData.pathways.find((item) => item.id === claim.subjectId) : undefined;
   if (!subject) return undefined;
   if (claim.field === 'totalCredits') return subject.credits;
   if (claim.field === 'focusTask') return subject.primaryFocus;
@@ -39,8 +41,9 @@ for (const claim of evidence.claims) {
   if (claimKeys.has(claim.key)) errors.push(`claim key 重复：${claim.key}`);
   claimKeys.add(claim.key);
   if (claim.key !== `${claim.subjectType}:${claim.subjectId}:${claim.field}`) errors.push(`claim key 与实体字段不一致：${claim.key}`);
-  if (findValue(claim) === undefined) errors.push(`claim 绑定的实体或字段不存在：${claim.key}`);
-  if (hash(findValue(claim)) !== claim.normalizedContentHash) errors.push(`claim hash 不匹配：${claim.key}（文案变化后旧核验必须失效）`);
+  const value = findValue(claim);
+  if (value === undefined) errors.push(`claim 绑定的实体或字段不存在：${claim.key}`);
+  else if (hash(value) !== claim.normalizedContentHash) errors.push(`claim hash 不匹配：${claim.key}（文案变化后旧核验必须失效）`);
   for (const refId of claim.evidenceRefIds) if (!refIds.has(refId)) errors.push(`claim ${claim.key} 缺少 EvidenceRef：${refId}`);
 }
 if (claimKeys.size !== evidence.claims.length) errors.push('claim key 必须唯一');
@@ -48,6 +51,7 @@ if (endpointIds.size !== evidence.endpoints.length) errors.push('endpoint ID 必
 if (refIds.size !== evidence.evidenceRefs.length) errors.push('EvidenceRef ID 必须唯一');
 for (const endpoint of evidence.endpoints) {
   if (endpoint.ownerType === 'project' && !data.projects.some((project) => project.id === endpoint.ownerId)) errors.push(`endpoint 所属项目不存在：${endpoint.id}`);
+  if (endpoint.ownerType === 'pathway' && !pathwayData.pathways.some((pathway) => pathway.id === endpoint.ownerId)) errors.push(`endpoint 所属路径不存在：${endpoint.id}`);
 }
 for (const link of evidence.linkAvailability) {
   if (!endpointIds.has(link.endpointId)) errors.push(`LinkAvailability 引用了不存在的 endpoint：${link.endpointId}`);

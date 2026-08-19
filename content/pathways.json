@@ -1,0 +1,633 @@
+{
+  "pathways": [
+    {
+      "id": "path-employment",
+      "slug": "employment",
+      "kind": "employment",
+      "title": "做工程相关工作",
+      "owner": "HseeHub P0 路径编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18",
+      "question": "我愿意长期解决什么问题，可以先承担哪些任务？",
+      "summary": "就业探索先从稳定的任务族开始，而不是从即时岗位或专业名称推断结果。你可以把课程、能力和项目整理成能被复核的过程证据，再回到具体组织的要求核对差距。",
+      "dailyTasks": [
+        "把模糊需求拆成能交付、能验证的任务",
+        "记录数据、设备或流程在什么条件下失效",
+        "向团队解释结果、限制和下一步"
+      ],
+      "roleFamilies": [
+        {
+          "title": "数据、算法与信息系统",
+          "tasks": ["整理数据字典和处理流程", "比较模型或规则的误差", "把结果写成可复核的说明"],
+          "evidenceExample": "保留一个从需求、数据、方法到误差解释的完整项目记录。",
+          "organizationTypes": ["软件与数据团队", "科研或技术服务团队"]
+        },
+        {
+          "title": "传感、嵌入式与仪器",
+          "tasks": ["定义采样条件和接口", "标记噪声、异常和停止状态", "用测试记录支持设计迭代"],
+          "evidenceExample": "用框图、采样表、状态说明和测试用例说明一个最小系统。",
+          "organizationTypes": ["仪器与设备研发团队", "电子、物联或测试团队"]
+        },
+        {
+          "title": "测试、验证与技术支持",
+          "tasks": ["把需求转成验收条件", "复现问题并记录环境", "用清晰边界支持交付沟通"],
+          "evidenceExample": "提交一份包含假设、复现步骤、结果和未覆盖范围的验证报告。",
+          "organizationTypes": ["质量与法规协作团队", "产品、解决方案与技术支持团队"]
+        }
+      ],
+      "capabilityIds": ["cap-software-information", "cap-design-validation", "cap-signal-data-ai"],
+      "projectIds": ["project-signal-feature-notebook"],
+      "scenarioIds": ["scenario-software", "scenario-ai-data", "scenario-healthcare"],
+      "artifactIds": ["artifact-signal-analysis", "artifact-sensor-test-record"],
+      "reusableAssets": [
+        "把数据、过程、结果和局限写清楚的项目记录",
+        "能展示输入、输出、验收条件和失败状态的工程产物",
+        "从课程任务中提炼出的可迁移能力描述"
+      ],
+      "additionalGates": [
+        "目标组织的工具链、协作方式和具体任务要求仍需逐项核对",
+        "进入医疗、器械或受监管场景还要补领域知识、标准和专业复核"
+      ],
+      "evidenceChecklist": [
+        "一页任务拆解：问题、输入、输出、限制和验收",
+        "可复现的过程记录、版本或测试样例",
+        "对一个失败结果的解释与下一步改进"
+      ],
+      "timeConstraints": [
+        "具体组织和职责会变化，稳定的岗位族只能帮助你理解任务，不代表某个职位持续存在",
+        "投递前需要回到目标组织的正式岗位说明、流程和资格字段"
+      ],
+      "actions": [
+        {
+          "id": "employment-15-minutes",
+          "horizon": "15-minutes",
+          "title": "看懂一个岗位族的日常任务",
+          "steps": ["选一个岗位族", "写下三项日常任务", "标记愿意、不愿意或还不确定的部分"],
+          "output": "一张任务偏好和能力差距便签。",
+          "stopCondition": "如果任务描述仍然让你无法判断具体工作，就先停在问题清单，不急着扩大搜索。",
+          "cannotProve": "不能证明你满足某个具体岗位的全部要求，也不能证明会被录用。",
+          "nextStep": "仍想了解时，进入 7 天试路。",
+          "externalActionRequired": false
+        },
+        {
+          "id": "employment-7-days",
+          "horizon": "7-days",
+          "title": "做一张任务—能力—证据差距表",
+          "steps": ["对照三份代表性任务描述", "为每项任务找到已有课程或项目证据", "标出需要补学或补做的部分"],
+          "output": "一张三列差距表，以及两个可以继续验证的问题。",
+          "stopCondition": "如果三份描述的任务完全不愿意做，保留结论并换一个岗位族，不把搜索变成无止境收藏。",
+          "cannotProve": "不能证明岗位信息在未来仍然相同，也不能把课程名称直接等同于胜任。",
+          "nextStep": "选一个差距最小且愿意继续的任务，进入 30 天做证据。",
+          "externalActionRequired": true
+        },
+        {
+          "id": "employment-30-days",
+          "horizon": "30-days",
+          "title": "把一个项目整理成可复核证据",
+          "steps": ["补齐需求与输入", "保留过程、结果和失败样例", "写一段交付说明与局限"],
+          "output": "项目说明、过程记录、结果截图或代码片段和反思页。",
+          "stopCondition": "如果无法说明数据许可、测试条件或结果限制，先补边界，不继续包装产物。",
+          "cannotProve": "不能证明真实工作经验、团队协作深度或目标组织的最终评价。",
+          "nextStep": "带着产物获取一次教师、同学或校友反馈，进入一学期复盘。",
+          "externalActionRequired": false
+        },
+        {
+          "id": "employment-semester",
+          "horizon": "semester",
+          "title": "用反馈判断继续、换族或保留备选",
+          "steps": ["请一位有相关经验的人看产物", "记录你愿意重复的任务和仍排斥的任务", "比较主路径与一个备选路径的共同资产"],
+          "output": "一页复盘：继续积累、换岗位族或保留备选，并列出下一学期的两项证据。",
+          "stopCondition": "如果反馈集中指出基础、责任或边界缺口，暂停扩展目标，先补最关键的一项。",
+          "cannotProve": "不能把一次反馈换算成就业结果、薪资或长期适配结论。",
+          "nextStep": "回到目标组织的正式入口逐项核对具体要求。",
+          "externalActionRequired": true
+        }
+      ],
+      "sourceIds": ["source-24365", "source-ime-2025", "source-college-profile"],
+      "endpointIds": ["endpoint-employment-24365", "endpoint-employment-college"],
+      "eligibilityBoundary": "本站只解释稳定岗位族和证据准备方式，不判断你是否符合某个具体职位，也不维护可报岗位清单；具体职责、学历、专业、经验和流程必须回到目标组织当次正式说明。",
+      "claimKeys": ["pathway:path-employment:eligibilityBoundary"],
+      "combinationPaths": ["先用项目证据进入相关任务，再决定是否继续深造", "就业探索与公共服务路径可以共享任务拆解和资料分析证据"]
+    },
+    {
+      "id": "path-domestic-postgraduate",
+      "slug": "domestic-postgraduate",
+      "kind": "domestic-postgraduate",
+      "title": "继续读研",
+      "owner": "HseeHub P0 路径编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18",
+      "question": "我想继续研究什么，为什么需要研究生训练？",
+      "summary": "国内深造不只是记考试科目，而是判断自己是否愿意持续阅读、实验、写作和面对不确定结果。页面提供方向和信息类型的核对框架，具体招生条件以当年度研招政策和目标单位官方页面为准。",
+      "dailyTasks": [
+        "围绕一个问题查找证据并说明方法",
+        "记录实验、复现或分析中的误差",
+        "把暂时没有答案的问题写成可继续研究的提问"
+      ],
+      "studyModes": ["学术型训练：更强调研究问题、方法与论文表达", "专业型训练：更强调面向任务的系统训练与实践接口", "科研助理或项目经历：先体验研究工作方式，再判断是否继续"],
+      "directionExamples": [
+        {"title": "医学数据与智能系统", "trainingQuestion": "如何让数据处理、模型和解释在约束下可复现？", "preparationSignal": "能说明数据来源、方法选择、误差和下一步问题。"},
+        {"title": "传感、检测与仪器", "trainingQuestion": "如何把现象稳定地测出来，并区分测量误差与对象变化？", "preparationSignal": "能保留采样条件、标定记录、异常处理和验证计划。"},
+        {"title": "材料、器械与工程验证", "trainingQuestion": "如何把材料或器械方案转成可评价、可迭代的工程证据？", "preparationSignal": "能从指标、测试、风险和适用范围讲清方案。"}
+      ],
+      "capabilityIds": ["cap-math-research", "cap-signal-data-ai", "cap-design-validation"],
+      "projectIds": ["project-signal-feature-notebook"],
+      "scenarioIds": ["scenario-ai-data", "scenario-healthcare", "scenario-software"],
+      "artifactIds": ["artifact-signal-analysis", "artifact-material-matrix"],
+      "reusableAssets": [
+        "围绕一个问题查资料、做方法和解释误差的过程记录",
+        "来自课程或项目的可复现数据、代码、实验或分析产物",
+        "能把兴趣转成研究问题的短说明"
+      ],
+      "additionalGates": [
+        "目标单位的专业、考试科目、复试、学制、费用和奖助要求需分别核对",
+        "研究生训练需要持续阅读、写作、实验或系统实践，短期兴趣不能代替长期体验"
+      ],
+      "evidenceChecklist": [
+        "一个有范围、有资料依据的研究问题",
+        "方法选择、误差来源和可复现步骤",
+        "对目标方向训练方式和自身缺口的对照"
+      ],
+      "timeConstraints": [
+        "招生政策、专业目录、考试科目和复试要求按年度与单位变化",
+        "推免、统考和校内规则不是同一套条件，不能在本站合并成统一结论"
+      ],
+      "actions": [
+        {
+          "id": "domestic-15-minutes",
+          "horizon": "15-minutes",
+          "title": "读懂一个方向的官方训练页面",
+          "steps": ["打开目标方向的官方培养或招生页", "写下它训练什么", "标出一个先修或材料问题"],
+          "output": "一段不超过 150 字的训练方式摘要和一个待核对问题。",
+          "stopCondition": "如果页面的适用对象、年度或单位范围不清楚，先停在来源核对，不用二手总结代替原文。",
+          "cannotProve": "不能证明符合报考条件，也不能证明一定被录取。",
+          "nextStep": "仍愿意理解训练内容时，进入 7 天试路。",
+          "externalActionRequired": true
+        },
+        {
+          "id": "domestic-7-days",
+          "horizon": "7-days",
+          "title": "比较三个方向的训练差异",
+          "steps": ["用同一模板记录三条方向的课程或研究训练", "写下共同能力和新增门槛", "提出一个自己愿意继续追问的问题"],
+          "output": "方向对照表、一个研究问题和信息缺口清单。",
+          "stopCondition": "如果比较只剩下名次或名气，回到训练任务和正式要求，不继续做主观排名。",
+          "cannotProve": "不能证明某个单位更适合你、能通过考试或会提供某种结果。",
+          "nextStep": "选一个问题做公开资料梳理或方法复现，进入 30 天做证据。",
+          "externalActionRequired": true
+        },
+        {
+          "id": "domestic-30-days",
+          "horizon": "30-days",
+          "title": "完成一次小型研究练习",
+          "steps": ["限定一个公开问题和资料范围", "做文献梳理、方法复现或误差分析", "记录无法复现的部分和原因"],
+          "output": "短报告、方法记录、结果图表和局限清单。",
+          "stopCondition": "如果数据、代码或文献许可不清楚，停止复制和上传，改用公开或合成材料。",
+          "cannotProve": "不能证明科研能力已经成熟、报考资格成立或招生单位会认可这份练习。",
+          "nextStep": "找教师或同学讨论你是否愿意持续做这类工作，进入一学期复盘。",
+          "externalActionRequired": false
+        },
+        {
+          "id": "domestic-semester",
+          "horizon": "semester",
+          "title": "复盘自己是否愿意持续研究",
+          "steps": ["回看阅读、实验和写作的实际投入", "记录反馈和未解决问题", "重新核对目标单位的官方条件和机会成本"],
+          "output": "一页复盘：继续深造、换方向或保留就业备选。",
+          "stopCondition": "如果长期任务与投入方式明显不匹配，允许换路，不用把已经花费的时间当作必须继续的理由。",
+          "cannotProve": "不能把复习时长、练习次数或一次好结果换算成录取结论。",
+          "nextStep": "回到中国研究生招生和目标单位官方入口逐项核对。",
+          "externalActionRequired": true
+        }
+      ],
+      "sourceIds": ["source-graduate-admissions", "source-ime-2025", "source-monai-tutorials"],
+      "endpointIds": ["endpoint-domestic-chsi", "endpoint-domestic-college"],
+      "eligibilityBoundary": "本站不合并不同招生单位的报考条件、考试科目、复试、调剂、学制或奖助结论；推免、统考与校内规则必须按当年度和目标单位的官方页面逐项核对。",
+      "claimKeys": ["pathway:path-domestic-postgraduate:eligibilityBoundary"],
+      "combinationPaths": ["先用项目或科研练习判断是否愿意研究，再决定投入正式备考", "深造准备与就业探索可以共享方法、数据和验证记录"]
+    },
+    {
+      "id": "path-public-service",
+      "slug": "public-service",
+      "kind": "public-service",
+      "title": "公共服务",
+      "owner": "HseeHub P0 路径编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18",
+      "question": "当年度职位要求与我的专业、学历和资格是否匹配？",
+      "summary": "公共服务探索的第一步是学会读公告、职位表和报考指南，而不是用专业名称猜可报岗位。你可以先体验资料整理和公共问题分析，再把地区、身份、学历、学位与职位条件交回当年度官方审查。",
+      "dailyTasks": [
+        "从公告、职位表和报考指南中找对应字段",
+        "整理公共问题的证据、口径和影响范围",
+        "把不确定条件写成需要向官方核对的问题"
+      ],
+      "officialFieldChecklist": [
+        {"field": "招录机关或招聘单位与职位任务", "question": "这个岗位实际要解决什么公共任务？"},
+        {"field": "专业目录或专业要求", "question": "要求引用哪一版专业目录，是否需要单位解释？"},
+        {"field": "学历、学位与应届身份", "question": "字段如何定义，适用对象和时间点是什么？"},
+        {"field": "地区、服务期与基层经历", "question": "是否存在职位特定的地域或经历条件？"},
+        {"field": "公告、职位表与报考指南", "question": "每份文件分别承担什么作用，冲突时回到谁？"}
+      ],
+      "serviceScopes": ["国考或省级招录的公告与职位信息", "事业单位或地方公共招聘的当期官方入口", "公共技术、数据整理和服务流程中的实际任务"],
+      "capabilityIds": ["cap-health-user", "cap-software-information", "cap-design-validation"],
+      "projectIds": ["project-signal-feature-notebook"],
+      "scenarioIds": ["scenario-environment-city", "scenario-software", "scenario-healthcare"],
+      "artifactIds": ["artifact-signal-analysis", "artifact-sensor-test-record"],
+      "reusableAssets": [
+        "能把资料来源、口径、时间范围和结论边界写清楚的信息整理",
+        "围绕一个公共议题完成的表格、分析摘要或可视化",
+        "从任务字段逐项核对而不是凭印象判断的习惯"
+      ],
+      "additionalGates": [
+        "具体专业、学历、学位、身份、地区、服务期和资格由当年度完整职位信息决定",
+        "国考、省考、事业单位招聘的公告和流程不同，不能混写"
+      ],
+      "evidenceChecklist": [
+        "公告—职位表—指南的字段对应表",
+        "一个公开议题的来源、口径和分析记录",
+        "无法由站内确认的资格问题清单"
+      ],
+      "timeConstraints": [
+        "招录周期、职位表和资格字段按年度、地区和单位变化",
+        "职位是否可报必须由当年度完整条件与资格审查确认，本站不列可报岗位清单"
+      ],
+      "actions": [
+        {
+          "id": "public-service-15-minutes",
+          "horizon": "15-minutes",
+          "title": "分清公告、职位表和报考指南",
+          "steps": ["查看三类文件的标题和发布主体", "分别写下它们回答的问题", "标出一项需要回到原文的字段"],
+          "output": "一张文件作用和待核验字段卡。",
+          "stopCondition": "如果无法确认文件的年度、发布主体或适用范围，停止转述，不把搜索摘要当成资格结论。",
+          "cannotProve": "不能证明你的专业可报、资格审查会通过或最终结果。",
+          "nextStep": "仍想理解工作方式时，进入 7 天试路。",
+          "externalActionRequired": true
+        },
+        {
+          "id": "public-service-7-days",
+          "horizon": "7-days",
+          "title": "逐字段标注一份官方职位信息",
+          "steps": ["选一份当期官方职位信息", "标出任务、专业、学历、身份和地区字段", "把不确定项列入问题清单"],
+          "output": "一份不含个人材料的字段标注和核对清单。",
+          "stopCondition": "如果信息不属于你的地区、年度或身份范围，停止比较，另找适用入口。",
+          "cannotProve": "不能把站内专业名称替代资格审查，也不能证明你应该报考某个职位。",
+          "nextStep": "用一个公开议题练习资料整理，进入 30 天做证据。",
+          "externalActionRequired": true
+        },
+        {
+          "id": "public-service-30-days",
+          "horizon": "30-days",
+          "title": "完成一份公共议题分析",
+          "steps": ["限定一个公开议题和时间范围", "记录来源、口径、缺失信息和影响对象", "写一页分析并邀请他人检查表达"],
+          "output": "资料表、简短分析、来源说明和不确定性清单。",
+          "stopCondition": "如果关键数据来源或口径无法说明，停止外推，不把局部样本写成全体结论。",
+          "cannotProve": "不能证明行政工作经验、考试能力、岗位资格或适配度。",
+          "nextStep": "把实际任务体验与硬条件一起带入一学期复盘。",
+          "externalActionRequired": false
+        },
+        {
+          "id": "public-service-semester",
+          "horizon": "semester",
+          "title": "结合任务和完整资格重新判断",
+          "steps": ["回看你愿意反复承担的公共任务", "按目标地区和当期官方文件重新核对字段", "与就业或深造备选比较共同资产和机会成本"],
+          "output": "一页复盘：继续准备、保留备选或更换路径。",
+          "stopCondition": "如果只能依靠模糊的专业对口印象，暂停投入，先向发布单位核对具体条件。",
+          "cannotProve": "不能把备考投入当作资格或结果的证据，也不能由本站替代官方审查。",
+          "nextStep": "离站查看当年度中央或地方官方公告、职位表和指南。",
+          "externalActionRequired": true
+        }
+      ],
+      "sourceIds": ["source-public-service", "source-24365", "source-college-profile"],
+      "endpointIds": ["endpoint-public-service-government", "endpoint-public-service-24365"],
+      "eligibilityBoundary": "专业是否可报、学历学位和应届身份是否符合、地区与服务期等条件只能由当年度具体公告、职位表、报考指南和资格审查确认；本站不维护可报岗位清单。",
+      "claimKeys": ["pathway:path-public-service:eligibilityBoundary"],
+      "combinationPaths": ["用资料分析和系统记录作为公共服务与就业探索的共同资产", "先做公共问题短实验，再决定是否进入长期备考"]
+    },
+    {
+      "id": "path-overseas-study",
+      "slug": "overseas-study",
+      "kind": "overseas-study",
+      "title": "海外继续学习",
+      "owner": "HseeHub P0 路径编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18",
+      "question": "哪类项目与目标匹配，入学和回国使用需要核对什么？",
+      "summary": "海外深造先比较项目训练方式、先修、语言、证据和真实成本，再决定是否继续。本站使用通用项目类型与核对模板，不做国家、学校或项目推荐，也不把“可申请”写成“会录取”。",
+      "dailyTasks": [
+        "比较项目的训练方式和先修要求",
+        "把学术、项目、语言和推荐信证据对齐",
+        "核对费用、签证、认证与时间线应询问谁"
+      ],
+      "programTypes": [
+        {"title": "授课型项目", "trainingDifference": "以课程、作业和应用任务为主，先修与学习方式需按项目说明核对。", "verificationQuestion": "课程结构、评估方式、语言和先修是否适合当前准备？"},
+        {"title": "研究型项目", "trainingDifference": "以研究问题、方法、导师和成果训练为主，项目匹配依赖具体研究方向。", "verificationQuestion": "研究兴趣、方法记录和潜在导师/项目要求如何对应？"},
+        {"title": "博士研究训练", "trainingDifference": "通常需要更长周期的研究计划、导师匹配和学术证据。", "verificationQuestion": "研究问题、 funding 或奖助、时间成本和身份要求由谁确认？"}
+      ],
+      "preparationQuestions": ["课程先修与学分如何解释", "语言成绩、有效期和豁免条件如何核对", "项目/研究证据与推荐信由谁评价", "总成本、签证和回国认证应查看哪些官方入口"],
+      "capabilityIds": ["cap-math-research", "cap-signal-data-ai", "cap-health-user"],
+      "projectIds": ["project-signal-feature-notebook"],
+      "scenarioIds": ["scenario-ai-data", "scenario-healthcare", "scenario-software"],
+      "artifactIds": ["artifact-signal-analysis", "artifact-material-matrix"],
+      "reusableAssets": [
+        "能讲清问题、方法、结果和限制的项目或研究记录",
+        "按目标项目重新组织的英文摘要或证据叙事",
+        "对先修、语言、成本和时间的核对表"
+      ],
+      "additionalGates": [
+        "项目官方页面会按申请季和机构变化，先修与材料不能由通用框架代替",
+        "签证、费用、奖学金和学历认证需回到目标国家/地区与官方政务入口"
+      ],
+      "evidenceChecklist": [
+        "项目类型、训练方式和先修对照",
+        "一份不夸大成果的项目/研究叙事",
+        "成本、时间、语言、签证和认证问题清单"
+      ],
+      "timeConstraints": [
+        "申请季、项目要求、费用和签证规则可能变化，不能展示未维护的最新截止日",
+        "认证与回国使用要求属于官方政务与具体项目问题，需离站核对"
+      ],
+      "actions": [
+        {
+          "id": "overseas-15-minutes",
+          "horizon": "15-minutes",
+          "title": "读懂一个项目官方页",
+          "steps": ["找出训练方式", "标出先修和语言入口", "记录费用或身份信息由谁发布"],
+          "output": "一张项目训练方式、先修和信息缺口卡。",
+          "stopCondition": "如果页面不是项目官方来源或申请季不清楚，停止比较，不用中介摘要填补空白。",
+          "cannotProve": "不能证明满足目标项目先修、会被录取或学历一定能认证。",
+          "nextStep": "仍想比较训练方式时，进入 7 天试路。",
+          "externalActionRequired": true
+        },
+        {
+          "id": "overseas-7-days",
+          "horizon": "7-days",
+          "title": "用同一模板比较三个项目",
+          "steps": ["记录三个项目的训练、先修、语言和成本问题", "区分已知与缺失信息", "不做国家或学校排名"],
+          "output": "项目对照表和待向官方确认的信息清单。",
+          "stopCondition": "如果成本、语言或先修仍无法从官方页面确认，保留缺口，不用估算替代。",
+          "cannotProve": "不能证明项目之间有统一可比的录取机会，也不能替目标机构作决定。",
+          "nextStep": "选一个证据缺口做 30 天叙事整理。",
+          "externalActionRequired": true
+        },
+        {
+          "id": "overseas-30-days",
+          "horizon": "30-days",
+          "title": "整理项目或研究证据叙事",
+          "steps": ["挑一个已有项目或研究练习", "写问题、方法、结果、限制和下一步", "按目标项目要求标出先修差距"],
+          "output": "一份项目/研究叙事草稿和先修差距表；不上传到本站。",
+          "stopCondition": "如果叙事需要夸大课堂练习、隐去数据许可或补写不存在的经历，停止并改正。",
+          "cannotProve": "不能证明材料完整、推荐信可得、签证成立或项目会录取。",
+          "nextStep": "按目标项目和认证入口重新核对总成本与硬条件，进入一学期复盘。",
+          "externalActionRequired": false
+        },
+        {
+          "id": "overseas-semester",
+          "horizon": "semester",
+          "title": "按目标项目复盘成本与匹配",
+          "steps": ["重新核对项目官方要求", "把语言、证据、时间和总成本放在一起", "与国内深造或就业备选比较共同资产"],
+          "output": "一页复盘：继续申请准备、换项目类型或保留其他路径。",
+          "stopCondition": "如果关键硬条件或资金安排无法确认，暂停高成本承诺，先获取官方或专业咨询。",
+          "cannotProve": "不能把准备完成度换算成录取、签证、认证或回国使用结论。",
+          "nextStep": "离站回到目标项目、目标国家/地区和教育部留学服务官方入口。",
+          "externalActionRequired": true
+        }
+      ],
+      "sourceIds": ["source-cscse", "source-slicer-training", "source-ime-2025"],
+      "endpointIds": ["endpoint-overseas-cscse", "endpoint-overseas-slicer"],
+      "eligibilityBoundary": "本站只提供项目类型和核对模板，不判断院校或项目能否申请、是否录取、签证是否成立或学历能否认证；具体条件必须回到申请季的项目官方页面和相关政务入口。",
+      "claimKeys": ["pathway:path-overseas-study:eligibilityBoundary"],
+      "combinationPaths": ["把项目证据先用于国内深造或就业，再决定是否加入海外申请", "研究型准备与独立项目可以共享问题、方法和反思记录"]
+    },
+    {
+      "id": "path-independent-work",
+      "slug": "independent-work",
+      "kind": "independent-work",
+      "title": "独立项目与服务",
+      "owner": "HseeHub P0 路径编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18",
+      "question": "我能为谁解决什么问题，怎样用一个小交付验证？",
+      "summary": "独立发展从明确服务对象、问题、交付物和不做什么开始。首发只覆盖公开/合成数据、实验工作流、低压非医疗原型和技术内容等低风险方向；真实交易前还要自行核对合同、版权、税务、隐私和安全。",
+      "dailyTasks": [
+        "把一个真实问题缩成可以交付的范围",
+        "展示结果、过程和反馈而不是只讲想法",
+        "在交付前说清数据、责任和停止条件"
+      ],
+      "serviceSlices": [
+        {"audience": "需要公开数据整理的人或小团队", "problem": "把分散数据变成可读的表格、图表或说明", "deliverable": "数据字典、可视化和一页解释", "boundary": "不接触未授权个人、健康或商业敏感数据。"},
+        {"audience": "实验或教学工作流使用者", "problem": "减少重复记录，明确输入、输出和异常状态", "deliverable": "小型脚本、流程图或模板", "boundary": "不接入生产、医疗或高风险控制系统。"},
+        {"audience": "需要技术表达的学生或团队", "problem": "把复杂工程过程讲清楚并保留来源", "deliverable": "图示、短教程或演示原型", "boundary": "不冒充专业认证、诊疗意见或正式产品说明。"}
+      ],
+      "complianceQuestions": ["数据和素材的许可、隐私与使用范围是什么", "交付边界、验收方式和修改次数如何写清楚", "真实交易涉及的合同、发票、税务或主体登记应向谁咨询", "是否存在医疗、器械、网络或现场安全责任"],
+      "capabilityIds": ["cap-software-information", "cap-design-validation", "cap-health-user"],
+      "projectIds": ["project-signal-feature-notebook"],
+      "scenarioIds": ["scenario-software", "scenario-environment-city", "scenario-electronic-iot"],
+      "artifactIds": ["artifact-signal-analysis"],
+      "reusableAssets": [
+        "一个可展示、可复核且说明数据许可的完整小产物",
+        "服务说明：为谁、解决什么、交付什么、不做什么",
+        "反馈、迭代和停止条件记录"
+      ],
+      "additionalGates": [
+        "真实客户数据、合同、税务、版权和隐私不进入本站，也不能靠模板替代专业意见",
+        "医疗、器械、人体、联网控制或生产系统不能由教学原型直接延伸"
+      ],
+      "evidenceChecklist": [
+        "一页服务说明或可演示原型",
+        "至少两轮反馈与迭代记录",
+        "数据许可、交付边界、验收和停止条件"
+      ],
+      "timeConstraints": [
+        "从作品到真实交易还有需求、合规、合同、税务和责任等额外步骤",
+        "收入、客户和市场需求不由站内项目练习预测或承诺"
+      ],
+      "actions": [
+        {
+          "id": "independent-15-minutes",
+          "horizon": "15-minutes",
+          "title": "写清为谁、解决什么和不做什么",
+          "steps": ["写一个服务对象", "写一个可观察的问题", "写一个交付物和一条边界"],
+          "output": "一页问题—交付—边界草稿。",
+          "stopCondition": "如果对象、问题或交付物无法具体说明，停在访谈问题，不急着做品牌、收费或注册。",
+          "cannotProve": "不能证明市场需求、收入、客户承诺或真实交易合规。",
+          "nextStep": "找一位真实使用者看草稿，进入 7 天试路。",
+          "externalActionRequired": false
+        },
+        {
+          "id": "independent-7-days",
+          "horizon": "7-days",
+          "title": "做一页服务说明或可演示原型",
+          "steps": ["限定一个小交付", "用公开或合成材料完成演示", "获取三条真实反馈并记录未满足的需求"],
+          "output": "服务说明、演示原型、反馈表和停止条件。",
+          "stopCondition": "如果必须使用未授权数据、真实医疗场景或高风险设备才能演示，立即换成合成/低风险问题。",
+          "cannotProve": "不能证明有人愿意付费、原型可直接商用或具备任何专业资质。",
+          "nextStep": "根据反馈做两轮边界清楚的迭代，进入 30 天做证据。",
+          "externalActionRequired": true
+        },
+        {
+          "id": "independent-30-days",
+          "horizon": "30-days",
+          "title": "记录两轮迭代和交付边界",
+          "steps": ["比较反馈前后的版本", "写下需求证据、舍弃内容和验收方式", "补齐许可、隐私和安全检查"],
+          "output": "版本对照、反馈摘要、交付清单和合规问题表。",
+          "stopCondition": "如果不能说明素材许可、责任范围或验收方式，停止对外承诺，先咨询相关专业入口。",
+          "cannotProve": "不能证明产品安全、客户满意、持续收入或适用于医疗/生产场景。",
+          "nextStep": "把它放回作品、兼职探索或继续验证的选择中，进入一学期复盘。",
+          "externalActionRequired": false
+        },
+        {
+          "id": "independent-semester",
+          "horizon": "semester",
+          "title": "判断作品、兼职探索还是继续验证",
+          "steps": ["回看实际交付和反馈", "判断你愿意长期承担的任务", "真实交易前核对合同、版权、税务和隐私问题"],
+          "output": "一页复盘：保留为作品、继续小规模验证或停止并换路。",
+          "stopCondition": "如果收益想象超过了问题证据，或责任边界无法承担，暂停扩张并保留可复用产物。",
+          "cannotProve": "不能把作品练习换算成收入、创业成功、市场规模或法律合规结论。",
+          "nextStep": "离站查看人社、市场监管、税务和知识产权等主管部门的官方入口。",
+          "externalActionRequired": true
+        }
+      ],
+      "sourceIds": ["source-mohrss", "source-nist", "source-arduino"],
+      "endpointIds": ["endpoint-independent-mohrss", "endpoint-independent-nist"],
+      "eligibilityBoundary": "独立项目示例只用于验证问题、交付和反馈，不承诺收入或交易结果；真实客户、合同、版权、税务、隐私、医疗和安全责任必须在站外向相应官方或专业入口核对。",
+      "claimKeys": ["pathway:path-independent-work:eligibilityBoundary"],
+      "combinationPaths": ["把独立项目作为就业或深造的作品证据，而不是立即注册或交易", "先保留稳定学习/工作，再用低风险实验验证是否愿意长期交付"]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "artifact-signal-analysis",
+      "title": "公开/合成数据分析记录",
+      "projectId": "project-signal-feature-notebook",
+      "description": "包含问题、数据处理、特征、结果、误差和局限的 Notebook 或截图包。",
+      "templateUrl": "/project-templates/signal-analysis-template.md",
+      "templateVersion": "v1.0",
+      "license": "CC BY 4.0",
+      "owner": "HseeHub P0 产物编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    },
+    {
+      "id": "artifact-sensor-test-record",
+      "title": "传感—采样—状态测试记录",
+      "projectId": "project-sensor-alarm-prototype",
+      "description": "包含系统框图、采样表、异常输入、提示规则和安全停止状态的记录。",
+      "templateUrl": "/project-templates/sensor-test-record-template.md",
+      "templateVersion": "v1.0",
+      "license": "CC BY 4.0",
+      "owner": "HseeHub P0 产物编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    },
+    {
+      "id": "artifact-material-matrix",
+      "title": "材料与检测选型矩阵",
+      "projectId": "project-material-test-matrix",
+      "description": "包含指标、单位、来源、权重变化、敏感性比较和测试边界的矩阵。",
+      "templateUrl": "/project-templates/material-matrix-template.md",
+      "templateVersion": "v1.0",
+      "license": "CC BY 4.0",
+      "owner": "HseeHub P0 产物编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    }
+  ],
+  "evidenceTransformations": [
+    {
+      "sourceArtifactId": "artifact-signal-analysis",
+      "pathwayId": "path-employment",
+      "evidenceUse": ["需求拆解、过程记录和结果解释", "可复现的测试或交付说明"],
+      "missingProof": ["具体岗位的完整要求", "真实组织中的协作与交付经验"],
+      "truthfulFraming": "这是一个可复核的学习产物，可用于解释你做过什么；不要把课堂练习包装成正式工作经历。",
+      "owner": "HseeHub P0 证据编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    },
+    {
+      "sourceArtifactId": "artifact-signal-analysis",
+      "pathwayId": "path-domestic-postgraduate",
+      "evidenceUse": ["研究问题、方法选择和误差分析", "对后续问题的记录"],
+      "missingProof": ["目标单位的报考资格", "长期研究训练与招生结果"],
+      "truthfulFraming": "把产物写成一次研究方法练习，保留限制和未解决问题，不宣称研究成果。",
+      "owner": "HseeHub P0 证据编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    },
+    {
+      "sourceArtifactId": "artifact-signal-analysis",
+      "pathwayId": "path-public-service",
+      "evidenceUse": ["资料整理、口径说明和问题分析", "把不确定性写成核对清单"],
+      "missingProof": ["职位专业和身份资格", "公共部门工作经验或审查结论"],
+      "truthfulFraming": "它可以展示资料处理能力和分析习惯，不能替代当年度职位表或资格审查。",
+      "owner": "HseeHub P0 证据编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    },
+    {
+      "sourceArtifactId": "artifact-signal-analysis",
+      "pathwayId": "path-overseas-study",
+      "evidenceUse": ["学术兴趣、方法训练和英文摘要素材", "项目叙事中的限制与下一步"],
+      "missingProof": ["目标项目先修和语言条件", "推荐信、资金、签证与录取"],
+      "truthfulFraming": "把它作为项目/研究证据的底稿，按目标项目要求重新组织，不虚构影响或成果。",
+      "owner": "HseeHub P0 证据编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    },
+    {
+      "sourceArtifactId": "artifact-signal-analysis",
+      "pathwayId": "path-independent-work",
+      "evidenceUse": ["示例交付物和服务边界", "反馈、迭代和数据许可记录"],
+      "missingProof": ["市场需求和真实客户承诺", "合同、税务、隐私与交易合规"],
+      "truthfulFraming": "它可以是一个公开/合成数据服务示例，不代表市场已经验证，也不代表可以直接商用。",
+      "owner": "HseeHub P0 证据编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    },
+    {
+      "sourceArtifactId": "artifact-sensor-test-record",
+      "pathwayId": "path-employment",
+      "evidenceUse": ["接口定义、异常用例和测试记录", "把设备状态写成可交付的工程说明"],
+      "missingProof": ["目标组织的硬件平台经验", "真实项目中的维护、协作和交付责任"],
+      "truthfulFraming": "它能说明你做过一次小型采样与测试流程，不等于已经承担生产设备或医疗设备责任。",
+      "owner": "HseeHub P0 证据编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    },
+    {
+      "sourceArtifactId": "artifact-sensor-test-record",
+      "pathwayId": "path-public-service",
+      "evidenceUse": ["状态记录、质量标记和异常处理清单", "把不确定性转成可复核的检查字段"],
+      "missingProof": ["具体公共技术岗位的资格条件", "现场安全、采购和运维经验"],
+      "truthfulFraming": "它可以展示记录和测试习惯，不能替代当年度公告、职位表或现场安全培训。",
+      "owner": "HseeHub P0 证据编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    },
+    {
+      "sourceArtifactId": "artifact-material-matrix",
+      "pathwayId": "path-domestic-postgraduate",
+      "evidenceUse": ["研究问题、变量选择和敏感性分析", "把参数来源与下一步实验写成研究计划"],
+      "missingProof": ["目标课题组的研究条件", "正式实验、重复性和招生要求"],
+      "truthfulFraming": "它是一份概念筛选与研究设计练习，不能写成材料性能结论或正式科研成果。",
+      "owner": "HseeHub P0 证据编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    },
+    {
+      "sourceArtifactId": "artifact-material-matrix",
+      "pathwayId": "path-overseas-study",
+      "evidenceUse": ["指标定义、方法说明和限制段落", "将矩阵改写为项目/研究兴趣的证据片段"],
+      "missingProof": ["目标项目的先修、语言和材料要求", "真实实验室经验与推荐信"],
+      "truthfulFraming": "它可以作为方法训练的底稿，仍需按目标项目的原始要求核对，不能暗示录取或材料认证。",
+      "owner": "HseeHub P0 证据编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18"
+    }
+  ],
+  "homePlan": {
+    "pathwayLaunch": {
+      "startModeOrder": ["has-direction", "from-assets", "undecided"],
+      "pathwayIds": ["path-employment", "path-domestic-postgraduate", "path-public-service", "path-overseas-study", "path-independent-work"],
+      "featuredArtifactId": "artifact-signal-analysis",
+      "defaultHorizon": "15-minutes"
+    }
+  }
+}

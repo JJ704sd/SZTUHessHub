@@ -6,8 +6,13 @@ import { parseSiteData } from '@/lib/content/schema';
 describe('Phase 1.6 evidence contract', () => {
   it('covers every P0 claim with a current normalized content hash and evidence reference', () => {
     const data = getSiteData();
-    expect(evidenceData.claims).toHaveLength(15);
-    for (const claim of evidenceData.claims) {
+    // The modular content layer also stores pathway boundary claims in the
+    // shared registry.  SiteData claims remain the Phase 1.6 P0 set; pathway
+    // claims are validated against content/pathways.json by pathways:check.
+    const siteClaims = evidenceData.claims.filter((claim) => claim.subjectType !== 'pathway');
+    expect(siteClaims).toHaveLength(15);
+    expect(evidenceData.claims.filter((claim) => claim.subjectType === 'pathway')).toHaveLength(5);
+    for (const claim of siteClaims) {
       expect(claim.evidenceRefIds.length).toBeGreaterThan(0);
       expect(hashClaimContent(getClaimValue(data, claim))).toBe(claim.normalizedContentHash);
       expect(claim.evidenceRefIds.every((id) => evidenceData.evidenceRefs.some((ref) => ref.id === id))).toBe(true);

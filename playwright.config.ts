@@ -1,18 +1,38 @@
 import { defineConfig } from '@playwright/test';
 
-const baseURL = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
+const externalBaseURL = process.env.PLAYWRIGHT_BASE_URL ?? process.env.BASE_URL;
+const baseURL = externalBaseURL ?? 'http://127.0.0.1:3000';
 
 export default defineConfig({
   testDir: './tests/e2e',
-  timeout: 30_000,
+  outputDir: './test-results/playwright',
+  snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{arg}{-platform}.png',
   fullyParallel: true,
-  reporter: 'list',
+  forbidOnly: Boolean(process.env.CI),
+  retries: process.env.CI ? 2 : 0,
+  timeout: 30_000,
+  expect: {
+    timeout: 5_000,
+    toHaveScreenshot: { animations: 'disabled', caret: 'hide' },
+  },
+  reporter: process.env.CI ? 'list' : [['list'], ['html', { outputFolder: 'test-results/playwright-report', open: 'never' }]],
   use: {
     baseURL,
     trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    video: 'off',
   },
-  webServer: process.env.BASE_URL ? undefined : {
-    command: 'npm.cmd run start',
+  projects: [
+    { name: 'desktop-light', use: { browserName: 'chromium', viewport: { width: 1440, height: 900 }, colorScheme: 'light' } },
+    { name: 'desktop-dark', use: { browserName: 'chromium', viewport: { width: 1440, height: 900 }, colorScheme: 'dark' } },
+    { name: 'tablet-light', use: { browserName: 'chromium', viewport: { width: 768, height: 1024 }, colorScheme: 'light' } },
+    { name: 'tablet-dark', use: { browserName: 'chromium', viewport: { width: 768, height: 1024 }, colorScheme: 'dark' } },
+    { name: 'mobile-light', use: { browserName: 'chromium', viewport: { width: 390, height: 844 }, colorScheme: 'light' } },
+    { name: 'mobile-dark', use: { browserName: 'chromium', viewport: { width: 390, height: 844 }, colorScheme: 'dark' } },
+    { name: 'narrow-light', use: { browserName: 'chromium', viewport: { width: 320, height: 800 }, colorScheme: 'light' } },
+  ],
+  webServer: externalBaseURL ? undefined : {
+    command: 'npm run start',
     url: baseURL,
     reuseExistingServer: true,
     timeout: 120_000,

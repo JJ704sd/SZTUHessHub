@@ -6,12 +6,12 @@ import { Badge } from '@/components/ui/primitives';
 
 export { Badge } from '@/components/ui/primitives';
 
-export function SectionHeading({ eyebrow, title, description, action }: { eyebrow?: string; title: string; description?: string; action?: ReactNode }) {
+export function SectionHeading({ eyebrow, title, description, action, titleId }: { eyebrow?: string; title: string; description?: string; action?: ReactNode; titleId?: string }) {
   return (
     <div className="section-heading">
       <div>
         {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
-        <h2>{title}</h2>
+        <h2 id={titleId}>{title}</h2>
         {description ? <p className="section-description">{description}</p> : null}
       </div>
       {action ? <div className="section-action">{action}</div> : null}
@@ -113,8 +113,9 @@ export function ScenarioCard({ scenario, index, capabilityLinks = [] }: { scenar
   );
 }
 
-export function FAQList({ items }: { items: Array<{ id: string; question: string; answer: string }> }) {
-  return <div className="faq-list">{items.map((item, index) => <details className="faq-item" key={item.id} open={index === 0}><summary><span>{item.question}</span><span className="faq-toggle" aria-hidden="true">+</span></summary><div className="faq-answer"><p>{item.answer}</p></div></details>)}</div>;
+export function FAQList({ items }: { items: Array<{ id: string; slug?: string; question: string; answer: string; reviewDueAt?: string }> }) {
+  const today = new Date().toISOString().slice(0, 10);
+  return <div className="faq-list">{items.map((item, index) => <details className="faq-item" id={item.slug ?? item.id} key={item.id} open={index === 0}><summary><span>{item.question}</span><span className="faq-toggle" aria-hidden="true">+</span></summary><div className="faq-answer">{item.reviewDueAt && item.reviewDueAt < today ? <div className="review-notice" role="status"><strong>需要复核</strong><span>这条回答已过复核日期，正式课程与通知请回到当前来源。</span></div> : null}<p>{item.answer}</p></div></details>)}</div>;
 }
 
 export function FoundationTable({ majors }: { majors: Major[] }) {
@@ -149,12 +150,12 @@ export function SiteFooter({ capabilityCount = 8 }: { capabilityCount?: number }
       <div className="page-container footer-inner">
         <div className="footer-brand">
           <Link className="brand" href="/" aria-label="HseeHub 首页"><span className="brand-mark" aria-hidden="true">H</span><span className="brand-copy"><strong>HseeHub</strong><span>健康工程探索站</span></span></Link>
-          <p>帮助学生看懂同院两个工程专业的共同底座、不同侧重和跨行业能力。内容是解释性导览，不替代正式培养方案或教务通知。</p>
+          <p>给健康工程学生的探索桌面：先看懂两个专业，试一个小项目，留下一份别人能看懂你做过什么的记录。</p>
         </div>
-        <div className="footer-col"><strong>从这里开始</strong><Link href="/majors">5 分钟看懂两个专业</Link><Link href="/capabilities">{capabilityCount} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
-        <div className="footer-col"><strong>内容边界</strong><Link href="/sources">来源与版本</Link><Link href="/majors/faq">学生常问</Link><Link href="/about">关于本站</Link></div>
+        <div className="footer-col"><strong>从这里开始</strong><Link href="/majors/compare">5 分钟看懂两个专业</Link><Link href="/capabilities">{capabilityCount} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
+        <div className="footer-col"><strong>来源与边界</strong><Link href="/sources">来源、版本与核验</Link><Link href="/majors/faq">学生常问</Link><Link href="/about">关于本站</Link></div>
       </div>
-      <div className="page-container footer-bottom"><span>默认内容版本：{siteConfig.currentCohort} 级 · 首版只读公开浏览</span><span>医疗内容仅供专业学习，不构成医疗建议</span></div>
+      <div className="page-container footer-bottom"><span>默认内容版本：{siteConfig.currentCohort} 级 · 依据与更新时间：{siteConfig.contentBaseline}</span><span>项目优先使用合成/公开数据；不处理真实患者数据</span></div>
     </footer>
   );
 }
