@@ -6,6 +6,7 @@ const pages = [
   { id: 'capabilities', path: '/capabilities' },
   { id: 'projects', path: '/projects?intent=sensor' },
   { id: 'project-signal', path: '/projects/signal-feature-notebook' },
+  { id: 'starter', path: '/projects/signal-feature-notebook/starter' },
   { id: 'majors-compare', path: '/majors/compare' },
   { id: 'pathways', path: '/pathways' },
 ] as const;

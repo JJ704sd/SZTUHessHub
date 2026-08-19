@@ -13,8 +13,8 @@ export default function HomePage() {
   const model = getHomePageModel();
   return <>
     <HomeTaskLaunchpad model={model} />
-    <HomeFeaturedProjects model={model} />
     <HomeDualMajorCase model={model} />
+    <HomeFeaturedProjects model={model} />
     <HomeArtifactPaths model={model} />
     <HomeRecent model={model} />
   </>;

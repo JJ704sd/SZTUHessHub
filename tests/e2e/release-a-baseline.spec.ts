@@ -23,9 +23,15 @@ test('双路径实验提供可下载的空白复盘单', async ({ page }) => {
   expect(await download.failure()).toBeNull();
 });
 
-test('sitemap 发布双路径实验路由', async ({ request }) => {
+test('sitemap 遵守当前部署环境的发布契约', async ({ request }) => {
   const response = await request.get('/sitemap.xml');
 
   expect(response.ok()).toBeTruthy();
-  expect(await response.text()).toContain('/pathways/explore</loc>');
+  const body = await response.text();
+  if (process.env.HSEEHUB_ENV === 'production') {
+    expect(body).toContain('/pathways/explore</loc>');
+    expect(body).toContain('/projects/signal-feature-notebook/starter</loc>');
+  } else {
+    expect(body).not.toContain('<url>');
+  }
 });

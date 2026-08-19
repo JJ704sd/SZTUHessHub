@@ -112,7 +112,8 @@ Playwright 正式快照放在 `tests/e2e/__screenshots__/`；临时运行产物�
 
 ## 相关文档
 
-- [Release B 产品与网页体验深化 Spec（当前）](docs/HseeHub-release-b-experience-spec.md)
+- [Release C：首次有效产出与发布闭环 Spec（下一阶段当前）](docs/HseeHub-release-c-student-field-spec.md)
+- [Release B 产品与网页体验深化 Spec（已实现基线）](docs/HseeHub-release-b-experience-spec.md)
 - [Release A 产品与体验重构 Spec（历史设计）](docs/HseeHub-next-stage-experience-spec.md)
 - [网站架构与产品规划](docs/HseeHub-website-architecture-spec.md)
 - [第一版质量检查点](docs/HseeHub-v1-quality-checkpoints.md)

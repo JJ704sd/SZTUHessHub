@@ -6,7 +6,7 @@ import { siteConfig } from '@/lib/site-config';
 export default function sitemap(): MetadataRoute.Sitemap {
   if (!siteConfig.isProduction) return [];
   const base = siteConfig.siteUrl;
-  const staticRoutes = ['/', '/majors', '/majors/compare', '/majors/faq', '/capabilities', '/projects', '/scenarios', '/sources', '/about', '/pathways', '/pathways/explore'];
+  const staticRoutes = ['/', '/majors', '/majors/compare', '/majors/faq', '/capabilities', '/projects', '/projects/signal-feature-notebook/starter', '/scenarios', '/sources', '/about', '/pathways', '/pathways/explore'];
   return [
     ...staticRoutes.map((path) => ({ url: `${base}${path}`, lastModified: new Date(siteConfig.contentBaseline), changeFrequency: 'monthly' as const, priority: path === '/' ? .9 : .7 })),
     ...siteData.majors.flatMap((major) => [{ url: `${base}/majors/${major.slug}`, lastModified: new Date(major.lastVerified), changeFrequency: 'monthly' as const, priority: .7 }, { url: `${base}/majors/${major.slug}/curriculum/${siteConfig.currentCohort}`, lastModified: new Date(major.lastVerified), changeFrequency: 'monthly' as const, priority: .6 }]),

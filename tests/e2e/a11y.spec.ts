@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-const routes = ['/', '/projects?intent=sensor', '/projects/signal-feature-notebook', '/majors/compare', '/pathways'];
+const routes = ['/', '/projects?intent=sensor', '/projects/signal-feature-notebook', '/projects/signal-feature-notebook/starter', '/majors/compare', '/pathways'];
 
 for (const route of routes) {
   test(`axe ${route}`, async ({ page }) => {
