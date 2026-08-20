@@ -24,7 +24,7 @@ HseeHub 帮学生先看懂智能医学工程与生物医学工程，再试一个
 
 已传播的旧路由继续保留，包括专业详情、课程版本、项目资源、场景详情和路径详情；本轮不建设登录、评论、社区、投稿、个人足迹或治理后台。
 
-## Release B / P0 内容
+## Release B / P0 内容（已实现基线；冲突以 Release C 为准）
 
 - 首页先给出三个动作，再呈现 1 个重点项目与 2 个紧凑条目、同题双专业案例、产物到 3 条路径的改写、最近更新和 3 个常见问题。
 - 项目列表以 `?intent=` 的四类学生意图排序而不隐藏项目；已传播的五维筛选 URL 保留一个兼容周期，未知值回退到全部并给出说明。
@@ -53,11 +53,14 @@ npm run dev
 
 打开 `http://localhost:3000`。
 
-提交前运行 Release B 完整门禁：
+当前推荐的工程门禁按 Release C 执行：
 
 ```bash
-npm run check:release-b
+npm run release-c:check  # Release C 范围与实现契约
+npm run check:release-c  # 完整工程门禁；需要本地环境与浏览器
 ```
+
+`check:release-c` 只证明工程门禁，不关闭真人测试、内容 owner、人工无障碍、preview、production 或回滚阻塞。
 
 也可以按需运行：
 
@@ -72,7 +75,8 @@ npm run test:e2e      # Playwright 关键路径
 npm run test:a11y     # axe 核心页面检查
 npm run test:visual   # Playwright 视觉基线
 npm run test:release-b-browser # 单一生产服务器上顺序运行 E2E、axe 与视觉
-npm run lighthouse    # production build 下三页各运行三次取中位
+npm run lighthouse    # 三页各运行三次取中位并归档报告；production 额外阻断 SEO
+npm run perf:ci       # 与 lighthouse 相同的 CI 阻断门禁
 ```
 
 Playwright 正式快照放在 `tests/e2e/__screenshots__/`；临时运行产物放在 `test-results/`，后者不能替代测试源码或正式基线。
@@ -93,11 +97,22 @@ Playwright 正式快照放在 `tests/e2e/__screenshots__/`；临时运行产物�
 
 ## 规划与质量门禁
 
-- [网站架构与产品规划](docs/HseeHub-website-architecture-spec.md)
-- [Phase 1.5：体验压缩、关系闭环与发布验证 Spec](docs/HseeHub-phase-1.5-experience-spec.md)
-- [HseeHub 第一版质量检查点](docs/HseeHub-v1-quality-checkpoints.md)
+当前状态是 `Release C engineering implemented / external validation blocked`。下一状态只能按 `validation candidate → validated RC → production-ready` 推进；不进入 Release D、Phase 2，也不恢复旧 Phase 1.7。Release C 的动态状态唯一记录在 [`docs/release-c-validation/acceptance-status.md`](docs/release-c-validation/acceptance-status.md)，执行顺序见 [`docs/release-c-validation/exit-plan.md`](docs/release-c-validation/exit-plan.md)。
 
-当前 Release B 已完成代码基线；学生/教师语言评审、200% 缩放与屏幕阅读器完整验收、外链人工复核、CI 预览和正式部署回滚仍属于后续交付收口项。
+并行的 [`code-health remediation Spec`](docs/HseeHub-code-health-remediation-spec.md) 只负责工程治理，不替代 Release C 验收。
+
+历史关系：`codex/phase-1.6@57b997e` 中的 Phase 1.7 文档未合并；部分内容被 Release A/B 吸收，顶层产品方向已被后续规范覆盖。它只作为历史输入记录，不恢复为当前规范。
+
+- [Release C：首次有效产出与发布闭环 Spec](docs/HseeHub-release-c-student-field-spec.md)（Current normative scope）
+- [Release B 产品与网页体验深化 Spec](docs/HseeHub-release-b-experience-spec.md)（已实现基线；冲突以 Release C 为准）
+- [Release A 产品与体验重构 Spec](docs/HseeHub-next-stage-experience-spec.md)（历史；已被 Release B 取代）
+- [Phase 1.5：体验压缩、关系闭环与发布验证 Spec](docs/HseeHub-phase-1.5-experience-spec.md)（历史；冲突以 Release C 为准）
+- [Phase 1.6 验收资料](docs/phase-1.6-validation/acceptance-matrix.md)（历史快照；不承担当前动态状态）
+- [网站架构与产品规划](docs/HseeHub-website-architecture-spec.md)（历史架构基线）
+- [HseeHub 第一版质量检查点](docs/HseeHub-v1-quality-checkpoints.md)（历史质量基线）
+- [ADR-001：项目目录采用静态首屏加客户端筛选](docs/adr/001-projects-static-filter.md)（已接受；存在当前体验漂移记录）
+- [ADR-002：项目意图排序与旧筛选兼容](docs/adr/002-project-intent-filter.md)（拟议治理动作；本任务不改变产品行为）
+
 ## 安全边界
 
 - 项目优先使用合成数据、公开授权数据或受控的本地教学材料。
@@ -112,8 +127,10 @@ Playwright 正式快照放在 `tests/e2e/__screenshots__/`；临时运行产物�
 
 ## 相关文档
 
-- [Release C：首次有效产出与发布闭环 Spec（下一阶段当前）](docs/HseeHub-release-c-student-field-spec.md)
+- [Release C：首次有效产出与发布闭环 Spec（Current normative scope）](docs/HseeHub-release-c-student-field-spec.md)
+- [Release C 动态验收状态（唯一状态源）](docs/release-c-validation/acceptance-status.md)
+- [Release C 退出计划](docs/release-c-validation/exit-plan.md)
 - [Release B 产品与网页体验深化 Spec（已实现基线）](docs/HseeHub-release-b-experience-spec.md)
-- [Release A 产品与体验重构 Spec（历史设计）](docs/HseeHub-next-stage-experience-spec.md)
-- [网站架构与产品规划](docs/HseeHub-website-architecture-spec.md)
-- [第一版质量检查点](docs/HseeHub-v1-quality-checkpoints.md)
+- [Release A 产品与体验重构 Spec（历史/已被 Release B 取代）](docs/HseeHub-next-stage-experience-spec.md)
+- [网站架构与产品规划（历史架构基线）](docs/HseeHub-website-architecture-spec.md)
+- [第一版质量检查点（历史质量基线）](docs/HseeHub-v1-quality-checkpoints.md)

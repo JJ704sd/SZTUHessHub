@@ -1,13 +1,43 @@
 # HseeHub Release C：首次有效产出与发布闭环 Spec
 
-> - 状态：下一阶段实施基线
-> - 修订日期：2026-08-19
-> - 代码基线：`4ef9f05`（`codex/release-a-p0`）
+> - 文档地位：Current normative scope（当前权威产品规范）
+> - 状态：engineering implemented; external validation blocked
+> - 修订日期：2026-08-20
+> - 规范起始基线：`4ef9f05`（`codex/release-a-p0`）
+> - 当前实现快照：以实际 `HEAD` 为准：`478cf570a4f415a6913495f82aa9804942eb235f`；工作区仍有未提交的用户 Lighthouse/CI 改动，不将其伪写成新的提交事实。
+> - 唯一动态状态源：[`docs/release-c-validation/acceptance-status.md`](release-c-validation/acceptance-status.md)
+> - 冲突优先级：Release C 对 Phase 1.5、Phase 1.6、Release B 的冲突项具有更高优先级。
+> - 下一状态路径：`validation candidate → validated RC → production-ready`；不进入 Release D、Phase 2，也不恢复旧 Phase 1.7。
 > - 上游阶段：Release B、Phase 1.5、Phase 1.6
 > - 适用范围：首页、项目列表、代表项目详情与 Starter、事实与资源状态、质量和发布闭环
 > - 保留文件名是为了维持既有文档链接；本稿已经取代原“学生现场与编辑流”方案。
+> - 历史关系：`codex/phase-1.6@57b997e` 中的 Phase 1.7 文档未合并；其部分内容被 Release A/B 吸收，顶层产品方向已被后续规范覆盖。该历史输入不构成当前规范。
 
 ---
+
+## 文档地位与状态收口
+
+本文件规定 Release C 的产品范围、验收条件和发布边界；它是静态规范，不是动态结果表。当前总体状态固定为 `engineering implemented / external validation blocked`。动态状态、每个 RC 项的责任人、证据、阻塞原因和下一动作，只能写入并读取 [`docs/release-c-validation/acceptance-status.md`](release-c-validation/acceptance-status.md)。`owner-signoff.md`、`student-test-record.md`、`accessibility-walkthrough.md` 和 `release-rollback.md` 是证据模板，不是第二套状态源。
+
+唯一允许的下一状态机是：
+
+```text
+engineering complete
+→ validation candidate
+→ validated RC
+→ production-ready
+```
+
+状态含义和转换条件如下：
+
+| 状态 | 含义 | 允许的下一步 |
+|---|---|---|
+| `engineering complete` | 工程实现与机器门禁契约已具备；不等于真人、owner、预览或生产证据完成 | 按 [Release C 退出计划](release-c-validation/exit-plan.md) 补齐前置条件，进入 `validation candidate` |
+| `validation candidate` | owner 与许可已确认，存在可分享且不索引的 preview，可以开始第一轮 5 人测试 | 根据发现修订并执行第二轮测试与人工无障碍验收 |
+| `validated RC` | 两轮真人测试、内容签核、人工无障碍和候选发布证据全部满足 Spec | 完成生产配置、真实回滚演练和两次清洁环境门禁 |
+| `production-ready` | 生产配置、回滚、双次完整门禁及证据归档均通过 | 只进入发布执行，不开启新的产品阶段 |
+
+本文件内的 Release C WP0–WP4 只是实施包的说明，不是全局 Phase 2 的授权，也不是 Release D 的入口。下一动作顺序以 [exit-plan.md](release-c-validation/exit-plan.md) 为准。
 
 ## 0. 一页结论
 
@@ -896,7 +926,7 @@ axe 0 serious/critical 是前置条件，不替代上述走查。
 
 ### 14.3 Release C Done
 
-以下全部满足才可标记完成：
+以下全部满足才可由动态状态源标记为 `validated RC` 或 `production-ready`；静态 Spec 自身不得单独关闭任何项：
 
 1. Gate 0 修复并稳定；
 2. Starter 可下载最小记录；
@@ -911,7 +941,7 @@ axe 0 serious/critical 是前置条件，不替代上述走查。
 
 ## 15. 实施路线
 
-### Phase 0：门禁与责任人（1–2 天）
+### Release C WP0：门禁与责任人（1–2 天）
 
 - 修复 sitemap 环境契约；
 - 修复 Playwright/Next 服务退出生命周期；
@@ -921,7 +951,7 @@ axe 0 serious/critical 是前置条件，不替代上述走查。
 
 **阻断条件：** 门禁仍不能稳定结束，或没有内容 owner，不进入视觉改造。
 
-### Phase 1：Starter 完成性（2–4 天）
+### Release C WP1：Starter 完成性（2–4 天）
 
 - 明确 manifest 三维状态；
 - 完成内容、许可与人工走通；
@@ -932,7 +962,7 @@ axe 0 serious/critical 是前置条件，不替代上述走查。
 
 **完成条件：** 至少 4/5 能在 12 分钟内保存最小记录，且没有安全误解。
 
-### Phase 2：首页与项目动作重排（4–6 天）
+### Release C WP2：首页与项目动作重排（4–6 天）
 
 - 删除首屏重复 teaser；
 - 首屏主 CTA 直达已批准 Starter；
@@ -944,7 +974,7 @@ axe 0 serious/critical 是前置条件，不替代上述走查。
 
 **完成条件：** 移动首页 ≤ 4400px，Starter 在第一屏可进入，核心路径 E2E 通过。
 
-### Phase 3：信任与视觉收口（3–5 天）
+### Release C WP3：信任与视觉收口（3–5 天）
 
 - 内容 owner 签核写入事实层；
 - 来源页展示机器/人工/新鲜度；
@@ -953,13 +983,15 @@ axe 0 serious/critical 是前置条件，不替代上述走查。
 - 删除无消费者旧样式；
 - 更新并人工批准视觉 golden。
 
-### Phase 4：Release Candidate（3–5 天）
+### Release C WP4：Release Candidate（3–5 天）
 
 - 第二轮 5 人同题测试；
 - NVDA/VoiceOver、200% zoom、键盘和打印验收；
 - 完整 `check:release-c` 连续两次；
 - preview 验收、production 配置检查、回滚演练；
 - README、About、metadata、sitemap 与版本日期收口。
+
+> 当前工程实现已经收口，不能因为本节仍保留 Release C WP0–WP4 标题就重新开启产品实施阶段。后续只按 [Release C 退出计划](release-c-validation/exit-plan.md) 推进真人、人工和发布证据。
 
 ### 最小可交付切线
 
@@ -1057,7 +1089,7 @@ axe 0 serious/critical 是前置条件，不替代上述走查。
 
 ## 20. 最终判断
 
-HseeHub 当前已经会“解释”，也已经出现了第一个能动手的起点。下一阶段不需要把它扩成社区，也不需要继续增加专题。最值得完成的，是让一个真实学生从首页出发，独立完成一次低风险动作，并带走一份诚实的小作品。
+HseeHub 当前已经会“解释”，也已经出现了第一个能动手的起点。当前不是进入 Release D、Phase 2 或恢复 Phase 1.7，而是把现有工程实现推进到真人与发布证据闭环。唯一下一状态路径是 `validation candidate → validated RC → production-ready`。
 
 Release C 的成功体验应当是：
 
@@ -1077,6 +1109,8 @@ Release C 的成功体验应当是：
 ## 附录 A：现状证据索引
 
 - 当前产品与运行说明：`README.md`
+- 动态验收状态：[`docs/release-c-validation/acceptance-status.md`](release-c-validation/acceptance-status.md)
+- 顺序与退出条件：[`docs/release-c-validation/exit-plan.md`](release-c-validation/exit-plan.md)
 - 当前首页组合：`app/page.tsx`
 - 当前首页区块：`components/content/home-sections.tsx`
 - 代表项目详情：`app/projects/[projectSlug]/page.tsx`
@@ -1092,6 +1126,7 @@ Release C 的成功体验应当是：
 - 视觉矩阵：`tests/e2e/visual.spec.ts`
 - Phase 1.6 人工阻塞：`docs/phase-1.6-validation/wp0-status.md`
 - Phase 1.6 验收矩阵：`docs/phase-1.6-validation/acceptance-matrix.md`
+- 未合并的 Phase 1.7 历史关系：`codex/phase-1.6@57b997e`（仅历史输入，不恢复文件）
 - 参考站：[https://sztubitbyte.com/](https://sztubitbyte.com/)
 
 ## 附录 B：参考站证据边界

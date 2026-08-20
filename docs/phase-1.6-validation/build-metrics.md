@@ -1,5 +1,7 @@
 # Phase 1.6 构建与页面指标
 
+> 历史快照（2026-08-17）：本文件保留当时的验证事实，不代表当前 Release C 状态。当前验收状态见 `docs/release-c-validation/acceptance-status.md`，当前 Lighthouse 证据见 `artifacts/perf-ci.json`。
+
 ## 基线
 
 基线是已对齐的 `origin/main@e6df957`，不是旧的 `main@08e3799`；随后为消解 PR 冲突合入了更新后的 `origin/main@c74a8e5`，当前验证 HEAD 为 `50cf131`。在对齐基线上运行 `npm run check`，合并后再次运行通过：
