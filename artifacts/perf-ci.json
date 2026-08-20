@@ -1,10 +1,131 @@
 {
-  "baseUrl": "http://127.0.0.1:3013",
-  "runs": 3,
-  "samples": [],
-  "medians": null,
-  "failures": [
-    "Lighthouse 第 1 次运行失败：'lighthouse' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n"
+  "schemaVersion": 1,
+  "baseUrl": "http://127.0.0.1:3001",
+  "deploymentEnvironment": "development",
+  "routes": [
+    "/",
+    "/projects/signal-feature-notebook",
+    "/pathways"
   ],
-  "checkedAt": "2026-08-17T05:17:26.049Z"
+  "runsPerRoute": 3,
+  "budgets": {
+    "performance": 90,
+    "accessibility": 95,
+    "seo": 95,
+    "seoRequired": false,
+    "lcpMs": 2500,
+    "cls": 0.1
+  },
+  "results": [
+    {
+      "route": "/",
+      "samples": [
+        {
+          "run": 1,
+          "performance": 100,
+          "accessibility": 100,
+          "seo": 66,
+          "lcpMs": 1888,
+          "cls": 0
+        },
+        {
+          "run": 2,
+          "performance": 100,
+          "accessibility": 100,
+          "seo": 66,
+          "lcpMs": 1856,
+          "cls": 0
+        },
+        {
+          "run": 3,
+          "performance": 100,
+          "accessibility": 100,
+          "seo": 66,
+          "lcpMs": 1767,
+          "cls": 0
+        }
+      ],
+      "medians": {
+        "performance": 100,
+        "accessibility": 100,
+        "seo": 66,
+        "lcpMs": 1856,
+        "cls": 0
+      }
+    },
+    {
+      "route": "/projects/signal-feature-notebook",
+      "samples": [
+        {
+          "run": 1,
+          "performance": 100,
+          "accessibility": 100,
+          "seo": 66,
+          "lcpMs": 1881,
+          "cls": 0
+        },
+        {
+          "run": 2,
+          "performance": 100,
+          "accessibility": 100,
+          "seo": 66,
+          "lcpMs": 1890,
+          "cls": 0
+        },
+        {
+          "run": 3,
+          "performance": 100,
+          "accessibility": 100,
+          "seo": 66,
+          "lcpMs": 1892,
+          "cls": 0
+        }
+      ],
+      "medians": {
+        "performance": 100,
+        "accessibility": 100,
+        "seo": 66,
+        "lcpMs": 1890,
+        "cls": 0
+      }
+    },
+    {
+      "route": "/pathways",
+      "samples": [
+        {
+          "run": 1,
+          "performance": 100,
+          "accessibility": 100,
+          "seo": 66,
+          "lcpMs": 1891,
+          "cls": 0
+        },
+        {
+          "run": 2,
+          "performance": 100,
+          "accessibility": 100,
+          "seo": 66,
+          "lcpMs": 1762,
+          "cls": 0
+        },
+        {
+          "run": 3,
+          "performance": 100,
+          "accessibility": 100,
+          "seo": 66,
+          "lcpMs": 1855,
+          "cls": 0
+        }
+      ],
+      "medians": {
+        "performance": 100,
+        "accessibility": 100,
+        "seo": 66,
+        "lcpMs": 1855,
+        "cls": 0
+      }
+    }
+  ],
+  "failures": [],
+  "checkedAt": "2026-08-19T11:32:31.954Z"
 }
