@@ -32,7 +32,7 @@
     "test:release-b-browser": "node scripts/run-release-b-browser-checks.mjs",
     "test:release-c-browser": "node scripts/run-release-b-browser-checks.mjs",
     "lighthouse": "node scripts/lighthouse-mobile.mjs",
-    "perf:ci": "node scripts/perf-ci.mjs",
+    "perf:ci": "node scripts/lighthouse-mobile.mjs",
     "release:check": "node scripts/check-release-config.mjs",
     "structure:check": "node scripts/check-phase-1-1-structure.mjs",
     "events:check": "node scripts/check-analytics-contract.mjs",
@@ -44,7 +44,7 @@
     "check": "npm run lint && npm run content:check && npm run links:check && npm run evidence:check && npm run structure:check && npm run events:check && npm run typecheck && npm run test && npm run build && npm run performance:check",
     "release-c:check": "node scripts/check-release-c.mjs",
     "check:release-b": "npm run check && npm run test:release-b-browser",
-    "check:release-c": "npm run env:check && npm run check && npm run release-c:check && npm run test:release-c-browser"
+    "check:release-c": "npm run env:check && npm run check && npm run release-c:check && npm run perf:ci && npm run test:release-c-browser"
   },
   "dependencies": {
     "next": "14.2.35",

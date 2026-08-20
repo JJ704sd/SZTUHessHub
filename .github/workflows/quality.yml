@@ -56,6 +56,13 @@ jobs:
       - run: npm run a11y:smoke
         env:
           BASE_URL: http://127.0.0.1:3000
+      - name: Run Lighthouse performance gate
+        timeout-minutes: 5
+        run: npm run perf:ci
+        env:
+          HSEEHUB_ENV: preview
+          LIGHTHOUSE_REQUIRE_SEO: 'false'
+          LIGHTHOUSE_BASE_URL: http://127.0.0.1:3000
       - run: npm run resources:probe
       - name: Install Chromium
         timeout-minutes: 5
@@ -73,6 +80,7 @@ jobs:
           name: phase-1.5-quality-artifacts
           path: |
             .next/server.log
+            artifacts/perf-ci.json
             test-results/**
           if-no-files-found: ignore
 
@@ -125,3 +133,17 @@ jobs:
           HSEEHUB_CHECK_ORIGIN: http://127.0.0.1:3000
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
         run: npm run metadata:check
+      - name: Run production Lighthouse gate
+        timeout-minutes: 5
+        run: npm run perf:ci
+        env:
+          HSEEHUB_ENV: production
+          LIGHTHOUSE_REQUIRE_SEO: 'true'
+          LIGHTHOUSE_BASE_URL: http://127.0.0.1:3000
+      - name: Upload production quality artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-c-production-quality-artifacts
+          path: artifacts/perf-ci.json
+          if-no-files-found: error

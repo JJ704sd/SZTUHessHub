@@ -11,6 +11,8 @@ for (const path of ['app/community', 'app/field', 'app/contribute', 'content/fie
   if (existsSync(join(root, path))) errors.push(`Release C 禁止新增 ${path}`);
 }
 const pkg = JSON.parse(read('package.json'));
+if (pkg.scripts?.lighthouse !== pkg.scripts?.['perf:ci']) errors.push('lighthouse 与 perf:ci 必须使用同一门禁实现');
+if (!pkg.scripts?.['check:release-c']?.includes('npm run perf:ci')) errors.push('check:release-c 必须包含 perf:ci');
 for (const dependency of ['@mui/material', 'chart.js', 'recharts', 'prisma', 'mongoose']) {
   if (pkg.dependencies?.[dependency] || pkg.devDependencies?.[dependency]) errors.push(`禁止依赖：${dependency}`);
 }
@@ -22,6 +24,9 @@ requireText('tests/e2e/visual.spec.ts', "id: 'starter'");
 requireText('.github/workflows/quality.yml', 'timeout-minutes: 5');
 requireText('.github/workflows/quality.yml', 'npm run test:e2e');
 requireText('.github/workflows/quality.yml', 'npm run test:a11y');
+requireText('.github/workflows/quality.yml', 'npm run perf:ci');
+requireText('.github/workflows/quality.yml', "LIGHTHOUSE_REQUIRE_SEO: 'true'");
+requireText('scripts/lighthouse-mobile.mjs', 'artifacts/perf-ci.json');
 forbidText('.github/workflows/quality.yml', 'npm run e2e:playwright');
 for (const path of ['docs/release-c-validation/owner-signoff.md', 'docs/release-c-validation/student-test-record.md', 'docs/release-c-validation/accessibility-walkthrough.md', 'docs/release-c-validation/release-rollback.md', 'docs/release-c-validation/acceptance-status.md']) {
   if (!existsSync(join(root, path))) errors.push(`缺少外部验收模板：${path}`);
