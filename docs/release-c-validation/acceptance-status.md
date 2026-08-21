@@ -2,9 +2,9 @@
 
 > 状态源地位：本文件是 Release C 唯一动态状态源；其他 Spec、历史矩阵和本目录模板不能另行定义当前状态。
 >
-> as-of：2026-08-20
+> as-of：2026-08-21
 >
-> implementation commit：`478cf570a4f415a6913495f82aa9804942eb235f`（当前 `HEAD`；工作区另有未提交用户 Lighthouse/CI 改动）
+> implementation commit：`e75174de185be5d771c33ac4aa69ffd67b427468`（当前 `HEAD`；工作区另有未提交的依赖兼容性与门禁修复）
 >
 > normative Spec：[`docs/HseeHub-release-c-student-field-spec.md`](../HseeHub-release-c-student-field-spec.md)
 >
@@ -47,7 +47,7 @@ engineering complete
 | RC-13 | 构建、性能、axe 与视觉矩阵连续两次通过 | BLOCKED | TBD | `artifacts/perf-ci.json`；`tests/e2e/visual.spec.ts` | 当前产物不是两次清洁环境的完整门禁归档；人工视觉审阅也缺失 | 完成双次清洁环境门禁，保存原始 log、报告和人工批准 |
 | RC-14 | preview 可分享且无索引 | BLOCKED | TBD | [`release-rollback.md`](release-rollback.md)；`.env.example` | 没有可分享 preview URL、访问许可和 runtime/metadata 证据 | 确认发布 owner 与访问边界，提供并验证 preview |
 | RC-15 | production 配置和真实回滚演练完成 | BLOCKED | TBD | [`release-rollback.md`](release-rollback.md) | production URL、release/rollback 版本、owner 和演练均待提供 | 完成 production config 与真实回滚演练，记录开始/结束和结果 |
-| RC-16 | 路由、内容域、禁止范围与依赖事实审计完成 | BLOCKED | TBD | `scripts/check-release-c.mjs`；`package.json`；`package-lock.json` | 本次未运行 `npm audit`；自动范围检查不等于完整依赖审计 | 按批准的审计授权执行并归档结果；不以缺失结果标绿 |
+| RC-16 | 路由、内容域、禁止范围与依赖事实审计完成 | BLOCKED | TBD | `scripts/check-release-c.mjs`；`package.json`；`package-lock.json`；`.github/workflows/quality.yml` | 2026-08-21 本地清洁安装审计为 0 漏洞并已加入 CI 高危门禁，但尚缺独立清洁环境的归档日志 | 在 clean checkout/CI 中执行并归档 `npm audit --audit-level=high` 日志；不以未归档的本机结果标绿 |
 
 ## 证据规则
 

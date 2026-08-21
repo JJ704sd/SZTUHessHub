@@ -13,13 +13,12 @@ const projects = read('components/project-browser.tsx');
 const projectsPage = read('app/projects/page.tsx');
 const failures = [];
 const expect = (condition, message) => { if (!condition) failures.push(message); };
-const releaseCHome = homeSections.includes("./home-sections.module.css") && homeSections.includes("const starterHref = '/projects/signal-feature-notebook/starter'");
+const releaseCHome = homeSections.includes("./home-sections.module.css") && homeSections.includes('model.homeActions');
 const releaseBHome = home.includes('HomeTaskLaunchpad') && homeSections.includes('release-b-home-launch');
 if (releaseCHome) {
-  const homeRender = home.slice(home.indexOf('return <>'));
   expect((home.match(/<Home(?:TaskLaunchpad|FeaturedProjects|DualMajorCase|ArtifactPaths|Recent)/g) ?? []).length === 5, 'Release C 首页必须输出五个有明确角色的服务端模块');
-  expect(homeRender.indexOf('HomeTaskLaunchpad') < homeRender.indexOf('HomeDualMajorCase') && homeRender.indexOf('HomeDualMajorCase') < homeRender.indexOf('HomeFeaturedProjects'), 'Release C 首页顺序必须是任务、专业比较、项目、产物、依据');
-  expect(homeSections.includes('做一次 10 分钟 Starter') && homeSections.includes('内部起点：') && homeSections.includes('机器可达 · 人工与许可待复核'), 'Release C 首页必须公开 Starter 主动作、项目内部起点和三维信任语义');
+  expect(home.includes('model.homeComposition.sectionOrder') && home.includes('launch: <HomeTaskLaunchpad') && home.includes('discover: <HomeDualMajorCase') && home.includes('projects: <><HomeFeaturedProjects') && home.includes('HomeArtifactPaths') && home.includes('trust: <HomeRecent'), 'Release C 首页顺序必须由 composition 驱动并保留任务、专业比较、项目、产物、依据');
+  expect(homeSections.includes('model.homeActions') && homeSections.includes('data-home-action-status') && homeSections.includes('内部起点：'), 'Release C 首页必须由模型公开 Starter 主动作、项目内部起点和状态语义');
   expect(!homeSections.includes('FAQList') && !homeSections.includes('model.updates') && !homeSections.includes('model.faqs'), 'Release C 首页不得展开完整 FAQ 或更新列表');
 } else if (releaseBHome) {
   expect((home.match(/<Home(?:TaskLaunchpad|FeaturedProjects|DualMajorCase|ArtifactPaths|Recent)/g) ?? []).length === 5, 'Release B 首页必须输出五个服务端模块');

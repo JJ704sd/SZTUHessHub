@@ -12,13 +12,17 @@ import styles from './project-detail.module.css';
 
 export function generateStaticParams() { return siteData.projects.map((project) => ({ projectSlug: project.slug })); }
 
-export function generateMetadata({ params }: { params: { projectSlug: string } }): Metadata {
-  const project = siteData.projects.find((item) => item.slug === params.projectSlug);
-  return { title: project?.title ?? '项目体验卡', description: project?.summary ?? 'HseeHub 项目体验卡', alternates: siteConfig.isProduction ? { canonical: `/projects/${params.projectSlug}` } : undefined };
+type ProjectDetailProps = { params: Promise<{ projectSlug: string }> };
+
+export async function generateMetadata({ params }: ProjectDetailProps): Promise<Metadata> {
+  const { projectSlug } = await params;
+  const project = siteData.projects.find((item) => item.slug === projectSlug);
+  return { title: project?.title ?? '项目体验卡', description: project?.summary ?? 'HseeHub 项目体验卡', alternates: siteConfig.isProduction ? { canonical: `/projects/${projectSlug}` } : undefined };
 }
 
-export default function ProjectDetailPage({ params }: { params: { projectSlug: string } }) {
-  const model = getProjectDetailModel(params.projectSlug);
+export default async function ProjectDetailPage({ params }: ProjectDetailProps) {
+  const { projectSlug } = await params;
+  const model = getProjectDetailModel(projectSlug);
   if (!model) notFound();
   const { project, catalog } = model;
   const source = siteData.sources.find((item) => item.id === project.sourceId);

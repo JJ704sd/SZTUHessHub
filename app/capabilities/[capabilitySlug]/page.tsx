@@ -7,15 +7,19 @@ import { ArrowLink, Badge, PageIntro, SectionHeading, SourceLine } from '@/compo
 
 export function generateStaticParams() { return siteData.capabilities.map((capability) => ({ capabilitySlug: capability.slug })); }
 
-export function generateMetadata({ params }: { params: { capabilitySlug: string } }): Metadata {
-  const capability = siteData.capabilities.find((item) => item.slug === params.capabilitySlug);
-  return { title: capability?.name ?? '能力详情', description: capability?.summary ?? 'HseeHub 能力与课程关系导览', alternates: siteConfig.isProduction ? { canonical: `/capabilities/${params.capabilitySlug}` } : undefined };
+type CapabilityDetailProps = { params: Promise<{ capabilitySlug: string }> };
+
+export async function generateMetadata({ params }: CapabilityDetailProps): Promise<Metadata> {
+  const { capabilitySlug } = await params;
+  const capability = siteData.capabilities.find((item) => item.slug === capabilitySlug);
+  return { title: capability?.name ?? '能力详情', description: capability?.summary ?? 'HseeHub 能力与课程关系导览', alternates: siteConfig.isProduction ? { canonical: `/capabilities/${capabilitySlug}` } : undefined };
 }
 
-export default function CapabilityDetailPage({ params }: { params: { capabilitySlug: string } }) {
-  const capability = siteData.capabilities.find((item) => item.slug === params.capabilitySlug);
+export default async function CapabilityDetailPage({ params }: CapabilityDetailProps) {
+  const { capabilitySlug } = await params;
+  const capability = siteData.capabilities.find((item) => item.slug === capabilitySlug);
   if (!capability) notFound();
-  const model = getCapabilityDetailModel(params.capabilitySlug);
+  const model = getCapabilityDetailModel(capabilitySlug);
   if (!model) notFound();
   const majorMap = new Map(siteData.majors.map((major) => [major.id, major]));
   const source = siteData.sources.find((item) => item.id === capability.sourceId);

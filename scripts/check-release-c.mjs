@@ -16,11 +16,16 @@ if (!pkg.scripts?.['check:release-c']?.includes('npm run perf:ci')) errors.push(
 for (const dependency of ['@mui/material', 'chart.js', 'recharts', 'prisma', 'mongoose']) {
   if (pkg.dependencies?.[dependency] || pkg.devDependencies?.[dependency]) errors.push(`禁止依赖：${dependency}`);
 }
-requireText('components/content/home-sections.tsx', '/projects/signal-feature-notebook/starter');
+requireText('content/site-data.json', '"composition"');
+requireText('lib/content/view-models.ts', 'homeActions');
+requireText('components/content/home-sections.tsx', 'model.homeActions');
+requireText('components/content/home-sections.tsx', 'project.primaryAction.href');
+forbidText('components/content/home-sections.tsx', '/projects/signal-feature-notebook/starter');
 requireText('components/starter-worksheet.tsx', '下载 Markdown 记录');
 requireText('components/starter-worksheet.tsx', '不上传、不写入 localStorage');
 requireText('app/projects/[projectSlug]/page.tsx', 'Starter 待人工复核');
 requireText('tests/e2e/visual.spec.ts', "id: 'starter'");
+requireText('tests/e2e/visual.spec.ts', 'home-release-c-');
 requireText('.github/workflows/quality.yml', 'timeout-minutes: 5');
 requireText('.github/workflows/quality.yml', 'npm run test:e2e');
 requireText('.github/workflows/quality.yml', 'npm run test:a11y');

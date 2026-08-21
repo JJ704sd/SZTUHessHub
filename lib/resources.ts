@@ -29,6 +29,17 @@ export type DerivedResourceStatus = 'verified' | 'pending' | 'stale' | 'unavaila
 export type PrimaryResourceConditions = { machineReachable: boolean; humanVerified: boolean; fresh: boolean };
 export const resourceManifests: ResourceManifest[] = [signalManifest as ResourceManifest];
 
+export function getResourceById(resourceId: string) {
+  return resourceManifests.flatMap((manifest) => manifest.resources).find((resource) => resource.id === resourceId);
+}
+
+export function hasHumanApprovalEvidence(resource: ResourceLink) {
+  return resource.reviewStatus === 'verified'
+    && resource.ownerId !== 'owner-pending-confirmation'
+    && !/noassertion/i.test(resource.license)
+    && Boolean(resource.reviewedBy && resource.lastHumanWalkthroughAt && resource.walkthroughEvidence);
+}
+
 function parseDate(value?: string) {
   if (!value) return null;
   const parsed = new Date(`${value}T00:00:00Z`);
@@ -43,7 +54,9 @@ export function isFresh(resource: ResourceLink, now = new Date(), maxAgeDays = R
 export function deriveResourceStatus(resource: ResourceLink, now = new Date()): DerivedResourceStatus {
   if (resource.availability === 'unreachable') return 'unavailable';
   if (resource.reviewStatus === 'pending') return 'pending';
-  if (resource.reviewStatus === 'stale' || !isFresh(resource, now)) return 'stale';
+  if (resource.reviewStatus === 'stale') return 'stale';
+  if (!hasHumanApprovalEvidence(resource)) return 'pending';
+  if (!isFresh(resource, now)) return 'stale';
   if (resource.availability === 'unknown') return 'unknown';
   return 'verified';
 }
@@ -54,7 +67,7 @@ export function canBePrimary(resource: ResourceLink, now = new Date()) {
 }
 
 export function primaryResourceConditions(resource: ResourceLink, now = new Date()): PrimaryResourceConditions {
-  return { machineReachable: resource.availability === 'reachable', humanVerified: resource.reviewStatus === 'verified', fresh: isFresh(resource, now) };
+  return { machineReachable: resource.availability === 'reachable', humanVerified: hasHumanApprovalEvidence(resource), fresh: isFresh(resource, now) };
 }
 
 export function validateResourceManifest(manifest: ResourceManifest) {

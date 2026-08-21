@@ -17,7 +17,8 @@ try {
   const home = await page('/');
   assert.equal(count(home, /data-home-task-entry="true"/g), 3, 'home exposes three task entry links');
   assert.match(home, /href="\/majors\/compare"/);
-  assert.match(home, /href="\/projects\/signal-feature-notebook\/starter"/);
+  assert.match(home, /href="\/projects\/signal-feature-notebook"/);
+  assert.match(home, /data-home-action-status="pending"/);
   assert.match(home, /href="\/pathways\/explore"/);
   assert.equal(count(home, /data-home-project-entry="true"/g), 3, 'home exposes three project entries');
 

@@ -10,9 +10,12 @@ import { siteConfig } from '@/lib/site-config';
 
 export function generateStaticParams() { return getSiteData().projects.map((project) => ({ projectSlug: project.slug })); }
 
-export function generateMetadata({ params }: { params: { projectSlug: string } }): Metadata {
-  const project = getSiteData().projects.find((item) => item.slug === params.projectSlug);
-  return { title: `${project?.title ?? '项目'} · 资源`, description: '项目体验卡的工具、数据来源、许可与外部入口。', alternates: siteConfig.isProduction ? { canonical: `/projects/${params.projectSlug}/resources` } : undefined };
+type ProjectResourcesProps = { params: Promise<{ projectSlug: string }> };
+
+export async function generateMetadata({ params }: ProjectResourcesProps): Promise<Metadata> {
+  const { projectSlug } = await params;
+  const project = getSiteData().projects.find((item) => item.slug === projectSlug);
+  return { title: `${project?.title ?? '项目'} · 资源`, description: '项目体验卡的工具、数据来源、许可与外部入口。', alternates: siteConfig.isProduction ? { canonical: `/projects/${projectSlug}/resources` } : undefined };
 }
 
 function ResourceCard({ resource, primary, now }: { resource: ResourceLink; primary: boolean; now: Date }) {
@@ -24,9 +27,10 @@ function ResourceCard({ resource, primary, now }: { resource: ResourceLink; prim
   return <article className="resource-card"><div className="resource-card-head"><div><Badge tone={status === 'verified' ? 'teal' : status === 'unavailable' ? 'amber' : 'muted'}>{resourceStatusLabel(status)}</Badge><h3>{resource.title}</h3></div><span className="card-kicker">{resource.kind}</span></div><dl className="resource-facts"><div><dt>版本</dt><dd>{resource.version}</dd></div><div><dt>owner</dt><dd>{resource.ownerId}</dd></div><div><dt>机器</dt><dd>{resource.availability}{resource.automatedStatusCode ? ` · HTTP ${resource.automatedStatusCode}` : ''}{resource.lastAutomatedCheckAt ? ` · ${resource.lastAutomatedCheckAt}` : ''}</dd></div><div><dt>人工</dt><dd>{resource.reviewStatus}{resource.reviewedBy ? ` · ${resource.reviewedBy}` : ''}{resource.lastHumanWalkthroughAt ? ` · ${resource.lastHumanWalkthroughAt}` : ' · 未登记走通时间'}</dd></div><div><dt>freshness</dt><dd>{resource.lastHumanWalkthroughAt && status === 'verified' ? 'fresh · 30 天内' : 'not fresh'}</dd></div><div><dt>许可</dt><dd>{resource.license}</dd></div></dl>{resource.failureReason ? <p className="resource-warning">{resource.failureReason}</p> : null}<div className="resource-actions">{action}{primary && status !== 'verified' ? <span className="resource-action-note">条件未齐全，不升级为主 CTA</span> : null}</div>{resource.internalFallbackPath ? <p className="resource-fallback">替代入口：<Link href={resource.internalFallbackPath}>回到项目说明</Link></p> : null}<small className="resource-url">权威路径：{resource.url}</small></article>;
 }
 
-export default function ProjectResourcesPage({ params }: { params: { projectSlug: string } }) {
-  const model = getProjectDetailModel(params.projectSlug);
-  const project = getProjectBySlug(params.projectSlug);
+export default async function ProjectResourcesPage({ params }: ProjectResourcesProps) {
+  const { projectSlug } = await params;
+  const model = getProjectDetailModel(projectSlug);
+  const project = getProjectBySlug(projectSlug);
   if (!model || !project) notFound();
   const source = getSiteData().sources.find((item) => item.id === project.sourceId);
   const manifest = resourceManifests.find((item) => item.projectId === project.id) ?? makeLegacyResourceManifest(project);

@@ -17,9 +17,11 @@ function firstValue(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
 }
 
-export default function ProjectsPage({ searchParams }: { searchParams?: ProjectSearchParams }) {
+type ProjectsPageProps = { searchParams?: Promise<ProjectSearchParams> };
+
+export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   const catalog = getProjectCatalog();
-  const params = searchParams ?? {};
+  const params = await searchParams ?? {};
   const intentValue = firstValue(params.intent);
   const intent = projectIntents.includes(intentValue as ProjectIntent) ? intentValue as ProjectIntent : undefined;
   const legacyFilters = parseLegacyProjectFilters(params, catalog.filters);

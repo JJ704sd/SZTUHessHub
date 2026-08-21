@@ -35,7 +35,7 @@ HseeHub 帮学生先看懂智能医学工程与生物医学工程，再试一个
 
 ## 技术栈与内容源
 
-- Next.js 14 App Router + React 18 + TypeScript
+- Next.js 16 App Router + React 19 + TypeScript
 - JSON 内容事实源、类型化读取层、构建期关系与链接校验
 - 语义 CSS token、亮暗主题、reduced-motion、服务端输出核心文字
 - `content/site-data.json`：专业、能力、项目、场景、FAQ 和来源
@@ -46,12 +46,27 @@ HseeHub 帮学生先看懂智能医学工程与生物医学工程，再试一个
 
 ## 本地运行
 
+项目固定使用 Node.js `24.18.0`（见 `.nvmrc` 与 `package.json#engines`）。首次启动：
+
 ```bash
-npm install
+nvm install 24.18.0
+nvm use 24.18.0
+npm ci
 npm run dev
 ```
 
 打开 `http://localhost:3000`。
+
+生产模式启动：
+
+```bash
+nvm use 24.18.0
+npm ci
+npm run build
+npm run start
+```
+
+生产服务器同样监听 `http://localhost:3000`。如果本机不使用 nvm，请先确认 `node --version` 输出 `v24.18.0`，再从 `npm ci` 开始执行。
 
 当前推荐的工程门禁按 Release C 执行：
 
