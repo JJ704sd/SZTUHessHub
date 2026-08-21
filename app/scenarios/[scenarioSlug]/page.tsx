@@ -7,13 +7,17 @@ import { siteConfig } from '@/lib/site-config';
 
 export function generateStaticParams() { return siteData.scenarios.map((scenario) => ({ scenarioSlug: scenario.slug })); }
 
-export function generateMetadata({ params }: { params: { scenarioSlug: string } }): Metadata {
-  const scenario = siteData.scenarios.find((item) => item.slug === params.scenarioSlug);
-  return { title: scenario?.name ?? '发展场景', description: scenario?.summary ?? 'HseeHub 能力迁移场景导览', alternates: siteConfig.isProduction ? { canonical: `/scenarios/${params.scenarioSlug}` } : undefined };
+type ScenarioDetailProps = { params: Promise<{ scenarioSlug: string }> };
+
+export async function generateMetadata({ params }: ScenarioDetailProps): Promise<Metadata> {
+  const { scenarioSlug } = await params;
+  const scenario = siteData.scenarios.find((item) => item.slug === scenarioSlug);
+  return { title: scenario?.name ?? '发展场景', description: scenario?.summary ?? 'HseeHub 能力迁移场景导览', alternates: siteConfig.isProduction ? { canonical: `/scenarios/${scenarioSlug}` } : undefined };
 }
 
-export default function ScenarioDetailPage({ params }: { params: { scenarioSlug: string } }) {
-  const scenario = siteData.scenarios.find((item) => item.slug === params.scenarioSlug);
+export default async function ScenarioDetailPage({ params }: ScenarioDetailProps) {
+  const { scenarioSlug } = await params;
+  const scenario = siteData.scenarios.find((item) => item.slug === scenarioSlug);
   if (!scenario) notFound();
   const source = siteData.sources.find((item) => item.id === scenario.sourceId);
   const relatedProjects = siteData.projects.filter((project) => project.scenarioIds.includes(scenario.id));

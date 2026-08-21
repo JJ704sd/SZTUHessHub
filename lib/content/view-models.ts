@@ -205,6 +205,7 @@ import rawUpdates from '../../content/updates.json';
 import { evidenceData, getClaimStatus, getProjectEndpoints, getProjectLinkAvailability, type FactStatus, type LinkStatus } from './evidence';
 import { getPathwayData, getPathwayEvidence, getRelatedCapabilities, getRelatedProjects, getRelatedScenarios, getSiteData } from './repository';
 import { contentUpdatesSchema, type ActionHorizon, type Capability, type ClaimRegistryEntry, type ContentUpdate, type EvidenceTransformation, type HomePlan, type LinkAvailability, type Major, type Pathway, type PathwayArtifact, type PathwayKind, type Project, type Scenario, type SiteData, type StartMode } from './schema';
+import { canBePrimary, deriveResourceStatus, getResourceById, primaryResourceConditions, resourceStatusLabel, type DerivedResourceStatus } from '@/lib/resources';
 
 const contentUpdates = contentUpdatesSchema.parse(rawUpdates);
 
@@ -221,8 +222,35 @@ const horizonLabels: Record<ActionHorizon, string> = {
   semester: '一学期复盘',
 };
 
+const homeActionIcons: Record<HomeActionView['id'], string> = { compare: '⇄', try: '↗', explore: '◌' };
+const homeSectionTitles: Record<HomePlan['composition']['sectionOrder'][number], string> = {
+  launch: '行动台',
+  discover: '探索面板',
+  projects: '小项目',
+  trust: '轻量上下文',
+};
+
+function isEditoriallyCurrent(item: { reviewDueAt: string }) {
+  return item.reviewDueAt >= new Date().toISOString().slice(0, 10);
+}
+
 export type RelationLink = { id: string; slug: string; label: string; href: string };
 export type TaskLink = { id: string; label: string; summary: string; href: string; icon: string; isPrimary: boolean };
+export type HomeActionView = {
+  id: HomePlan['composition']['journeys'][number]['id'];
+  intent: HomePlan['composition']['journeys'][number]['intent'];
+  label: string;
+  summary: string;
+  href: string;
+  fallbackHref?: string;
+  fallbackLabel?: string;
+  projectId?: string;
+  isPrimary: boolean;
+  directStart: boolean;
+  status: 'available' | DerivedResourceStatus;
+  statusLabel: string;
+  statusDetail?: string;
+};
 export type ClaimView = ClaimRegistryEntry & {
   status: 'verified' | 'review_due' | 'disputed' | 'unverified';
   evidenceHref: string;
@@ -294,10 +322,12 @@ export type ProjectDetailView = ProjectCatalogItem & {
 };
 
 export type HomePageModel = {
-  primaryJourneyId: HomePlan['primaryJourneyId'];
+  homeComposition: HomePlan['composition'];
+  primaryJourneyId: HomePlan['composition']['primaryJourneyId'];
   showExploreSection: boolean;
   explanatoryText: string;
   tasks: TaskLink[];
+  homeActions: HomeActionView[];
   startModes: Array<{ id: StartMode; label: string; summary: string; href: string }>;
   taskEntries: Array<{ id: string; label: string; summary: string; href: string; primary?: boolean }>;
   modules: Array<{ id: string; title: string }>;
@@ -409,6 +439,40 @@ function mapProjectDetail(project: Project, data = getSiteData()): ProjectDetail
   };
 }
 
+function getHomeActions(data: SiteData): HomeActionView[] {
+  const composition = data.siteMeta.home.composition;
+  return composition.journeys.map((journey) => {
+    const isPrimary = journey.id === composition.primaryJourneyId;
+    if (journey.id !== 'try') {
+      if (!journey.href) throw new Error(`首页 ${journey.id} journey 缺少 href`);
+      return { ...journey, href: journey.href, isPrimary, directStart: false, status: 'available' as const, statusLabel: journey.availabilityLabel, statusDetail: journey.safetyCue };
+    }
+
+    if (!journey.projectId || !journey.resourceId) throw new Error('首页 try journey 缺少项目或资源');
+    const project = data.projects.find((item) => item.id === journey.projectId);
+    const resource = getResourceById(journey.resourceId);
+    if (!project) throw new Error(`首页 try journey 缺少项目：${journey.projectId}`);
+    if (!resource || resource.kind !== 'starter') throw new Error(`首页 try journey 缺少 starter 资源：${journey.resourceId}`);
+
+    const status = deriveResourceStatus(resource);
+    const directStart = canBePrimary(resource);
+    const fallbackHref = resource.internalFallbackPath ?? project.primaryAction.href;
+    const statusLabel = status === 'pending' ? journey.availabilityLabel : resourceStatusLabel(status);
+    const conditions = primaryResourceConditions(resource);
+    return {
+      ...journey,
+      projectId: project.id,
+      href: directStart ? resource.url : fallbackHref,
+      fallbackHref,
+      isPrimary,
+      directStart,
+      status,
+      statusLabel,
+      statusDetail: `${statusLabel} · ${conditions.machineReachable ? '机器可达' : '机器状态待复核'} · ${conditions.humanVerified ? '人工与许可已复核' : '人工与许可待复核'}`,
+    };
+  });
+}
+
 export function getProjectCatalog(): {
   items: ProjectCatalogItem[];
   filters: { major: RelationLink[]; capability: RelationLink[]; scenario: RelationLink[]; viewpoint: string[]; duration: string[] };
@@ -429,11 +493,15 @@ export function getProjectCatalog(): {
 export function getHomePageModel(): HomePageModel {
   const data = getSiteData();
   const home = data.siteMeta.home;
+  const pathwayData = getPathwayData();
+  const homeActions = getHomeActions(data);
   const selectedMajors = selectByIds(data.majors, home.majorIds, '首页专业');
   const selectedCapabilities = selectByIds(data.capabilities, home.capabilityIds, '首页能力');
   const selectedProjects = selectByIds(data.projects, home.projectIds, '首页项目');
   const selectedScenarios = selectByIds(data.scenarios, home.scenarioIds, '首页场景');
-  const collaborationCase = data.dualLensCases.find((item) => item.id === home.featuredDualLensCaseId);
+  if (selectedProjects.some((item) => !isEditoriallyCurrent(item))) throw new Error('首页精选项目包含已过复核日期的内容');
+  const discoveryIds = home.composition.discoveryItemIds;
+  const collaborationCase = data.dualLensCases.find((item) => item.id === home.featuredDualLensCaseId && discoveryIds.includes(item.id) && isEditoriallyCurrent(item));
   const faq = data.faqs.find((item) => item.id === home.faqId);
   if (!collaborationCase || !faq) throw new Error('首页显式编排引用缺失');
   const faqs = [faq, ...data.faqs.filter((item) => item.id !== faq.id)].slice(0, 3);
@@ -444,13 +512,13 @@ export function getHomePageModel(): HomePageModel {
     .sort((a, b) => b.update.publishedAt.localeCompare(a.update.publishedAt) || a.update.id.localeCompare(b.update.id))
     .slice(0, 3)
     .map(({ update, entity }) => ({ ...update, entityTitle: entity.title, href: entity.href }));
-  const pathwayData = getPathwayData();
-  const featuredArtifact = pathwayData.artifacts.find((item) => item.id === pathwayData.homePlan.pathwayLaunch.featuredArtifactId);
+  const artifactId = discoveryIds.find((id) => pathwayData.artifacts.some((item) => item.id === id));
+  const featuredArtifact = pathwayData.artifacts.find((item) => item.id === artifactId && isEditoriallyCurrent(item));
   if (!featuredArtifact) throw new Error('首页没有可用的当前产物');
   const artifactProject = data.projects.find((item) => item.id === featuredArtifact.projectId);
   if (!artifactProject) throw new Error(`首页 featured artifact 缺少项目：${featuredArtifact.projectId}`);
   const transformations = pathwayData.evidenceTransformations
-    .filter((item) => item.sourceArtifactId === featuredArtifact.id)
+    .filter((item) => item.sourceArtifactId === featuredArtifact.id && isEditoriallyCurrent(item) && pathwayData.pathways.some((pathway) => pathway.id === item.pathwayId && isEditoriallyCurrent(pathway)))
     .map((item) => ({
       pathwayId: item.pathwayId,
       pathwayTitle: pathwayData.pathways.find((pathway) => pathway.id === item.pathwayId)?.title ?? item.pathwayId,
@@ -476,29 +544,25 @@ export function getHomePageModel(): HomePageModel {
       return { pathwayTitle: pathway.title, title: action.title, output: action.output };
     }),
   }));
-  const tasks = [
-    { id: 'compare', label: '看懂两个专业', summary: '共同底座、不同侧重、如何协作', href: '/majors', icon: '⇄' },
-    { id: 'capability', label: '从能力看任务', summary: '课程能形成什么能力、可以做什么', href: '/capabilities', icon: '◌' },
-    { id: 'project', label: '试一个项目', summary: '先看时长、基础和产出，再决定是否开始', href: '/projects', icon: '↗' },
-  ].map((task) => ({ ...task, isPrimary: task.id === home.primaryJourneyId }));
+  const tasks = homeActions.map((action) => ({
+    id: action.id,
+    label: action.label,
+    summary: action.summary,
+    href: action.href,
+    icon: homeActionIcons[action.id],
+    isPrimary: action.isPrimary,
+  }));
   const sharedFoundationClaim = claimFor(data, 'major_comparison', 'major-comparison', 'sharedFoundation');
   return {
-    primaryJourneyId: home.primaryJourneyId,
+    homeComposition: home.composition,
+    primaryJourneyId: home.composition.primaryJourneyId,
     showExploreSection: home.showExploreSection,
     explanatoryText: '先从一个任务开始：看懂两个专业、从能力找任务，或先试一张项目体验卡。',
     tasks,
+    homeActions,
     startModes: pathwayData.homePlan.pathwayLaunch.startModeOrder.map((id) => ({ id, ...startModeCopy[id] })),
-    taskEntries: [
-      { id: 'compare', label: '两个专业到底差在哪', summary: '从共同问题看两边各做什么、最后怎样接起来', href: '/majors/compare', primary: true },
-      { id: 'project', label: '给我一个能马上试的项目', summary: '先看时长、最低基础和会留下什么', href: '/projects?intent=quick-look' },
-      { id: 'undecided', label: '我还没想好，从这里开始', summary: '用两种短任务比较自己愿意继续哪一种', href: '/pathways/explore' },
-    ],
-    modules: [
-      { id: 'tasks', title: '任务入口' },
-      { id: 'compare', title: '双专业一屏对照' },
-      { id: 'projects', title: '今天先试一个' },
-      { id: 'explore', title: '场景与继续探索' },
-    ],
+    taskEntries: homeActions.map((action) => ({ id: action.id, label: action.label, summary: action.summary, href: action.href, ...(action.isPrimary ? { primary: true } : {}) })),
+    modules: home.composition.sectionOrder.map((id) => ({ id, title: homeSectionTitles[id] })),
     majors: selectedMajors.map((item) => ({ id: item.id, slug: item.slug, name: item.name, shortName: item.shortName, navigationLabel: item.navigationLabel, cardSummary: item.cardSummary, taskSummary: item.taskSummary, primaryFocus: item.primaryFocus, representativeCourses: item.representativeCourses, claims: [claimFor(data, 'major', item.id, 'focusTask'), claimFor(data, 'major', item.id, 'representativeCourseGroup'), claimFor(data, 'major', item.id, 'totalCredits')] })),
     sharedFoundation: home.sharedFoundation,
     collaboration: { title: collaborationCase.title, summary: collaborationCase.sharedGoal, caseSlug: collaborationCase.slug, artifact: collaborationCase.sharedArtifact, claims: [claimFor(data, 'dual_lens_case', collaborationCase.id, 'sharedGoal'), claimFor(data, 'dual_lens_case', collaborationCase.id, 'sharedArtifact')] },

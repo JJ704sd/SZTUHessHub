@@ -17,6 +17,11 @@ const viewports = [
   { id: '1440x900', width: 1440, height: 900 },
 ] as const;
 
+// Keep the existing home baselines intact while the Release C composition has its own explicit baseline.
+const screenshotName = (pageId: string, viewportId: string, theme: string) => pageId === 'home'
+  ? `home-release-c-${viewportId}-${theme}.png`
+  : `${pageId}-${viewportId}-${theme}.png`;
+
 for (const pageCase of pages) {
   for (const viewport of viewports) {
     for (const theme of ['light', 'dark'] as const) {
@@ -25,7 +30,7 @@ for (const pageCase of pages) {
         await page.addInitScript((selectedTheme) => window.localStorage.setItem('hseehub-theme', selectedTheme), theme);
         await page.goto(pageCase.path);
         await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-        await expect(page).toHaveScreenshot(`${pageCase.id}-${viewport.id}-${theme}.png`, { fullPage: true });
+        await expect(page).toHaveScreenshot(screenshotName(pageCase.id, viewport.id, theme), { fullPage: true });
       });
     }
   }
@@ -37,7 +42,7 @@ test('visual state home mobile menu open', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: /菜单/ }).click();
   await expect(page.getByRole('navigation', { name: '移动端主导航' })).toBeVisible();
-  await expect(page).toHaveScreenshot('home-390x844-light-menu-open.png', { fullPage: true });
+  await expect(page).toHaveScreenshot('home-release-c-390x844-light-menu-open.png', { fullPage: true });
 });
 
 test('project state keeps valid legacy conditions visible', async ({ page }) => {

@@ -17,7 +17,7 @@ test('首页只有三个动作，项目完整展示不重复', async ({ page }) 
   await page.goto('/');
   const actions = page.getByRole('navigation', { name: '开始探索' }).getByRole('link');
   await expect(actions).toHaveCount(3);
-  await expect(actions).toHaveText([/看两个专业怎么分工/, /做一次 10 分钟 Starter/, /我还没想好/]);
+  await expect(actions).toHaveText([/看两个专业怎么分工/, /Starter 待人工复核/, /我还没想好/]);
   await expect(page.locator('.home-project-teaser, .home-feature-project, .home-compact-project')).toHaveCount(0);
   await expect(page.locator('section').filter({ has: page.getByRole('heading', { name: '三个任务，只保留影响开始的事实' }) }).locator('article')).toHaveCount(3);
 });

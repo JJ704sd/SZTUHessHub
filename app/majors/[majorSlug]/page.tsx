@@ -7,13 +7,17 @@ import { ArrowLink, Badge, LearningStory, PageIntro, SectionHeading, SourceLine 
 
 export function generateStaticParams() { return siteData.majors.map((major) => ({ majorSlug: major.slug })); }
 
-export function generateMetadata({ params }: { params: { majorSlug: string } }): Metadata {
-  const major = siteData.majors.find((item) => item.slug === params.majorSlug);
-  return { title: major?.name ?? '专业介绍', description: major?.summary ?? 'HseeHub 双专业通俗导览', alternates: siteConfig.isProduction ? { canonical: `/majors/${params.majorSlug}` } : undefined };
+type MajorDetailProps = { params: Promise<{ majorSlug: string }> };
+
+export async function generateMetadata({ params }: MajorDetailProps): Promise<Metadata> {
+  const { majorSlug } = await params;
+  const major = siteData.majors.find((item) => item.slug === majorSlug);
+  return { title: major?.name ?? '专业介绍', description: major?.summary ?? 'HseeHub 双专业通俗导览', alternates: siteConfig.isProduction ? { canonical: `/majors/${majorSlug}` } : undefined };
 }
 
-export default function MajorDetailPage({ params }: { params: { majorSlug: string } }) {
-  const major = siteData.majors.find((item) => item.slug === params.majorSlug);
+export default async function MajorDetailPage({ params }: MajorDetailProps) {
+  const { majorSlug } = await params;
+  const major = siteData.majors.find((item) => item.slug === majorSlug);
   if (!major) notFound();
   const source = siteData.sources.find((item) => item.id === major.sourceId);
   const relatedCapabilities = siteData.capabilities.filter((capability) => capability.majorEvidence.some((evidence) => evidence.majorId === major.id));

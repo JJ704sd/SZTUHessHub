@@ -9,7 +9,8 @@ import {
   getScenarioDetailModel,
   getSiteData,
 } from '@/lib/content';
-import { canBePrimary, primaryResourceConditions, resourceManifests, validateResourceManifest } from '@/lib/resources';
+import { parseSiteData } from '@/lib/content/schema';
+import { canBePrimary, deriveResourceStatus, primaryResourceConditions, resourceManifests, validateResourceManifest } from '@/lib/resources';
 
 function nonWhitespaceLength(value: string) {
   return value.replace(/\s/g, '').length;
@@ -19,12 +20,26 @@ describe('Phase 1.5 content model', () => {
   it('projects a task-first home without rendering detail-only content', () => {
     const home = getHomePageModel();
 
-    expect(home.tasks.map((task) => task.id)).toEqual(['compare', 'capability', 'project']);
-    expect(home.tasks.map((task) => task.href)).toEqual(['/majors', '/capabilities', '/projects']);
-    expect(home.primaryJourneyId).toBe('compare');
+    expect(home.tasks.map((task) => task.id)).toEqual(['compare', 'try', 'explore']);
+    expect(home.tasks.map((task) => task.href)).toEqual(['/majors/compare#dual-lens', '/projects/signal-feature-notebook', '/pathways/explore']);
+    expect(home.primaryJourneyId).toBe(home.homeComposition.primaryJourneyId);
+    expect(home.primaryJourneyId).toBe('try');
     expect(home.tasks.filter((task) => task.isPrimary)).toHaveLength(1);
     expect(home.tasks.filter((task) => task.isPrimary).map((task) => task.id)).toEqual([home.primaryJourneyId]);
-    expect(home.modules.map((module) => module.id)).toEqual(['tasks', 'compare', 'projects', 'explore']);
+    expect(home.homeActions.map((action) => action.id)).toEqual(['compare', 'try', 'explore']);
+    expect(home.homeActions.filter((action) => action.isPrimary).map((action) => action.id)).toEqual(['try']);
+    expect(home.homeActions.find((action) => action.id === 'try')).toMatchObject({
+      href: '/projects/signal-feature-notebook',
+      fallbackHref: '/projects/signal-feature-notebook',
+      fallbackLabel: '先看 Starter 状态',
+      directStart: false,
+      status: 'pending',
+      statusLabel: 'Starter 待人工复核',
+      statusDetail: 'Starter 待人工复核 · 机器可达 · 人工与许可待复核',
+    });
+    expect(home.homeComposition.sectionOrder).toEqual(['launch', 'discover', 'projects', 'trust']);
+    expect(home.homeComposition.discoveryItemIds).toEqual(['case-wearable-vital-signs', 'artifact-signal-analysis']);
+    expect(home.modules.map((module) => module.id)).toEqual(home.homeComposition.sectionOrder);
     expect(home.capabilities).toHaveLength(3);
     expect(home.projects).toHaveLength(3);
     expect(home.scenarios).toHaveLength(6);
@@ -33,6 +48,23 @@ describe('Phase 1.5 content model', () => {
     expect(home.projects.every((project) => project.cardSummary.length <= 48)).toBe(true);
     expect(home.projects.every((project) => !('steps' in project))).toBe(true);
     expect(home.projects.every((project) => !('boundary' in project))).toBe(true);
+  });
+
+  it('rejects broken home journey references before rendering', () => {
+    const invalid = JSON.parse(JSON.stringify(getSiteData())) as Record<string, any>;
+    invalid.siteMeta.home.composition.journeys[2].id = 'try';
+    invalid.siteMeta.home.composition.journeys[2].intent = 'try';
+    expect(() => parseSiteData(invalid)).toThrow(/journey id 不得重复/);
+  });
+
+  it('rejects missing and cross-project Starter references before rendering', () => {
+    const missing = JSON.parse(JSON.stringify(getSiteData())) as Record<string, any>;
+    missing.siteMeta.home.composition.journeys[1].resourceId = 'resource-missing';
+    expect(() => parseSiteData(missing)).toThrow(/资源不存在/);
+
+    const crossProject = JSON.parse(JSON.stringify(getSiteData())) as Record<string, any>;
+    crossProject.siteMeta.home.composition.journeys[1].projectId = 'project-sensor-alarm-prototype';
+    expect(() => parseSiteData(crossProject)).toThrow(/资源与项目不一致/);
   });
 
   it('keeps the project catalog to interactive fields only', () => {
@@ -91,5 +123,16 @@ describe('Phase 1.5 content model', () => {
     expect(primary).toBeDefined();
     expect(primaryResourceConditions(primary as NonNullable<typeof primary>)).toEqual({ machineReachable: true, humanVerified: false, fresh: false });
     expect(canBePrimary(primary as NonNullable<typeof primary>)).toBe(false);
+  });
+
+  it('does not promote a resource without explicit approval evidence', () => {
+    const primary = resourceManifests[0].resources[0];
+    const now = new Date('2026-08-21T00:00:00Z');
+    const contradictory = { ...primary, availability: 'reachable' as const, reviewStatus: 'verified' as const, license: 'NOASSERTION', ownerId: 'owner-pending-confirmation', lastHumanWalkthroughAt: '2026-08-20', reviewedBy: 'pending-reviewer', walkthroughEvidence: 'pending' };
+    expect(deriveResourceStatus(contradictory, now)).toBe('pending');
+    expect(canBePrimary(contradictory, now)).toBe(false);
+
+    const stale = { ...contradictory, license: 'CC BY 4.0', ownerId: 'owner-hseehub', lastHumanWalkthroughAt: '2026-07-01', reviewedBy: 'reviewer', walkthroughEvidence: 'walkthrough-1' };
+    expect(deriveResourceStatus(stale, now)).toBe('stale');
   });
 });

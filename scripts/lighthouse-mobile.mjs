@@ -2,6 +2,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
+import { chromium } from '@playwright/test';
 import lighthouse from 'lighthouse';
 import { launch as launchChrome } from 'chrome-launcher';
 import { runColdLighthouseAudit } from './lib/lighthouse-runner.mjs';
@@ -15,6 +16,7 @@ const seoRequired = process.env.LIGHTHOUSE_REQUIRE_SEO
   : deploymentEnvironment === 'production';
 const budgets = { performance: 90, accessibility: 95, seo: 95, seoRequired, lcpMs: 2_500, cls: 0.1 };
 const artifactPath = resolve('artifacts/perf-ci.json');
+const lighthouseChromePath = process.env.CHROME_PATH ?? chromium.executablePath();
 
 async function waitForServer(url, timeoutMs = 90_000) {
   const startedAt = Date.now();
@@ -109,7 +111,7 @@ async function main() {
       const samples = [];
       for (let run = 1; run <= runsPerRoute; run += 1) {
         const report = await runColdLighthouseAudit({
-          launchChrome,
+          launchChrome: (options) => launchChrome({ ...options, chromePath: lighthouseChromePath }),
           audit: (port) => lighthouse(`${baseUrl}${route}`, {
             port,
             logLevel: 'error',

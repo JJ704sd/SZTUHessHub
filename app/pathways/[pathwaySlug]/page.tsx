@@ -18,13 +18,17 @@ export function generateStaticParams() {
   return ['employment', 'domestic-postgraduate', 'public-service', 'overseas-study', 'independent-work'].map((pathwaySlug) => ({ pathwaySlug }));
 }
 
-export function generateMetadata({ params }: { params: { pathwaySlug: string } }): Metadata {
-  const pathway = getPathwayBySlug(params.pathwaySlug);
-  return { title: pathway?.title ?? '发展路径', description: pathway?.summary ?? 'HseeHub 发展路径详情', alternates: { canonical: `/pathways/${params.pathwaySlug}` } };
+type PathwayDetailProps = { params: Promise<{ pathwaySlug: string }> };
+
+export async function generateMetadata({ params }: PathwayDetailProps): Promise<Metadata> {
+  const { pathwaySlug } = await params;
+  const pathway = getPathwayBySlug(pathwaySlug);
+  return { title: pathway?.title ?? '发展路径', description: pathway?.summary ?? 'HseeHub 发展路径详情', alternates: { canonical: `/pathways/${pathwaySlug}` } };
 }
 
-export default function PathwayDetailPage({ params }: { params: { pathwaySlug: string } }) {
-  const pathway = getPathwayBySlug(params.pathwaySlug);
+export default async function PathwayDetailPage({ params }: PathwayDetailProps) {
+  const { pathwaySlug } = await params;
+  const pathway = getPathwayBySlug(pathwaySlug);
   if (!pathway) notFound();
   const model = getPathwayDetailModel(pathway);
   const needsReview = pathway.reviewDueAt < new Date().toISOString().slice(0, 10);

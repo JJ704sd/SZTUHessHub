@@ -1,12 +1,18 @@
 import { expect, test } from '@playwright/test';
 
-test('首页主动作直达 10 分钟 Starter', async ({ page }) => {
+test('首页主动作遵守 Starter 状态并回退到项目说明', async ({ page }) => {
   await page.goto('/');
   const launch = page.getByRole('navigation', { name: '开始探索' });
   await expect(launch.getByRole('link')).toHaveCount(3);
-  const primary = launch.getByRole('link', { name: /做一次 10 分钟 Starter/ });
-  await expect(primary).toHaveAttribute('href', '/projects/signal-feature-notebook/starter');
+  const primary = launch.getByRole('link', { name: /Starter 待人工复核/ });
+  await expect(primary).toHaveAttribute('href', '/projects/signal-feature-notebook');
+  await expect(primary).toHaveAttribute('data-home-action-status', 'pending');
+  await expect(primary).toHaveAttribute('data-home-action-direct-start', 'false');
+  await expect(primary).toHaveAttribute('data-home-action-fallback', '/projects/signal-feature-notebook');
   await expect(primary).toBeInViewport();
+  const representativeProject = page.locator('[data-home-project-entry]').first();
+  await expect(representativeProject.getByRole('link')).toHaveAttribute('href', '/projects/signal-feature-notebook');
+  await expect(representativeProject.getByRole('link')).toContainText('先看 Starter 状态');
 });
 
 test('项目详情以内置 Starter 为首要动作并分开显示三维状态', async ({ page }) => {

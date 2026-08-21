@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const readJson = (path) => readFile(resolve(root, path), 'utf8').then(JSON.parse);
-const [site, claims, manifest] = await Promise.all([readJson('content/site-data.json'), readJson('content/claims.json'), readJson('content/resources/signal-feature-notebook.json')]);
+const [site, claims, manifest, pathways] = await Promise.all([readJson('content/site-data.json'), readJson('content/claims.json'), readJson('content/resources/signal-feature-notebook.json'), readJson('content/pathways.json')]);
 const errors = [];
 const ids = new Set(site.sources.map((source) => source.id));
 const date = (value) => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(new Date(`${value}T00:00:00Z`).getTime());
@@ -51,6 +51,46 @@ for (const resource of manifest.resources) {
   }
 }
 if (project?.launch?.primaryResourceId !== manifest.primaryResourceId || project?.launch?.maxStartSeconds !== 120) errors.push('项目 primaryResourceId 与 starter launch 合同不一致');
+
+const home = site.siteMeta?.home;
+const composition = home?.composition;
+const expectedSections = ['launch', 'discover', 'projects', 'trust'];
+if (!composition) errors.push('首页缺少 composition');
+else {
+  if ('primaryJourneyId' in home) errors.push('旧首页 primaryJourneyId 不得与 composition 并存');
+  if (composition.sectionOrder?.length !== expectedSections.length || composition.sectionOrder.some((id) => !expectedSections.includes(id)) || new Set(composition.sectionOrder).size !== composition.sectionOrder.length) errors.push('首页 composition.sectionOrder 必须恰好包含四个不重复区块');
+  const journeyIds = new Set((composition.journeys ?? []).map((journey) => journey.id));
+  if (!journeyIds.has(composition.primaryJourneyId)) errors.push(`首页主 journey 不存在：${composition.primaryJourneyId}`);
+  if (new Set(composition.discoveryItemIds ?? []).size !== (composition.discoveryItemIds ?? []).length) errors.push('首页 discoveryItemIds 不得重复');
+  const discoverable = new Map([
+    ...site.dualLensCases.map((item) => [item.id, item]),
+    ...pathways.artifacts.map((item) => [item.id, item]),
+  ]);
+  const today = new Date().toISOString().slice(0, 10);
+  for (const id of composition.discoveryItemIds ?? []) {
+    const item = discoverable.get(id);
+    if (!item) errors.push(`首页 discovery item 不存在：${id}`);
+    else {
+      for (const field of ['owner', 'updatedAt', 'reviewDueAt']) if (!nonEmpty(item[field])) errors.push(`首页 discovery item ${id} 缺少 ${field}`);
+      if (!date(item.reviewDueAt) || item.reviewDueAt < today) errors.push(`首页 discovery item 已过期：${id}`);
+    }
+  }
+  const featuredCaseId = home.featuredDualLensCaseId;
+  if (!composition.discoveryItemIds?.includes(featuredCaseId)) errors.push(`首页 featuredDualLensCaseId 必须属于 discoveryItemIds：${featuredCaseId}`);
+  const featuredArtifactId = pathways.homePlan?.pathwayLaunch?.featuredArtifactId;
+  if (!composition.discoveryItemIds?.includes(featuredArtifactId)) errors.push(`首页 featuredArtifactId 必须属于 discoveryItemIds：${featuredArtifactId}`);
+  for (const journey of composition.journeys ?? []) {
+    if (journey.id === 'try') {
+      const resource = manifest.resources.find((item) => item.id === journey.resourceId);
+      if (!resource) errors.push(`首页 try journey 资源不存在：${journey.resourceId}`);
+      else {
+        if (resource.kind !== 'starter') errors.push(`首页 try journey 必须指向 starter：${journey.resourceId}`);
+        if (manifest.projectId !== journey.projectId) errors.push(`首页 try journey 项目与资源 manifest 不一致：${journey.resourceId}`);
+      }
+      if (!nonEmpty(journey.fallbackLabel)) errors.push('首页 try journey 缺少 fallbackLabel');
+    }
+  }
+}
 
 if (errors.length) {
   console.error('Phase 1.1 content contract failed.');

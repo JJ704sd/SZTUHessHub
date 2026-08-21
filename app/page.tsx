@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { HomeArtifactPaths, HomeDualMajorCase, HomeFeaturedProjects, HomeRecent, HomeTaskLaunchpad } from '@/components/content/home-sections';
 import { getHomePageModel } from '@/lib/content';
@@ -11,11 +12,13 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const model = getHomePageModel();
+  const sections = {
+    launch: <HomeTaskLaunchpad model={model} />,
+    discover: <HomeDualMajorCase model={model} />,
+    projects: <><HomeFeaturedProjects model={model} /><HomeArtifactPaths model={model} /></>,
+    trust: <HomeRecent model={model} />,
+  };
   return <>
-    <HomeTaskLaunchpad model={model} />
-    <HomeDualMajorCase model={model} />
-    <HomeFeaturedProjects model={model} />
-    <HomeArtifactPaths model={model} />
-    <HomeRecent model={model} />
+    {model.homeComposition.sectionOrder.map((section) => <Fragment key={section}>{sections[section]}</Fragment>)}
   </>;
 }

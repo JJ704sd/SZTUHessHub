@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { resourceManifests } from '../resources';
 
 const nonEmptyString = z.string().trim().min(1);
 const idList = z.array(nonEmptyString);
@@ -255,8 +256,52 @@ const primaryMetadata = {
   lastVerified: dateSchema,
 };
 
+export const homeJourneyIdSchema = z.enum(['try', 'compare', 'explore']);
+export const homeSectionIdSchema = z.enum(['launch', 'discover', 'projects', 'trust']);
+const internalHrefSchema = z.string().regex(/^\/(?!\/)[^\s]+$/, '首页入口必须是站内绝对路径');
+
+export const homeJourneySchema = z.object({
+  id: homeJourneyIdSchema,
+  intent: homeJourneyIdSchema,
+  label: nonEmptyString,
+  summary: nonEmptyString,
+  availabilityLabel: nonEmptyString,
+  fallbackLabel: nonEmptyString.optional(),
+  safetyCue: nonEmptyString.optional(),
+  fallbackJourneyId: homeJourneyIdSchema.optional(),
+  href: internalHrefSchema.optional(),
+  projectId: nonEmptyString.optional(),
+  resourceId: nonEmptyString.optional(),
+}).superRefine((journey, context) => {
+  if (journey.id !== journey.intent) context.addIssue({ code: z.ZodIssueCode.custom, path: ['intent'], message: '首页 journey 的 intent 必须与 id 一致' });
+  if (journey.id === 'try') {
+    if (!journey.projectId) context.addIssue({ code: z.ZodIssueCode.custom, path: ['projectId'], message: 'try journey 必须绑定项目' });
+    if (!journey.resourceId) context.addIssue({ code: z.ZodIssueCode.custom, path: ['resourceId'], message: 'try journey 必须绑定资源' });
+    if (!journey.fallbackLabel) context.addIssue({ code: z.ZodIssueCode.custom, path: ['fallbackLabel'], message: 'try journey 必须提供 fallback 文案' });
+    if (journey.href) context.addIssue({ code: z.ZodIssueCode.custom, path: ['href'], message: 'try journey 的 href 由资源 manifest 导出' });
+  } else if (!journey.href) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ['href'], message: `${journey.id} journey 必须提供 href` });
+  }
+  if (journey.fallbackJourneyId === journey.id) context.addIssue({ code: z.ZodIssueCode.custom, path: ['fallbackJourneyId'], message: '首页 journey 不得回退到自身' });
+});
+
+export const homeCompositionSchema = z.object({
+  primaryJourneyId: homeJourneyIdSchema,
+  sectionOrder: z.array(homeSectionIdSchema).length(4),
+  journeys: z.array(homeJourneySchema).length(3),
+  discoveryItemIds: idList.min(1).max(4),
+}).superRefine((composition, context) => {
+  const ids = composition.journeys.map((journey) => journey.id);
+  if (new Set(ids).size !== ids.length) context.addIssue({ code: z.ZodIssueCode.custom, path: ['journeys'], message: '首页 journey id 不得重复' });
+  if (!ids.includes(composition.primaryJourneyId)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['primaryJourneyId'], message: '首页主 journey 必须存在于 journeys' });
+  if (new Set(composition.sectionOrder).size !== composition.sectionOrder.length) context.addIssue({ code: z.ZodIssueCode.custom, path: ['sectionOrder'], message: '首页区块顺序不得重复' });
+  if (new Set(composition.discoveryItemIds).size !== composition.discoveryItemIds.length) context.addIssue({ code: z.ZodIssueCode.custom, path: ['discoveryItemIds'], message: '首页探索实体不得重复' });
+  composition.journeys.forEach((journey, index) => {
+    if (journey.fallbackJourneyId && !ids.includes(journey.fallbackJourneyId)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['journeys', index, 'fallbackJourneyId'], message: `首页 fallback journey 不存在：${journey.fallbackJourneyId}` });
+  });
+});
+
 export const homePlanSchema = z.object({
-  primaryJourneyId: z.enum(['compare', 'capability', 'project']),
   majorIds: z.array(nonEmptyString).length(2),
   sharedFoundation: z.array(nonEmptyString).min(3).max(6),
   featuredDualLensCaseId: nonEmptyString,
@@ -265,6 +310,7 @@ export const homePlanSchema = z.object({
   scenarioIds: z.array(nonEmptyString).min(1).max(6),
   faqId: nonEmptyString,
   showExploreSection: z.boolean(),
+  composition: homeCompositionSchema,
   evidenceRecordId: nonEmptyString.optional(),
 }).superRefine((home, context) => {
   if ((home.capabilityIds.length < 3 || home.scenarioIds.length < 6 || !home.showExploreSection) && !home.evidenceRecordId) {
@@ -320,6 +366,9 @@ export const dualLensSchema = z.object({
 
 export const dualLensCaseSchema = z.object({
   ...primaryMetadata,
+  owner: nonEmptyString,
+  updatedAt: dateSchema,
+  reviewDueAt: dateSchema,
   title: nonEmptyString,
   problem: nonEmptyString,
   sharedGoal: nonEmptyString,
@@ -597,6 +646,7 @@ export const siteDataSchema = z.object({
   const dualLensCaseIds = new Set(data.dualLensCases.map((item) => item.id));
   const projectIds = new Set(data.projects.map((item) => item.id));
   const faqIds = new Set(data.faqs.map((item) => item.id));
+  const resourcesById = new Map(resourceManifests.flatMap((manifest) => manifest.resources.map((resource) => [resource.id, { resource, manifest }] as const)));
   const home = data.siteMeta.home;
   const checkHomeIds = (ids: string[], available: Set<string>, path: string) => {
     if (new Set(ids).size !== ids.length) context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', path], message: '首页编排 ID 不得重复' });
@@ -606,6 +656,18 @@ export const siteDataSchema = z.object({
   checkHomeIds(home.capabilityIds, capabilityIds, 'capabilityIds');
   checkHomeIds(home.projectIds, projectIds, 'projectIds');
   checkHomeIds(home.scenarioIds, scenarioIds, 'scenarioIds');
+  home.composition.journeys.forEach((journey, index) => {
+    if (journey.projectId && !projectIds.has(journey.projectId)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', 'composition', 'journeys', index, 'projectId'], message: `首页 journey 项目不存在：${journey.projectId}` });
+    if (journey.resourceId) {
+      const resourceEntry = resourcesById.get(journey.resourceId);
+      if (!resourceEntry) context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', 'composition', 'journeys', index, 'resourceId'], message: `首页 journey 资源不存在：${journey.resourceId}` });
+      else {
+        if (resourceEntry.resource.kind !== 'starter') context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', 'composition', 'journeys', index, 'resourceId'], message: `首页 try journey 必须指向 starter：${journey.resourceId}` });
+        if (journey.projectId && resourceEntry.manifest.projectId !== journey.projectId) context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', 'composition', 'journeys', index, 'resourceId'], message: `首页 journey 资源与项目不一致：${journey.resourceId}` });
+        if (resourceEntry.resource.internalFallbackPath && !internalHrefSchema.safeParse(resourceEntry.resource.internalFallbackPath).success) context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', 'composition', 'journeys', index, 'resourceId'], message: `首页 journey fallback 必须是站内路径：${resourceEntry.resource.internalFallbackPath}` });
+      }
+    }
+  });
   if (!dualLensCaseIds.has(home.featuredDualLensCaseId)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', 'featuredDualLensCaseId'], message: '首页同题双解实体不存在' });
   if (!faqIds.has(home.faqId)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['siteMeta', 'home', 'faqId'], message: '首页 FAQ 实体不存在' });
   for (const item of data.dualLensCases) item.lenses.forEach((lens, index) => { if (!majorIds.has(lens.majorId)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['dualLensCases', item.id, 'lenses', index, 'majorId'], message: '专业关系不存在' }); });

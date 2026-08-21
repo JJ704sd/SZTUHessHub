@@ -4,7 +4,6 @@
     "tagline": "先看共同底座，再理解两种工程视角",
     "description": "HseeHub 用学生听得懂的语言，带你认识智能医学工程与生物医学工程的共同基础、培养侧重、可迁移能力和可尝试的项目。内容以 2025 级事实为当前入口，不替代正式培养方案、教务通知或专业选择结论。",
     "home": {
-      "primaryJourneyId": "compare",
       "majorIds": [
         "major-ime",
         "major-bme"
@@ -35,7 +34,40 @@
         "scenario-environment-city"
       ],
       "faqId": "faq-shared-foundation",
-      "showExploreSection": true
+      "showExploreSection": true,
+      "composition": {
+        "primaryJourneyId": "try",
+        "sectionOrder": ["launch", "discover", "projects", "trust"],
+        "discoveryItemIds": ["case-wearable-vital-signs", "artifact-signal-analysis"],
+        "journeys": [
+          {
+            "id": "compare",
+            "intent": "compare",
+            "label": "看两个专业怎么分工",
+            "summary": "用同一道题看两种工程视角",
+            "availabilityLabel": "随时可看",
+            "href": "/majors/compare#dual-lens"
+          },
+          {
+            "id": "try",
+            "intent": "try",
+            "label": "做一次 10 分钟 Starter",
+            "summary": "无账号、零安装、只用合成信号",
+            "availabilityLabel": "Starter 待人工复核",
+            "fallbackLabel": "先看 Starter 状态",
+            "projectId": "project-signal-feature-notebook",
+            "resourceId": "resource-signal-feature-starter"
+          },
+          {
+            "id": "explore",
+            "intent": "explore",
+            "label": "我还没想好",
+            "summary": "用两条短任务做一周比较",
+            "availabilityLabel": "随时可逛",
+            "href": "/pathways/explore"
+          }
+        ]
+      }
     }
   },
   "mediaAssets": [
@@ -306,6 +338,9 @@
       "sharedArtifact": "系统框图、采样与数据字典、两专业接口表、测试计划和风险清单。",
       "validation": "检查采样稳定性、信号质量记录、处理复现性和接口字段一致性；只验证教学原型流程，不推断医疗效果。",
       "riskBoundary": "不接入真实患者、医院系统或医疗设备，不给出诊断和健康处置建议；阈值与数据只用于教学演示，正式设备还需要伦理、法规、质量体系和专业测试。",
+      "owner": "HseeHub P0 专业内容编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18",
       "sourceId": "source-college-profile",
       "lastVerified": "2026-08-13"
     },
@@ -338,6 +373,9 @@
       "sharedArtifact": "从采集到展示的流程图、影像质量与算法误差对照表、字段接口说明和人工复核清单。",
       "validation": "使用公开授权或合成样例，复核输入来源、处理版本、标注一致性和错误类型，并写明样例限制。",
       "riskBoundary": "不使用真实患者影像，不输出诊断、分诊或治疗建议；教学结果不能替代临床验证、伦理审查、数据治理、器械注册和专业人员判断。",
+      "owner": "HseeHub P0 专业内容编辑",
+      "updatedAt": "2026-08-18",
+      "reviewDueAt": "2026-09-18",
       "sourceId": "source-monai-tutorials",
       "lastVerified": "2026-08-13"
     }
