@@ -91,7 +91,7 @@ if (await isPortOccupied()) {
 const stages = [
   ['metadata', ['node', 'scripts/check-metadata.mjs']],
   ['runtime', ['node', 'scripts/check-runtime-acceptance.mjs']],
-  ...['home.spec.ts', 'release-a-baseline.spec.ts', 'release-c.spec.ts'].map((file) => [`E2E:${file}`, [`tests/e2e/${file}`, '--project=desktop-light', '--project=mobile-light', '--project=narrow-light']]),
+  ...['home.spec.ts', 'release-a-baseline.spec.ts', 'release-c.spec.ts', 'career-resources.spec.ts', 'practice-guides.spec.ts'].map((file) => [`E2E:${file}`, [`tests/e2e/${file}`, '--project=desktop-light', '--project=mobile-light', '--project=narrow-light']]),
   ['accessibility', ['tests/e2e/a11y.spec.ts', '--project=desktop-light']],
   // Playwright 1.51 on Windows can retain workers after one 45-case screenshot
   // run. Split the same matrix into bounded page groups so every child exits.

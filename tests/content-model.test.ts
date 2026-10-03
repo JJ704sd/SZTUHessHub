@@ -1,9 +1,10 @@
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   getCapabilityDetailModel,
   getHomePageModel,
+  getPathwayData,
   getProjectCatalog,
   getProjectDetailModel,
   getScenarioDetailModel,
@@ -17,9 +18,43 @@ function nonWhitespaceLength(value: string) {
 }
 
 describe('Phase 1.5 content model', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-08-21T00:00:00Z'));
+    vi.stubEnv('EVIDENCE_BUILD_DATE', '');
+    vi.stubEnv('BUILD_DATE', '');
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllEnvs();
+  });
+
+  it.each([['2026-10-03', 'verified'], ['2027-10-03', 'review_due']])('keeps configured content visible and marks editorial review due on %s', (date, pathwayFactStatus) => {
+    vi.setSystemTime(new Date(`${date}T00:00:00Z`));
+
+    const home = getHomePageModel();
+
+    expect(home.editorialReviewDue).toBe(true);
+    expect(home.projects.map((project) => project.id)).toEqual(['project-signal-feature-notebook', 'project-sensor-alarm-prototype', 'project-material-test-matrix']);
+    expect(home.featuredDualLensCase.id).toBe('case-wearable-vital-signs');
+    expect(home.faqs).toHaveLength(3);
+    expect(home.faqs[0].id).toBe('faq-shared-foundation');
+    expect(home.evidence.artifact.id).toBe('artifact-signal-analysis');
+    expect(home.evidence.transformations.map((item) => item.pathwayId)).toEqual(['path-employment', 'path-domestic-postgraduate', 'path-public-service', 'path-overseas-study', 'path-independent-work']);
+    expect(home.pathways).toHaveLength(5);
+    expect(home.actionLadder).toHaveLength(4);
+    expect(home.reviewDueItems).toEqual(expect.arrayContaining(['project-signal-feature-notebook', 'case-wearable-vital-signs', 'artifact-signal-analysis', 'path-employment', 'transformation:artifact-signal-analysis:path-employment']));
+    expect(home.homeActions.find((action) => action.id === 'try')).toMatchObject({ status: 'pending', directStart: false, href: '/projects/signal-feature-notebook' });
+    expect(home.trust.claimStatus).toBe('unverified');
+    expect(home.trust.factStatus).toBe(pathwayFactStatus);
+  });
+
   it('projects a task-first home without rendering detail-only content', () => {
     const home = getHomePageModel();
 
+    expect(home.editorialReviewDue).toBe(false);
+    expect(home.reviewDueItems).toEqual([]);
     expect(home.tasks.map((task) => task.id)).toEqual(['compare', 'try', 'explore']);
     expect(home.tasks.map((task) => task.href)).toEqual(['/majors/compare#dual-lens', '/projects/signal-feature-notebook', '/pathways/explore']);
     expect(home.primaryJourneyId).toBe(home.homeComposition.primaryJourneyId);
@@ -65,6 +100,35 @@ describe('Phase 1.5 content model', () => {
     const crossProject = JSON.parse(JSON.stringify(getSiteData())) as Record<string, any>;
     crossProject.siteMeta.home.composition.journeys[1].projectId = 'project-sensor-alarm-prototype';
     expect(() => parseSiteData(crossProject)).toThrow(/资源与项目不一致/);
+  });
+
+  it('still rejects missing configured entities after their review dates pass', () => {
+    vi.setSystemTime(new Date('2027-10-03T00:00:00Z'));
+    const data = getSiteData();
+    const home = data.siteMeta.home;
+    const projectIds = home.projectIds;
+    const discoveryIds = home.composition.discoveryItemIds;
+    const transformation = getPathwayData().evidenceTransformations[0];
+    const pathwayId = transformation.pathwayId;
+
+    try {
+      home.projectIds = ['project-missing', ...projectIds.slice(1)];
+      expect(() => getHomePageModel()).toThrow('首页项目 缺少登记实体 project-missing');
+      home.projectIds = projectIds;
+
+      home.composition.discoveryItemIds = ['case-missing', 'artifact-signal-analysis'];
+      expect(() => getHomePageModel()).toThrow('首页显式编排引用缺失');
+      home.composition.discoveryItemIds = ['case-wearable-vital-signs', 'artifact-missing'];
+      expect(() => getHomePageModel()).toThrow('首页编排缺少产物');
+      home.composition.discoveryItemIds = discoveryIds;
+
+      transformation.pathwayId = 'path-missing';
+      expect(() => getHomePageModel()).toThrow('首页产物改写缺少路径：path-missing');
+    } finally {
+      home.projectIds = projectIds;
+      home.composition.discoveryItemIds = discoveryIds;
+      transformation.pathwayId = pathwayId;
+    }
   });
 
   it('keeps the project catalog to interactive fields only', () => {

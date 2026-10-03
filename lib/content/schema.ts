@@ -98,9 +98,34 @@ const independentServiceSchema = z.object({
   boundary: nonEmptyString,
 });
 
+export const careerResourceCatalogSchema = z.object({
+  owner: nonEmptyString,
+  updatedAt: dateSchema,
+  reviewDueAt: dateSchema,
+  items: z.array(z.object({
+    id: nonEmptyString,
+    title: nonEmptyString,
+    url: z.string().url().startsWith('https://'),
+    category: z.enum(['platform', 'medical', 'technology', 'preparation']),
+    description: nonEmptyString,
+    tags: z.array(nonEmptyString).min(1).max(4),
+    accessNote: nonEmptyString,
+  })).min(1),
+}).superRefine((catalog, context) => {
+  const ids = new Set<string>();
+  const urls = new Set<string>();
+  catalog.items.forEach((item, index) => {
+    if (ids.has(item.id)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['items', index, 'id'], message: '就业资源 id 不得重复' });
+    if (urls.has(item.url)) context.addIssue({ code: z.ZodIssueCode.custom, path: ['items', index, 'url'], message: '就业资源 URL 不得重复' });
+    ids.add(item.id);
+    urls.add(item.url);
+  });
+});
+
 export const employmentPathwaySchema = pathwayBaseSchema.extend({
   kind: z.literal('employment'),
   roleFamilies: z.array(roleFamilySchema).min(2).max(5),
+  resourceCatalog: careerResourceCatalogSchema,
 });
 
 export const domesticPostgraduatePathwaySchema = pathwayBaseSchema.extend({

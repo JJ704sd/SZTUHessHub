@@ -15,6 +15,104 @@
         "记录数据、设备或流程在什么条件下失效",
         "向团队解释结果、限制和下一步"
       ],
+      "resourceCatalog": {
+        "owner": "HseeHub P0 路径编辑",
+        "updatedAt": "2026-10-03",
+        "reviewDueAt": "2026-11-03",
+        "items": [
+          {
+            "id": "career-sztu", "category": "platform", "title": "深圳技术大学就业网",
+            "url": "https://jyzd.sztu.edu.cn/index.htm",
+            "description": "从校内宣讲会、双选会和在线招聘开始，找学校发布的招聘信息与就业指导。",
+            "tags": ["学校官方", "宣讲会", "校招"],
+            "accessNote": "在首页选择招聘信息或就业指导；招聘列表会跳转到学校就业服务平台。"
+          },
+          {
+            "id": "career-ncss", "category": "platform", "title": "国家大学生就业服务平台",
+            "url": "https://www.ncss.cn/",
+            "description": "集中查看职位信息、实习岗位与招聘专场，再按地区和方向缩小范围。",
+            "tags": ["教育部平台", "实习", "校招"],
+            "accessNote": "职位要求与申请方式在详情中查看，部分服务需要学信账号登录。"
+          },
+          {
+            "id": "career-shixiseng", "category": "platform", "title": "实习僧",
+            "url": "https://www.shixiseng.com/",
+            "description": "按城市、方向、每周天数和实习月数筛选机会，先找到能和课程安排配合的实习。",
+            "tags": ["招聘平台", "实习", "时间筛选"],
+            "accessNote": "申请在平台内完成；筛选后再看企业、工作地点与出勤要求。"
+          },
+          {
+            "id": "career-mindray", "category": "medical", "title": "迈瑞人才招聘",
+            "url": "https://www.mindray.com/cn/career",
+            "description": "从医疗设备企业的招聘入口了解校招方向，把课程里的软硬件与测试能力对照到岗位要求。",
+            "tags": ["企业官方", "医疗设备", "校招"],
+            "accessNote": "从人才招聘页选择校园招聘；具体岗位在企业招聘系统中查看。"
+          },
+          {
+            "id": "career-united-imaging", "category": "medical", "title": "联影校园招聘",
+            "url": "https://united-imaging.zhiye.com/campus",
+            "description": "面向医疗影像、设备与医疗 AI 的企业校招入口，可搜索算法、软件和工程相关方向。",
+            "tags": ["企业官方", "医疗影像", "医疗 AI"],
+            "accessNote": "联影医疗与联影智能官网共用的校招门户；在职位详情中核对公司、城市和要求。"
+          },
+          {
+            "id": "career-siemens-healthineers", "category": "medical", "title": "西门子医疗实习招聘",
+            "url": "https://jobs.siemens.com.cn/healthineers/position/index?recruitmentType=INTERNSHIPRECRUITMENT",
+            "description": "查看医疗设备相关的实习入口，留意质量、研发支持等岗位要求的专业与实践经历。",
+            "tags": ["企业官方", "医疗设备", "实习"],
+            "accessNote": "入口已选择实习生招聘；打开职位后核对城市、每周出勤与实习时长。"
+          },
+          {
+            "id": "career-huawei", "category": "technology", "title": "华为校园招聘",
+            "url": "https://career.huawei.com/cn/campus-recruitment",
+            "description": "查看应届生与实习项目，从软件、算法、电子和系统方向的岗位说明里找能力交集。",
+            "tags": ["企业官方", "软件与硬件", "校招 / 实习"],
+            "accessNote": "先选择对应毕业届别和招聘项目，再查看岗位要求与申请流程。"
+          },
+          {
+            "id": "career-tencent", "category": "technology", "title": "腾讯校园招聘",
+            "url": "https://join.qq.com/",
+            "description": "软件、算法、数据与产品方向的校招入口，适合把编程和项目经历对照到具体工作任务。",
+            "tags": ["企业官方", "软件 / 数据", "校招 / 实习"],
+            "accessNote": "选择校招或实习项目；职位与投递操作在腾讯招聘站完成。"
+          },
+          {
+            "id": "career-bytedance", "category": "technology", "title": "字节跳动校园招聘",
+            "url": "https://jobs.bytedance.com/campus/",
+            "description": "用职位关键词与城市筛选软件、AI 和数据相关机会，再逐项核对毕业时间与技术要求。",
+            "tags": ["企业官方", "软件 / AI", "校招 / 实习"],
+            "accessNote": "先选校招或实习，再按城市和岗位类别查找；申请需进入职位详情。"
+          },
+          {
+            "id": "career-siemens", "category": "technology", "title": "西门子实习招聘",
+            "url": "https://jobs.siemens.com.cn/siemens/position/index?recruitmentType=INTERNSHIPRECRUITMENT",
+            "description": "把医工里的建模、软件和验证经验延伸到工业 AI 与研发实习，比较不同场景里的工程任务。",
+            "tags": ["企业官方", "工业 AI", "实习"],
+            "accessNote": "入口已选择实习生招聘；可按地点与关键词继续筛选。"
+          },
+          {
+            "id": "career-nowcoder", "category": "preparation", "title": "牛客 · 题库与面经",
+            "url": "https://www.nowcoder.com/",
+            "description": "按岗位练笔试题、查面试经验，拿一份具体岗位说明决定要补哪类知识。",
+            "tags": ["求职社区", "笔试", "面试经验"],
+            "accessNote": "面经来自用户分享，适合了解题型与体验；流程仍以企业通知为准。"
+          },
+          {
+            "id": "career-leetcode", "category": "preparation", "title": "力扣 · 编程题库",
+            "url": "https://leetcode.cn/problemset/",
+            "description": "练习算法、数据结构与数据库题，把做题过程中的思路、复杂度和边界讲清楚。",
+            "tags": ["练习平台", "算法", "数据库"],
+            "accessNote": "部分题目与功能需要登录或会员；按目标岗位选择练习范围。"
+          },
+          {
+            "id": "career-sztubitbyte", "category": "preparation", "title": "SZTUBitByte · 实习就业",
+            "url": "https://sztubitbyte.com/career",
+            "description": "继续查看技术岗位资料、企业招聘入口和面经内容，也可使用站内的简历与求职进度工具。",
+            "tags": ["学生社区", "技术岗位", "求职工具"],
+            "accessNote": "企业目录可公开浏览；简历、进度等个人功能需要登录该站。"
+          }
+        ]
+      },
       "roleFamilies": [
         {
           "title": "数据、算法与信息系统",

@@ -6,8 +6,13 @@ const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const readJson = (path) => readFile(resolve(root, path), 'utf8').then(JSON.parse);
 const [site, claims, manifest, pathways] = await Promise.all([readJson('content/site-data.json'), readJson('content/claims.json'), readJson('content/resources/signal-feature-notebook.json'), readJson('content/pathways.json')]);
 const errors = [];
+const warnings = [];
 const ids = new Set(site.sources.map((source) => source.id));
-const date = (value) => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(new Date(`${value}T00:00:00Z`).getTime());
+const date = (value) => {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+};
 const nonEmpty = (value) => typeof value === 'string' && value.trim().length > 0;
 const validUrl = (value) => typeof value === 'string' && (value.startsWith('/') || value.startsWith('https://'));
 
@@ -72,7 +77,8 @@ else {
     if (!item) errors.push(`首页 discovery item 不存在：${id}`);
     else {
       for (const field of ['owner', 'updatedAt', 'reviewDueAt']) if (!nonEmpty(item[field])) errors.push(`首页 discovery item ${id} 缺少 ${field}`);
-      if (!date(item.reviewDueAt) || item.reviewDueAt < today) errors.push(`首页 discovery item 已过期：${id}`);
+      if (!date(item.reviewDueAt)) errors.push(`首页 discovery item ${id} reviewDueAt 必须是日期`);
+      else if (item.reviewDueAt < today) warnings.push(`首页 discovery item 待复核：${id}（reviewDueAt=${item.reviewDueAt}）；保留内容并显示待复核状态，不提升事实或资源状态`);
     }
   }
   const featuredCaseId = home.featuredDualLensCaseId;
@@ -97,4 +103,9 @@ if (errors.length) {
   errors.forEach((error) => console.error(`- ${error}`));
   process.exit(1);
 }
-console.log(`Phase 1.1 content contract passed (${claims.length} claims, ${manifest.resources.length} resources).`);
+if (warnings.length) {
+  warnings.forEach((warning) => console.warn(`- ${warning}`));
+  console.log(`Phase 1.1 content contract validated with ${warnings.length} editorial review warnings (${claims.length} claims, ${manifest.resources.length} resources).`);
+} else {
+  console.log(`Phase 1.1 content contract passed (${claims.length} claims, ${manifest.resources.length} resources).`);
+}

@@ -1,0 +1,283 @@
+{
+  "owner": "HseeHub 求职内容编辑",
+  "updatedAt": "2026-10-03",
+  "reviewDueAt": "2026-11-03",
+  "license": "原创编辑内容；外部资料仅作链接与摘要",
+  "stages": [
+    {
+      "id": "roles",
+      "title": "认识岗位",
+      "description": "先看一天会做什么，再决定想学什么。岗位样例来自企业官网，准备重点、作品建议和自查题由本站编辑整理。",
+      "actions": [
+        "选两个感兴趣的方向，各读一份完整岗位说明。",
+        "分别圈出工作任务、技术工具和申请条件，保留原文链接。",
+        "写下最想尝试的一项任务和还不理解的一个词。"
+      ],
+      "output": "一张岗位对照表：做什么、已有证据、下一步补什么。"
+    },
+    {
+      "id": "evidence",
+      "title": "积累证据",
+      "description": "从一个能完成的小问题开始，让别人看得懂你如何得到结果。",
+      "actions": [
+        "选一个项目，写清输入、输出和本次准备验证的问题。",
+        "保留代码或表格、运行步骤、测试结果和失败样例。",
+        "改动一个条件再试一次，记录结果为什么变化。"
+      ],
+      "output": "一份能复核的作品：问题、过程、结果、局限和个人贡献。"
+    },
+    {
+      "id": "opportunities",
+      "title": "找到机会",
+      "description": "带着任务关键词去找机会，把时间与地点一起放进筛选条件。",
+      "actions": [
+        "从学校就业网、官方招聘入口或实习平台搜索岗位关键词。",
+        "逐项核对毕业届别、专业、地点、每周出勤和持续月数。",
+        "保存岗位链接、查看日期与截止时间，申请前再看一次原页。"
+      ],
+      "output": "一个可以实际安排时间的机会清单。"
+    },
+    {
+      "id": "application",
+      "title": "准备申请",
+      "description": "把最相关的经历讲清楚，让简历上的每句话都有作品或记录支撑。",
+      "actions": [
+        "选一份目标岗位说明，先挑一段最相关的课程或项目经历，有第二段再补充。",
+        "按问题、行动、结果和局限整理简历，说明自己负责的部分。",
+        "用三分钟讲一次项目，请同学追问一个失败样例。"
+      ],
+      "output": "一份针对岗位的简历、一组作品链接和一段项目讲述。"
+    },
+    {
+      "id": "review",
+      "title": "复盘调整",
+      "description": "每次申请或交流后，只选一个最值得改进的地方。",
+      "actions": [
+        "记录投递日期、当前进度、对方通知和自己没讲清的问题。",
+        "把问题分成知识缺口、证据不足和时间条件不匹配。",
+        "补一次实验或改一段表达，再决定继续申请还是换方向。"
+      ],
+      "output": "一条有依据的下一步行动，而不是只累计投递次数。"
+    }
+  ],
+  "roles": [
+    {
+      "id": "data-ai",
+      "title": "数据与 AI 算法",
+      "summary": "从医学信号与图像分析，到工业模型评测与 AI 研究，都可以先练习提出问题、组织实验和解释误差。",
+      "searchKeywords": ["算法实习", "数据分析", "模型评测", "医学图像", "信号处理"],
+      "tasks": [
+        "开发分类、滤波或信号处理算法，补充单元测试与设计文档。",
+        "连接模型与仿真环境，整理实验配置、执行过程和评测结果。",
+        "比较预测、泛化或鲁棒性表现，核对异常结果并重复实验。"
+      ],
+      "capabilityIds": ["cap-signal-data-ai", "cap-math-research", "cap-software-information"],
+      "projectEvidence": [
+        {
+          "projectId": "project-signal-feature-notebook",
+          "evidenceFocus": "保留合成数据参数、训练与测试划分、基线结果和误分类样例，让人能复现你的比较。",
+          "nextExperiment": "固定其他条件，只提高噪声或改变采样条件，比较指标与错误分布；把它写成算法练习，不推断临床效果。"
+        }
+      ],
+      "resourceIds": ["career-siemens", "career-united-imaging", "career-huawei"],
+      "readiness": [
+        "用 Python 完成一次可重复的数据处理与评测，写清数据来源、参数和运行步骤。",
+        "比较一个简单基线与一次改动，解释指标选择、数据划分和失败样例。",
+        "按目标方向补一项：医学信号与图像基础，或模型评测、Linux 与实验工具；用小任务验证学会了什么。"
+      ],
+      "interviewQuestions": [
+        "为什么选这个指标和基线？换一种错误代价，结论会怎样变？",
+        "你如何避免训练数据与测试数据混在一起，并让别人复现实验？",
+        "挑一个失败样例：你能判断问题来自数据、方法还是评测过程吗？"
+      ],
+      "sources": [
+        {
+          "title": "西门子 · 工业 AI 世界模型测评 Pipeline 实习生",
+          "url": "https://jobs.siemens.com.cn/siemens/position/detail?positionId=6aa756937280da28da079abe&recruitmentType=INTERNSHIPRECRUITMENT",
+          "checkedAt": "2026-10-03",
+          "note": "已读官方实习 JD：涉及仿真环境集成、模型评测、自动化实验和结果校验；该样例列出 Python、Linux、Git、Docker 与强化学习基础。"
+        },
+        {
+          "title": "西门子医疗 · FY27 MR 算法工程师",
+          "url": "https://jobs.siemens.com.cn/healthineers/position/detail?currentLang=zh_CN&positionId=6aa157217280da28da079848&recruitmentType=CAMPUSRECRUITMENT",
+          "checkedAt": "2026-10-03",
+          "note": "已读官方校招 JD：涉及算法实现、单元测试、代码评审与缺陷处理；该样例列出机器学习、Python 或 MATLAB、C++，医学图像处理经历为优先项。"
+        }
+      ]
+    },
+    {
+      "id": "software",
+      "title": "软件开发与系统",
+      "summary": "想把一个想法做成别人能使用的工具，可以从模块、接口和测试入手，再探索云服务、应用开发或医疗软件。",
+      "searchKeywords": ["软件开发实习", "应用开发", "云服务", "软件工程师", "AI 应用开发"],
+      "tasks": [
+        "把需求拆成软件模块或服务，完成设计、实现与文档。",
+        "为功能和接口编写测试，把改动接入持续集成流程。",
+        "围绕可靠性、性能和可用性改进系统，并与团队核对问题。"
+      ],
+      "capabilityIds": ["cap-software-information", "cap-design-validation"],
+      "projectEvidence": [
+        {
+          "projectId": "project-sensor-alarm-prototype",
+          "evidenceFocus": "选数据与信息系统角色，说明输入格式、提示规则、状态变化和测试记录，用它展示接口与程序组织能力。",
+          "nextExperiment": "在仿真中加入缺失、异常和断开输入，为每种状态补一个可重复测试，再写清模块之间传递什么。"
+        },
+        {
+          "projectId": "project-signal-feature-notebook",
+          "evidenceFocus": "把数据生成、特征计算和结果展示分清楚，保留运行说明和一次修改记录。",
+          "nextExperiment": "将一段重复处理整理成可调用函数，补输入示例与边界测试，比较修改前后的结果是否一致。"
+        }
+      ],
+      "resourceIds": ["career-huawei", "career-tencent", "career-leetcode"],
+      "readiness": [
+        "选一种目标岗位使用的语言，把一个小工具从输入到结果完整做完。",
+        "画出模块与接口，解释状态、错误如何传递，以及你为什么这样组织代码。",
+        "保留版本记录、测试结果和运行说明；投云服务方向时，再做一项独立的部署或容器练习。"
+      ],
+      "interviewQuestions": [
+        "你如何划分模块？一个输入发生变化，会影响哪些地方？",
+        "用户给出空值、错误格式或重复操作时，程序会怎样回应？",
+        "你用什么证据确认一次修改没有破坏已有行为？遇到性能问题会先测什么？"
+      ],
+      "sources": [
+        {
+          "title": "SAP · Intelligent Cloud Service Developer 实习生",
+          "url": "https://careers.sap.com/job/Shanghai-SAP-China-iXp-Intern-Intelligent-Cloud-Service-Developer-201203/1435163033/",
+          "checkedAt": "2026-10-03",
+          "note": "已读官方实习 JD：涉及云基础服务、AI 与云工程结合、可靠性及性能；该样例将 Kubernetes、Docker 和 Python、Golang 等编程技能列为优先项。"
+        },
+        {
+          "title": "西门子医疗 · FY27 CT Software Programmer – AI",
+          "url": "https://jobs.siemens.com.cn/healthineers/position/detail?currentLang=zh_CN&positionId=6abc7a755643cc5f6a59d9d7&recruitmentType=CAMPUSRECRUITMENT",
+          "checkedAt": "2026-10-03",
+          "note": "已读官方校招 JD：涉及软件架构、模块实现、测试、持续集成与文档；该样例列出面向对象编程、设计模式，以及 AI 应用开发和评测经验。"
+        }
+      ]
+    },
+    {
+      "id": "embedded",
+      "title": "嵌入式与仪器",
+      "summary": "喜欢让程序与真实读数相遇，可以从仿真或低压传感原型开始，练习采样、状态控制、接口和调试。",
+      "searchKeywords": ["嵌入式软件", "硬件开发", "仪器研发", "数据采集", "MCU"],
+      "tasks": [
+        "编写数据采集、通信或实时控制模块，设计状态机与故障处理。",
+        "参与传感接口和测量电路设计，记录调试中的噪声、漂移与精度问题。",
+        "配合软硬件联调，复现问题并整理代码、测试和设计记录。"
+      ],
+      "capabilityIds": ["cap-electronics-control", "cap-sensing-measurement", "cap-design-validation"],
+      "projectEvidence": [
+        {
+          "projectId": "project-sensor-alarm-prototype",
+          "evidenceFocus": "保留系统框图、采样参数、单位、质量标记和状态测试，说明信号如何进入程序。",
+          "nextExperiment": "在仿真或低压台架上只改变采样间隔，比较噪声与响应；覆盖断开输入和停止状态，不接入人体、市电或医疗设备。"
+        }
+      ],
+      "resourceIds": ["career-huawei", "career-mindray", "career-siemens"],
+      "readiness": [
+        "用 C/C++ 或现有开发板工具完成一次采样与状态切换，能逐步说明代码在做什么。",
+        "画清信号与接口，记录单位、时序、量程和异常输入的处理方式。",
+        "做一次单变量调试，保留修改前后的读数与测试结果，并解释还没排除的原因。"
+      ],
+      "interviewQuestions": [
+        "采样频率与输入信号是什么关系？读数异常时你先检查哪一层？",
+        "输入断开或通信中断后，系统进入什么状态？恢复条件是什么？",
+        "一次软硬件联调问题，你怎样缩小范围并区分代码、接线和测量条件？"
+      ],
+      "sources": [
+        {
+          "title": "西门子 · EP R&D 初级嵌入式软件工程师",
+          "url": "https://jobs.siemens.com.cn/siemens/position/detail?positionId=6aa361e87280da28da07995f&recruitmentType=CAMPUSRECRUITMENT",
+          "checkedAt": "2026-10-03",
+          "note": "已读官方校招 JD：涉及驱动、采集、状态机、故障处理、测试和板级联调；该样例列出 C/C++ 与 MCU 或 FPGA 基础，课程设计等实践经历为优先项。"
+        },
+        {
+          "title": "西门子 · EP R&D 初级硬件开发工程师",
+          "url": "https://jobs.siemens.com.cn/siemens/position/detail?positionId=6aa361e67280da28da07995d&recruitmentType=CAMPUSRECRUITMENT",
+          "checkedAt": "2026-10-03",
+          "note": "已读官方校招 JD：涉及传感接口、精密测量、原理图、器件选择与样机调试；该样例关注模拟与数字电路等基础，课程设计或实验室项目为优先项。"
+        }
+      ]
+    },
+    {
+      "id": "quality",
+      "title": "测试、质量与技术支持",
+      "summary": "这三条路关注不同任务：测试验证行为，质量维护流程与记录，技术支持整理和跟进问题。可以先试试自己更喜欢哪一种。",
+      "searchKeywords": ["测试开发", "质量实习", "技术支持", "验证工程师", "自动化测试"],
+      "tasks": [
+        "测试方向：从需求设计用例，执行自动或手动测试并报告结果。",
+        "质量方向：整理质量体系文件、流程更新与培训记录。",
+        "技术支持方向：记录问题详情，按规则分派、跟踪和汇总处理进度。"
+      ],
+      "capabilityIds": ["cap-design-validation", "cap-software-information", "cap-sensing-measurement"],
+      "projectEvidence": [
+        {
+          "projectId": "project-sensor-alarm-prototype",
+          "evidenceFocus": "把正常、异常、输入断开和停止状态写成测试用例，分别记录预期、实际结果和复现步骤。",
+          "nextExperiment": "请同学按记录重复一次仿真测试，补齐他无法复现的条件，并写一条清楚的问题交接记录。"
+        },
+        {
+          "projectId": "project-material-test-matrix",
+          "evidenceFocus": "检查指标、单位、参数来源与缺失值，把假设和待验证项分开记录。",
+          "nextExperiment": "改动一个权重或环境条件，追踪结论变化，并补一份测试计划；保持它是概念筛选练习。"
+        }
+      ],
+      "resourceIds": ["career-siemens-healthineers", "career-sztu", "career-ncss"],
+      "readiness": [
+        "选一个小功能，把需求、测试条件、预期和实际结果对应起来。",
+        "用表格或脚本整理一次测试与问题记录，保留版本、来源和复现步骤。",
+        "分别练习写缺陷报告、整理文件变更、做问题交接，再按喜欢的任务选择方向。"
+      ],
+      "interviewQuestions": [
+        "这个需求怎样才算通过？除了正常情况，你还会测试什么？",
+        "别人无法复现你报告的问题时，你会补哪些环境与操作信息？",
+        "记录不一致或问题暂时未解决时，你怎样说明事实、下一步和交接对象？"
+      ],
+      "sources": [
+        {
+          "title": "西门子医疗 · FY27 CT Test Engineer",
+          "url": "https://jobs.siemens.com.cn/healthineers/position/detail?currentLang=zh_CN&positionId=6abc7b645643cc5f6a59d9d9&recruitmentType=CAMPUSRECRUITMENT",
+          "checkedAt": "2026-10-03",
+          "note": "已读官方校招 JD：按需求设计系统与软件测试、开发测试工具、执行用例并报告；该样例列出 C# 面向对象编程，自动化测试与配置管理经验为优先项。"
+        },
+        {
+          "title": "西门子医疗 · VAR Quality Assurance Intern",
+          "url": "https://jobs.siemens.com.cn/healthineers/position/detail?positionId=6a8ffe207280da28da078dc1&recruitmentType=INTERNSHIPRECRUITMENT",
+          "checkedAt": "2026-10-03",
+          "note": "已读官方实习 JD：协助维护质量体系、文件与培训记录；该样例列出 Office、英文读写与沟通能力，工作内容与软件测试岗位不同。"
+        },
+        {
+          "title": "SAP · Technical Support Queue Manager 实习生",
+          "url": "https://careers.sap.com/job/Dalian-China-SAP-China-iXp-Intern-Intern-Queue-Manager-for-Technial-Support-Dalian-116023/1431751533/",
+          "checkedAt": "2026-10-03",
+          "note": "已读官方实习 JD：负责客户问题的记录、分派、跟踪及统计，属于支持队列工作；该样例列出数据分析工具和中英文沟通能力。"
+        }
+      ]
+    }
+  ],
+  "application": {
+    "resumePrompts": [
+      "用一句话写清项目解决什么问题、输入是什么、最后交付了什么。",
+      "说明你亲自完成的动作，把团队成果与个人贡献分开。",
+      "给结果补上数据范围、比较方法和作品链接，保留失败与局限。",
+      "明确标注课程、合成数据或仿真项目；只填写有记录支持的数字与经历。"
+    ],
+    "internshipChecks": [
+      "核对岗位对应的毕业届别、在读身份、专业要求与申请截止时间。",
+      "把每周出勤、连续月数、地点和到岗时间放进课程日历。",
+      "阅读工作任务与工具要求，区分明确条件、优先项和自己需要补的内容。",
+      "在企业官方页面确认申请方式，提交前检查所需材料与个人信息。"
+    ],
+    "interviewSteps": [
+      "按问题、选择、行动、结果准备三分钟项目讲述。",
+      "选一个真实失败样例，说明如何定位、修改以及仍有何限制。",
+      "请同学用本页自查题追问，记下不能用作品或数据回答的地方。",
+      "按目标岗位安排一次编程、实验解释或问题交接练习，遵守对方的作答与工具要求。"
+    ],
+    "followUpSteps": [
+      "记录申请日期、原始岗位链接、已提交版本与后续通知。",
+      "交流后记下未答清的问题，选一个补实验或补知识的行动。",
+      "按对方提供的时间与渠道跟进；收到反馈后更新记录。",
+      "复盘任务兴趣、能力差距与时间条件，保留能用于下一次申请的作品。"
+    ]
+  }
+}

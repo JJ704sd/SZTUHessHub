@@ -19,7 +19,7 @@ test('首页只有三个动作，项目完整展示不重复', async ({ page }) 
   await expect(actions).toHaveCount(3);
   await expect(actions).toHaveText([/看两个专业怎么分工/, /Starter 待人工复核/, /我还没想好/]);
   await expect(page.locator('.home-project-teaser, .home-feature-project, .home-compact-project')).toHaveCount(0);
-  await expect(page.locator('section').filter({ has: page.getByRole('heading', { name: '三个任务，只保留影响开始的事实' }) }).locator('article')).toHaveCount(3);
+  await expect(page.locator('section').filter({ has: page.getByRole('heading', { name: '灵感，从动手开始。' }) }).locator('article')).toHaveCount(3);
 });
 
 test('意图只改变顺序，不隐藏三个项目', async ({ page }) => {

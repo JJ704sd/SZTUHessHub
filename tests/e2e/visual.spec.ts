@@ -9,6 +9,9 @@ const pages = [
   { id: 'starter', path: '/projects/signal-feature-notebook/starter' },
   { id: 'majors-compare', path: '/majors/compare' },
   { id: 'pathways', path: '/pathways' },
+  { id: 'career', path: '/pathways/employment' },
+  { id: 'capability-practice', path: '/capabilities/software-and-information-systems' },
+  { id: 'scenario-software', path: '/scenarios/software-systems' },
 ] as const;
 
 const viewports = [
@@ -27,6 +30,8 @@ for (const pageCase of pages) {
     for (const theme of ['light', 'dark'] as const) {
       test(`visual ${pageCase.id} ${viewport.id} ${theme}`, async ({ page }) => {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        // Capture the decorative SVG without its opacity entrance animation.
+        if (pageCase.id === 'home') await page.emulateMedia({ reducedMotion: 'reduce' });
         await page.addInitScript((selectedTheme) => window.localStorage.setItem('hseehub-theme', selectedTheme), theme);
         await page.goto(pageCase.path);
         await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
@@ -38,6 +43,7 @@ for (const pageCase of pages) {
 
 test('visual state home mobile menu open', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.addInitScript(() => window.localStorage.setItem('hseehub-theme', 'light'));
   await page.goto('/');
   await page.getByRole('button', { name: /菜单/ }).click();

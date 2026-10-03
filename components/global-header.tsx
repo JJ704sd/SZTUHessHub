@@ -4,8 +4,20 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { siteConfig } from '@/lib/site-config';
+import { BrandMark } from '@/components/ui/brand-mark';
 
 type Theme = 'light' | 'dark';
+
+function NavigationIcon({ href }: { href: string }) {
+  const paths: Record<string, string> = {
+    '/': 'm3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9',
+    '/majors': 'M12 5v15M3 4c4-1 6 0 9 1 3-1 5-2 9-1v15c-4-1-6 0-9 1-3-1-5-2-9-1Z',
+    '/projects': 'M9 3h6M10 3v6L4 19a1 1 0 0 0 1 2h14a1 1 0 0 0 1-2L14 9V3M7 15h10',
+    '/capabilities': 'M9 5h6M5 9v6M19 9v6M9 19h6M3 3h6v6H3ZM15 3h6v6h-6ZM3 15h6v6H3ZM15 15h6v6h-6Z',
+    '/pathways': 'M5 20V9a4 4 0 0 1 4-4h10M15 1l4 4-4 4M5 15h9a4 4 0 0 1 4 4v2',
+  };
+  return <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paths[href]} /></svg>;
+}
 
 export function GlobalHeader() {
   const pathname = usePathname();
@@ -67,22 +79,24 @@ export function GlobalHeader() {
     <header className="site-header">
       <div className="header-inner page-container">
         <Link className="brand" href="/" aria-label="HseeHub 首页">
-          <span className="brand-mark" aria-hidden="true">H</span>
+          <BrandMark />
           <span className="brand-copy">
             <strong>HseeHub</strong>
-            <span>健康工程探索站</span>
+            <span>HEALTH × ENGINEERING</span>
           </span>
         </Link>
 
         <nav className="desktop-nav" aria-label="主导航">
+          <Link className={pathname === '/' ? 'nav-link is-active' : 'nav-link'} href="/" aria-current={pathname === '/' ? 'page' : undefined}><NavigationIcon href="/" />首页</Link>
           {siteConfig.navItems.map((item) => (
             <Link key={item.href} className={isActive(item.href) ? 'nav-link is-active' : 'nav-link'} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
-              {item.label}
+              <NavigationIcon href={item.href} />{item.label}
             </Link>
           ))}
         </nav>
 
         <div className="header-actions">
+          <Link className="header-start" href="/projects">开始探索 <span aria-hidden="true">↗</span></Link>
           <button className="theme-switch theme-switch-desktop" type="button" onClick={toggleTheme} aria-label={`切换到${theme === 'dark' ? '亮色' : '暗色'}主题`} aria-pressed={theme === 'dark'}>
             <span className="theme-icon" aria-hidden="true">{theme === 'dark' ? '☼' : '◐'}</span>
             <span className="theme-label">{theme === 'dark' ? '亮色' : '暗色'}</span>
@@ -95,9 +109,10 @@ export function GlobalHeader() {
       </div>
 
       <nav ref={mobileNavRef} id="mobile-navigation" className={menuOpen ? 'mobile-nav is-open page-container' : 'mobile-nav page-container'} aria-label="移动端主导航" aria-hidden={!menuOpen}>
+        <Link className={pathname === '/' ? 'mobile-nav-link is-active' : 'mobile-nav-link'} href="/" tabIndex={menuOpen ? 0 : -1} aria-current={pathname === '/' ? 'page' : undefined}><span><NavigationIcon href="/" />首页</span><span aria-hidden="true">↗</span></Link>
         {siteConfig.navItems.map((item) => (
           <Link key={item.href} className={isActive(item.href) ? 'mobile-nav-link is-active' : 'mobile-nav-link'} href={item.href} tabIndex={menuOpen ? 0 : -1} aria-current={isActive(item.href) ? 'page' : undefined}>
-            <span>{item.label}</span>
+            <span><NavigationIcon href={item.href} />{item.label}</span>
             <span aria-hidden="true">↗</span>
           </Link>
         ))}

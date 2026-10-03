@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import type { Capability, DualLensCase, Major, Project, Scenario, Source } from '@/lib/content/schema';
 import { siteConfig } from '@/lib/site-config';
 import { Badge } from '@/components/ui/primitives';
+import { BrandMark } from '@/components/ui/brand-mark';
 
 export { Badge } from '@/components/ui/primitives';
 
@@ -149,10 +150,11 @@ export function SiteFooter({ capabilityCount = 8 }: { capabilityCount?: number }
     <footer className="site-footer">
       <div className="page-container footer-inner">
         <div className="footer-brand">
-          <Link className="brand" href="/" aria-label="HseeHub 首页"><span className="brand-mark" aria-hidden="true">H</span><span className="brand-copy"><strong>HseeHub</strong><span>健康工程探索站</span></span></Link>
-          <p>给健康工程学生的探索桌面：先看懂两个专业，试一个小项目，留下一份别人能看懂你做过什么的记录。</p>
+          <Link className="brand" href="/" aria-label="HseeHub 首页"><BrandMark /><span className="brand-copy"><strong>HseeHub</strong><span>HEALTH × ENGINEERING</span></span></Link>
+          <p className="footer-invitation">把好奇心，做成点什么。</p>
+          <p>看懂一点，动手一点。下一次探索，从这里继续。</p>
         </div>
-        <div className="footer-col"><strong>从这里开始</strong><Link href="/majors/compare">5 分钟看懂两个专业</Link><Link href="/capabilities">{capabilityCount} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
+        <div className="footer-col"><strong>继续探索 ↗</strong><Link href="/majors/compare">5 分钟看懂两个专业</Link><Link href="/capabilities">{capabilityCount} 类可迁移能力</Link><Link href="/projects">今天先试一个项目</Link></div>
         <div className="footer-col"><strong>来源与边界</strong><Link href="/sources">来源、版本与核验</Link><Link href="/majors/faq">学生常问</Link><Link href="/about">关于本站</Link></div>
       </div>
       <div className="page-container footer-bottom"><span>默认内容版本：{siteConfig.currentCohort} 级 · 依据与更新时间：{siteConfig.contentBaseline}</span><span>项目优先使用合成/公开数据；不处理真实患者数据</span></div>

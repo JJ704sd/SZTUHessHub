@@ -323,6 +323,8 @@ export type ProjectDetailView = ProjectCatalogItem & {
 
 export type HomePageModel = {
   homeComposition: HomePlan['composition'];
+  editorialReviewDue: boolean;
+  reviewDueItems: string[];
   primaryJourneyId: HomePlan['composition']['primaryJourneyId'];
   showExploreSection: boolean;
   explanatoryText: string;
@@ -499,9 +501,8 @@ export function getHomePageModel(): HomePageModel {
   const selectedCapabilities = selectByIds(data.capabilities, home.capabilityIds, '首页能力');
   const selectedProjects = selectByIds(data.projects, home.projectIds, '首页项目');
   const selectedScenarios = selectByIds(data.scenarios, home.scenarioIds, '首页场景');
-  if (selectedProjects.some((item) => !isEditoriallyCurrent(item))) throw new Error('首页精选项目包含已过复核日期的内容');
   const discoveryIds = home.composition.discoveryItemIds;
-  const collaborationCase = data.dualLensCases.find((item) => item.id === home.featuredDualLensCaseId && discoveryIds.includes(item.id) && isEditoriallyCurrent(item));
+  const collaborationCase = data.dualLensCases.find((item) => item.id === home.featuredDualLensCaseId && discoveryIds.includes(item.id));
   const faq = data.faqs.find((item) => item.id === home.faqId);
   if (!collaborationCase || !faq) throw new Error('首页显式编排引用缺失');
   const faqs = [faq, ...data.faqs.filter((item) => item.id !== faq.id)].slice(0, 3);
@@ -513,22 +514,25 @@ export function getHomePageModel(): HomePageModel {
     .slice(0, 3)
     .map(({ update, entity }) => ({ ...update, entityTitle: entity.title, href: entity.href }));
   const artifactId = discoveryIds.find((id) => pathwayData.artifacts.some((item) => item.id === id));
-  const featuredArtifact = pathwayData.artifacts.find((item) => item.id === artifactId && isEditoriallyCurrent(item));
-  if (!featuredArtifact) throw new Error('首页没有可用的当前产物');
+  const featuredArtifact = pathwayData.artifacts.find((item) => item.id === artifactId);
+  if (!featuredArtifact) throw new Error('首页编排缺少产物');
   const artifactProject = data.projects.find((item) => item.id === featuredArtifact.projectId);
   if (!artifactProject) throw new Error(`首页 featured artifact 缺少项目：${featuredArtifact.projectId}`);
-  const transformations = pathwayData.evidenceTransformations
-    .filter((item) => item.sourceArtifactId === featuredArtifact.id && isEditoriallyCurrent(item) && pathwayData.pathways.some((pathway) => pathway.id === item.pathwayId && isEditoriallyCurrent(pathway)))
-    .map((item) => ({
+  const selectedTransformations = pathwayData.evidenceTransformations.filter((item) => item.sourceArtifactId === featuredArtifact.id);
+  const transformations = selectedTransformations.map((item) => {
+    const pathway = pathwayData.pathways.find((pathway) => pathway.id === item.pathwayId);
+    if (!pathway) throw new Error(`首页产物改写缺少路径：${item.pathwayId}`);
+    return {
       pathwayId: item.pathwayId,
-      pathwayTitle: pathwayData.pathways.find((pathway) => pathway.id === item.pathwayId)?.title ?? item.pathwayId,
+      pathwayTitle: pathway.title,
       evidenceUse: item.evidenceUse,
       missingProof: item.missingProof,
       truthfulFraming: item.truthfulFraming,
       owner: item.owner,
       updatedAt: item.updatedAt,
       reviewDueAt: item.reviewDueAt,
-    }));
+    };
+  });
   if (transformations.length < 2) throw new Error('首页 featured artifact 至少需要两条路径改写');
   const orderedPathways = pathwayData.homePlan.pathwayLaunch.pathwayIds.map((id) => {
     const pathway = pathwayData.pathways.find((item) => item.id === id);
@@ -553,8 +557,16 @@ export function getHomePageModel(): HomePageModel {
     isPrimary: action.isPrimary,
   }));
   const sharedFoundationClaim = claimFor(data, 'major_comparison', 'major-comparison', 'sharedFoundation');
+  const reviewDueItems = [
+    ...[...selectedProjects, collaborationCase, featuredArtifact, ...orderedPathways]
+      .filter((item) => !isEditoriallyCurrent(item))
+      .map((item) => item.id),
+    ...selectedTransformations.filter((item) => !isEditoriallyCurrent(item)).map((item) => `transformation:${item.sourceArtifactId}:${item.pathwayId}`),
+  ];
   return {
     homeComposition: home.composition,
+    editorialReviewDue: reviewDueItems.length > 0,
+    reviewDueItems,
     primaryJourneyId: home.composition.primaryJourneyId,
     showExploreSection: home.showExploreSection,
     explanatoryText: '先从一个任务开始：看懂两个专业、从能力找任务，或先试一张项目体验卡。',

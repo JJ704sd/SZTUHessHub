@@ -5,6 +5,9 @@ import { getProjectDetailModel, siteData } from '@/lib/content';
 import { siteConfig } from '@/lib/site-config';
 import { Badge, SectionHeading, SourceLine } from '@/components/site';
 import { TrustLine } from '@/components/content/trust-line';
+import { CareerConnections } from '@/components/content/career-guide';
+import { ProjectEvidenceExample } from '@/components/content/practice-guide';
+import { getPracticeGuides } from '@/lib/content/practice-guides';
 import { StatusBadge } from '@/components/ui/primitives';
 import { getProjectResourceState } from '@/lib/content/project-resource-state';
 import { primaryResourceConditions, resourceManifests } from '@/lib/resources';
@@ -25,6 +28,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailProps) 
   const model = getProjectDetailModel(projectSlug);
   if (!model) notFound();
   const { project, catalog } = model;
+  const example = getPracticeGuides().projects.find((item) => item.projectId === project.id)!;
   const source = siteData.sources.find((item) => item.id === project.sourceId);
   const statusLabel = { available: '资源可用', degraded: '有替代入口', unverified: '需要先核验', unavailable: '暂不可开始' }[catalog.resourceHealth.status];
   const resourceState = getProjectResourceState(project);
@@ -53,12 +57,14 @@ export default async function ProjectDetailPage({ params }: ProjectDetailProps) 
 
       <section className="detail-block" id="artifact-template"><SectionHeading eyebrow="作品记录" title="做完以后，你会留下什么" description="把问题、输入、做法、结果和限制放在一起，别人才能看懂你真正做过什么。" /><div className="project-artifact-layout"><figure className="project-artifact-preview"><img src={catalog.visualAsset.src} alt={catalog.visualAsset.alt} width={catalog.visualAsset.width} height={catalog.visualAsset.height} loading="lazy" /><figcaption className="asset-note">本站登记的项目结果预览</figcaption></figure><div className="project-artifact-info"><h3>{project.expectedOutput}</h3><dl className="artifact-annotations"><div><dt>问题</dt><dd>{project.summary}</dd></div><div><dt>输入</dt><dd>{project.dataSource}</dd></div><div><dt>做法</dt><dd>{project.steps.slice(0, 2).join('；')}</dd></div><div><dt>结果</dt><dd>{project.expectedOutput}</dd></div><div><dt>限制</dt><dd>{project.boundary}</dd></div></dl>{isStarterProject ? <Link className="button button-secondary" href={`/projects/${project.slug}/starter`}>打开 10 分钟 Starter <span aria-hidden="true">→</span></Link> : <a className="button button-secondary" href={project.artifactTemplate.href} download>下载记录模板</a>}</div></div></section>
 
-      <section className="detail-block"><SectionHeading eyebrow="随时可以停" title="卡住或不合适时，怎么收尾" /><div className="card-grid card-grid-2"><article className="boundary-card"><strong>停止条件</strong><p>完成一份能说明问题、过程、结果和限制的最小记录后即可停止；不要扩大到真实诊疗或敏感数据。</p></article><article className="side-card"><strong>复盘一个问题</strong><p>哪一步最能说明你愿不愿意继续做同类任务？</p></article></div></section>
+      <ProjectEvidenceExample example={example} />
+      <section className="detail-block"><SectionHeading eyebrow="CHECK YOUR WORK / 做到哪里可以先收尾" title="检查结果，再决定要不要继续。" /><div className="card-grid card-grid-3"><article className="side-card"><strong>怎样验证这份作品</strong><p>{project.validation}</p></article><article className="boundary-card"><strong>停止条件</strong><p>{project.stopCondition}</p></article><article className="side-card"><strong>复盘一个问题</strong><p>{project.reflectionPrompt}</p></article></div></section>
 
       <section className="detail-block"><SectionHeading eyebrow="安全与数据" title="只在边界清楚的范围内继续" /><div className="comparison-table-wrap"><table className="comparison-table"><caption className="sr-only">项目工具、数据和许可</caption><tbody><tr><th scope="row">工具 / 材料</th><td>{project.tools.map((tool) => tool.name).join('、')}</td></tr><tr><th scope="row">数据类型</th><td>{siteConfig.projectDataLabels.kind[project.data.kind]} · {siteConfig.projectDataLabels.sensitivity[project.data.sensitivity]}</td></tr><tr><th scope="row">数据访问</th><td>{project.dataAccess}</td></tr><tr><th scope="row">许可</th><td>{project.license}</td></tr></tbody></table></div><div className="boundary-card section-gap-top"><strong>安全边界</strong><p>{project.safetyBoundary}</p></div><TrustLine label="数据边界事实" factStatus={catalog.claims.dataBoundary.status} href={catalog.claims.dataBoundary.evidenceHref} /></section>
 
       <section className="detail-block"><SectionHeading eyebrow="资源、模板与下一步" title="合适的话，从真实入口继续" /><div className="card-grid card-grid-2"><article className="side-card"><strong>继续做什么</strong><p>{project.nextStep}</p></article><article className="side-card"><strong>{statusLabel}</strong><p>{catalog.resourceHealth.note ?? '打开前先核对资源状态。'}</p>{startAction}<Link className="text-link" href={`/projects/${project.slug}/resources`}>查看主入口和替代入口 <span aria-hidden="true">→</span></Link></article></div></section>
 
+      <CareerConnections kind="project" id={project.id} />
       <section className="detail-block"><SectionHeading eyebrow="依据与更新时间" title="需要核对时，回到原始来源" /><SourceLine source={source} label="项目来源" /><p className="source-updated">项目最后核验于 {project.lastVerified}</p></section>
     </div>
   </>;

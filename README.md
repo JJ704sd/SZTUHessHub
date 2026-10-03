@@ -12,12 +12,23 @@ HseeHub 帮学生先看懂智能医学工程与生物医学工程，再试一个
 
 ## 页面入口
 
+2026-10 的界面重构参考 [SZTUBitByte](https://sztubitbyte.com/) 的轻量工作台、快捷入口与卡片层级，采用绿色、青柠、淡紫的实验空间视觉。首页的轨道与信号插画由 SVG/CSS 绘制，无额外动画依赖；专业、项目、能力、路径、来源及详情页共用统一的亮暗主题、导航和基础组件。
+
+内容过复核日期时保留已有入口，并显示待复核提示，不再让首页或路径总览报错。日期、事实与 Starter 审核状态保持独立；无效关系或非法日期仍会被校验器拒绝。此次重构不改变下文的外部验收与发布状态。
+
+就业与实习资源位于 `/pathways/employment#career-resources`，首页作品区和路径总览可直达。目录收录校内/公共平台、医工企业、软件与 AI、笔试面试四类入口，并提供可下载的求职准备单。数据维护在 `content/pathways.json` 的就业路径 `resourceCatalog`，其整理与复核日期独立于路径事实；收录招聘入口不代表确认某个岗位正在招聘。
+
+就业页按“认识岗位 → 积累证据 → 找到机会 → 准备申请 → 复盘调整”组织，医工、软件与 AI 并重。四类岗位准备方向和三份已有项目通过同一份 `content/career-guide.json` 关联；能力、项目详情提供反向入口。岗位样例来源、查看日期与编辑建议分开记录，当前具体职位是否接受申请仍需回到原站核对。后续按需更新的步骤见 [求职内容维护](docs/career-content-maintenance.md)。
+
+八类能力各配一份约 15 分钟的编辑练习，提供材料、三步操作、产物、自查与迁移追问；六个场景也可从已有能力关系进入练习。三份项目填写示例与扩充后的空白模板帮助学生保留可复查记录，求职页再展示对应的证据、简历表达和面试追问。这些内容集中在 `content/practice-guides.json`，其日期独立于原有培养与项目事实；示例中的计划、手工复算和实际执行保持区分。
+
 | 入口 | 用途 |
 | --- | --- |
 | [`/majors`](app/majors/page.tsx) | 专业与课程：共同底座、课程侧重、培养方案入口 |
 | [`/projects`](app/projects/page.tsx) | 做个项目：按四类行动意图进入、查看真实资源状态和产物模板 |
 | [`/capabilities`](app/capabilities/page.tsx) | 能力地图：课程、工程任务与可迁移场景 |
 | [`/pathways`](app/pathways/page.tsx) | 选下一步：日常任务、15 分钟动作和关键门槛 |
+| [`/pathways/employment`](app/pathways/[pathwaySlug]/page.tsx) | 求职全流程：岗位、能力与作品、机会入口、申请与复盘 |
 | [`/pathways/explore`](app/pathways/explore/page.tsx) | 还没想好：一周双路径短实验与本地复盘单 |
 | [`/scenarios`](app/scenarios/page.tsx) | 跨场景关系页，从能力或项目进入 |
 | [`/sources`](app/sources/page.tsx) | 来源、版本、许可与最后核验 |
@@ -39,8 +50,10 @@ HseeHub 帮学生先看懂智能医学工程与生物医学工程，再试一个
 - JSON 内容事实源、类型化读取层、构建期关系与链接校验
 - 语义 CSS token、亮暗主题、reduced-motion、服务端输出核心文字
 - `content/site-data.json`：专业、能力、项目、场景、FAQ 和来源
+- `content/practice-guides.json`：能力短练习、项目示范与作品表达；下载内容位于 `public/project-examples/` 和 `public/project-templates/`
 - `content/updates.json`：经过编辑确认的最近更新，不从更新时间自动推断事件
 - `content/pathways.json`：路径、产物和方向改写
+- `content/career-guide.json`：五阶段求职准备、岗位样例、作品关系和申请建议
 - `content/evidence.json`：claims、endpoint 与 `linkAvailability`
 - `lib/content.ts`、`lib/content/`：类型、关系读取和事实状态
 
@@ -94,7 +107,7 @@ npm run lighthouse    # 三页各运行三次取中位并归档报告；producti
 npm run perf:ci       # 与 lighthouse 相同的 CI 阻断门禁
 ```
 
-Playwright 正式快照放在 `tests/e2e/__screenshots__/`；临时运行产物放在 `test-results/`，后者不能替代测试源码或正式基线。
+Playwright 正式视觉快照放在 `tests/e2e/visual.spec.ts-snapshots/`；临时运行产物放在 `test-results/`，后者不能替代测试源码或正式基线。
 
 正式部署前，请参考 [`.env.example`](.env.example) 设置 `NEXT_PUBLIC_SITE_URL`，让 canonical、sitemap 和 robots 使用真实站点地址。
 

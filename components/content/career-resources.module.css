@@ -1,0 +1,50 @@
+.resources { padding: 32px 0 48px; scroll-margin-top: 16px; }
+.intro { display: flex; justify-content: space-between; align-items: center; gap: 32px; }
+.intro h2 { margin: 8px 0 12px; font-size: clamp(26px, 3vw, 38px); letter-spacing: -.04em; line-height: 1.4; }
+.intro p:last-child { margin: 0; color: var(--color-text-secondary); font-size: 14px; line-height: 1.8; }
+.count { flex: 0 0 auto; display: grid; padding: 17px 25px; border-radius: 18px; background: var(--color-lime); color: var(--color-on-lime); text-align: center; transform: rotate(3deg); }
+.count strong { font: 700 36px/1.2 var(--font-mono); }
+.count span { margin-top: 5px; font-size: 11px; }
+.guideLinks { display: flex; flex-wrap: wrap; gap: 6px 24px; margin-top: 18px; }
+.guideLinks a { display: inline-flex; align-items: center; min-height: 38px; color: var(--color-brand); font-size: 12px; }
+.categories { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 26px 0 12px; }
+.categories a { display: flex; align-items: center; gap: 9px; min-height: 58px; padding: 12px 15px; border: 1px solid var(--color-border); border-radius: 12px; background: var(--color-surface); font-size: 13px; font-weight: 700; }
+.categories a:hover { color: var(--color-brand); border-color: var(--color-brand); }
+.categories a > span { display: grid; place-items: center; flex: 0 0 28px; height: 28px; border-radius: 8px; color: var(--color-accent); background: var(--color-lavender); font-size: 17px; }
+.categories a small { margin-left: auto; color: var(--color-text-secondary); font-family: var(--font-mono); }
+.note { color: var(--color-text-secondary); font-size: 11px; line-height: 1.8; }
+.group { margin-top: 34px; scroll-margin-top: 16px; }
+.groupHeading { display: flex; align-items: flex-start; gap: 13px; margin-bottom: 17px; }
+.groupHeading > span { padding-top: 5px; color: var(--color-brand); font: 11px/1.8 var(--font-mono); }
+.groupHeading h3 { margin: 0 0 6px; font-size: 21px; letter-spacing: -.025em; }
+.groupHeading p { margin: 0; color: var(--color-text-secondary); font-size: 12px; line-height: 1.7; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.card { display: flex; min-width: 0; flex-direction: column; padding: 22px; border: 1px solid var(--color-border); border-radius: 18px; background: var(--color-surface); }
+.tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.tags span { padding: 3px 7px; border-radius: 5px; color: var(--color-text-secondary); background: var(--color-surface-subtle); font-size: 10px; }
+.tags span:first-child { color: var(--color-brand); background: var(--color-surface-tint); }
+.card h4 { margin: 15px 0 9px; font-size: 18px; line-height: 1.55; letter-spacing: -.02em; }
+.description { margin: 0 0 18px; color: var(--color-text-secondary); font-size: 13px; line-height: 1.85; }
+.access { margin: auto 0 14px; padding-top: 2px; color: var(--color-text-secondary); font-size: 11px; line-height: 1.8; }
+.card > a { display: flex; justify-content: space-between; align-items: center; min-height: 44px; padding-top: 12px; border-top: 1px solid var(--color-border); color: var(--color-brand); font-size: 12px; font-weight: 700; }
+.card > a > span:last-child { font-size: 19px; }
+.card > a:hover { text-decoration: underline; text-underline-offset: 4px; }
+@media (max-width: 960px) {
+  .categories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .resources { padding-block: 24px 32px; }
+  .intro { gap: 14px; align-items: flex-start; }
+  .intro h2 { font-size: 26px; }
+  .intro p:last-child { font-size: 12px; }
+  .count { padding: 10px 13px; }
+  .count strong { font-size: 26px; }
+  .count span { font-size: 9px; }
+  .categories { gap: 8px; margin-top: 22px; }
+  .categories a { padding: 10px; gap: 7px; font-size: 11px; }
+  .categories a > span { flex-basis: 22px; height: 24px; font-size: 15px; }
+  .grid { grid-template-columns: 1fr; gap: 12px; }
+  .card { padding: 19px; }
+  .group { margin-top: 28px; }
+}

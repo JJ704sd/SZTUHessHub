@@ -8,6 +8,7 @@ const data = JSON.parse(content);
 const pathwayData = JSON.parse(readFileSync(resolve(root, 'content/pathways.json'), 'utf8'));
 const evidenceData = JSON.parse(readFileSync(resolve(root, 'content/evidence.json'), 'utf8'));
 const failures = [];
+let careerResourceCount = 0;
 
 const internalTargets = [
   {
@@ -56,6 +57,16 @@ for (const pathway of pathwayData.pathways ?? []) {
     const source = data.sources.find((item) => item.id === sourceId);
     if (!source) failures.push(`pathways.${pathway.id}.sourceIds 缺少来源：${sourceId}`);
   }
+  if (pathway.kind === 'employment') {
+    if (!pathway.resourceCatalog || !Array.isArray(pathway.resourceCatalog.items)) {
+      failures.push(`pathways.${pathway.id}.resourceCatalog.items 缺少就业资源目录`);
+    } else {
+      for (const resource of pathway.resourceCatalog.items) {
+        checkUrl(resource.url, `pathways.${pathway.id}.resourceCatalog.items.${resource.id}.url`);
+        careerResourceCount += 1;
+      }
+    }
+  }
 }
 for (const endpoint of evidenceData.endpoints ?? []) checkUrl(endpoint.url, `evidence.endpoints.${endpoint.id}.url`);
 
@@ -89,4 +100,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`Link check passed (${data.sources.length} sources, ${data.projects.length} projects, ${pathwayData.pathways.length} pathways).`);
+console.log(`Link check passed (${data.sources.length} sources, ${data.projects.length} projects, ${pathwayData.pathways.length} pathways, ${careerResourceCount} career resources).`);

@@ -1,0 +1,96 @@
+.journey, .section, .role { scroll-margin-top: 16px; }
+.journey { padding: 8px 0 32px; }
+.heading { margin-bottom: 24px; }
+.heading h2, .evidencePanel h2, .review h2 { margin: 9px 0 12px; font-size: clamp(25px, 2.5vw, 34px); line-height: 1.45; letter-spacing: -.04em; }
+.heading > p:last-child, .evidencePanel p, .review p { max-width: 760px; margin: 0; color: var(--color-text-secondary); font-size: 14px; line-height: 1.85; }
+.steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; padding: 0; margin: 0; list-style: none; }
+.steps > li { display: flex; min-width: 0; flex-direction: column; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-surface); }
+.steps a { position: relative; display: flex; flex: 1; flex-direction: column; padding: 20px 18px; border-radius: 16px; }
+.steps a:hover { background: var(--color-surface-tint); }
+.stageActions { margin: 0 18px 15px; color: var(--color-text-secondary); font-size: 11px; line-height: 1.8; }
+.stageActions summary { min-height: 32px; cursor: pointer; }
+.stageActions ul { padding-left: 16px; margin: 0; }
+.stageActions li + li { margin-top: 6px; }
+.stepNumber { color: var(--color-accent); font: 12px var(--font-mono); }
+.steps h3 { margin: 17px 0 10px; font-size: 17px; }
+.steps p { margin: 0 0 18px; color: var(--color-text-secondary); font-size: 12px; line-height: 1.8; }
+.stepOutput { margin-top: auto; color: var(--color-brand); font-size: 11px; line-height: 1.7; }
+.arrow { position: absolute; right: 16px; top: 15px; color: var(--color-text-secondary); }
+.meta { margin: 15px 0 0; color: var(--color-text-secondary); font-size: 11px; }
+.section { padding: 36px 0; }
+.roles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+.role { min-width: 0; overflow: hidden; padding: 26px; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-surface); }
+.roleTop { display: flex; justify-content: space-between; align-items: center; color: var(--color-brand); font: 10px var(--font-mono); }
+.role h3 { margin: 15px 0 12px; font-size: 25px; line-height: 1.45; letter-spacing: -.035em; }
+.summary { margin: 0; color: var(--color-text-secondary); font-size: 13px; line-height: 1.85; }
+.keywords { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0; }
+.keywords > span { padding: 3px 7px; color: var(--color-text-secondary); background: var(--color-surface-subtle); border-radius: 5px; font-size: 10px; }
+.keywords > span:first-child { padding-left: 0; background: transparent; }
+.role h4 { margin: 20px 0 10px; font-size: 13px; }
+.firstStep { margin-bottom: 20px; padding: 15px 17px; border-radius: 12px; background: var(--color-lavender); }
+.firstStep > span { color: var(--color-text-secondary); font-size: 10px; }
+.firstStep h4 { margin: 9px 0; font-size: 14px; line-height: 1.6; }
+.firstStep p { margin: 0; font-size: 12px; line-height: 1.8; }
+.firstStep a { display: inline-flex; align-items: center; min-height: 36px; margin-top: 7px; color: var(--color-brand); font-size: 12px; font-weight: 700; }
+.roleLinks { display: flex; flex-wrap: wrap; gap: 6px 12px; }
+.roleLinks h4 { flex: 0 0 100%; margin: 3px 0; }
+.roleLinks a { display: inline-flex; gap: 6px; min-height: 32px; align-items: center; color: var(--color-brand); font-size: 12px; }
+.evidenceLinks > div { margin-top: 10px; padding: 16px; border: 1px solid var(--color-border); border-radius: 12px; background: var(--color-canvas); }
+.evidenceLinks a { display: flex; justify-content: space-between; gap: 14px; font-size: 14px; font-weight: 700; }
+.evidenceLinks p { margin: 9px 0 8px; font-size: 12px; line-height: 1.8; }
+.evidenceLinks small { color: var(--color-text-secondary); font-size: 11px; line-height: 1.8; }
+.roleDetail { margin-top: 18px; border-top: 1px solid var(--color-border); }
+.roleDetail summary { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding-block: 15px; min-height: 48px; cursor: pointer; color: var(--color-brand); font-size: 12px; font-weight: 700; list-style: none; }
+.roleDetail summary::-webkit-details-marker { display: none; }
+.roleDetail[open] summary > span { transform: rotate(45deg); }
+.detailContent ul, .detailContent ol { padding-left: 20px; margin-block: 10px 20px; font-size: 12px; line-height: 1.9; }
+.detailContent li + li { margin-top: 7px; }
+.source { margin-bottom: 15px; padding: 12px 14px; border-left: 2px solid var(--color-border-strong); background: var(--color-canvas); }
+.source a { color: var(--color-brand); font-size: 12px; font-weight: 600; }
+.source p { margin: 7px 0; font-size: 11px; line-height: 1.8; }
+.source small { color: var(--color-text-secondary); font-size: 10px; }
+.resourceLinks { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 14px; padding-top: 13px; border-top: 1px solid var(--color-border); font-size: 11px; }
+.resourceLinks > span { color: var(--color-text-secondary); }
+.resourceLinks a { display: inline-flex; align-items: center; min-height: 32px; color: var(--color-brand); }
+.evidencePanel, .review { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 36px; padding: 30px; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-lavender); }
+.evidencePanel :global(.text-link), .review :global(.text-link) { display: inline-flex; margin-top: 18px; min-height: 38px; }
+.evidencePanel ol, .review ol { margin: 0; padding-left: 22px; font-size: 13px; line-height: 1.9; }
+.evidencePanel li + li, .review li + li { margin-top: 13px; }
+.applicationGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 17px; }
+.applicationGrid article { min-width: 0; padding: 23px; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-surface); }
+.applicationGrid article > span { color: var(--color-brand); font: 10px var(--font-mono); }
+.applicationGrid h3 { margin: 15px 0 13px; font-size: 19px; }
+.applicationGrid ul, .applicationGrid ol { margin: 0; padding-left: 19px; color: var(--color-text-secondary); font-size: 12px; line-height: 1.9; }
+.applicationGrid li + li { margin-top: 12px; }
+.download { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 18px; padding: 18px 23px; border-radius: 14px; background: var(--color-surface-tint); }
+.download p { margin: 0; font-size: 13px; }
+.download a { flex-shrink: 0; }
+.review { background: var(--color-surface); }
+.review strong { display: block; margin-top: 15px; color: var(--color-brand); font-size: 12px; line-height: 1.8; }
+.connectionGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+.connectionGrid > a { display: grid; gap: 12px; min-width: 0; padding: 21px; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-surface); }
+.connectionGrid > a:hover { border-color: var(--color-brand); }
+.connectionGrid strong { font-size: 17px; }
+.connectionGrid > a > span { color: var(--color-text-secondary); font-size: 12px; line-height: 1.8; }
+.connectionGrid small { color: var(--color-brand); font-size: 11px; }
+.legacy { padding-block: 30px; border-top: 1px solid var(--color-border); }
+.legacy > summary { min-height: 48px; cursor: pointer; color: var(--color-brand); font-weight: 700; }
+@media (max-width: 960px) {
+  .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .applicationGrid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .steps { grid-template-columns: 1fr; gap: 8px; }
+  .steps a { display: grid; grid-template-columns: 26px 1fr; column-gap: 8px; padding: 15px; }
+  .stepNumber { padding-top: 5px; }
+  .steps h3 { margin: 0; }
+  .steps p { grid-column: 2; margin: 7px 12px 8px 0; }
+  .stepOutput { grid-column: 2; }
+  .roles, .connectionGrid { grid-template-columns: 1fr; }
+  .role { padding: 20px; }
+  .role h3 { font-size: 23px; }
+  .section { padding-block: 26px; }
+  .heading > p:last-child, .evidencePanel p, .review p { font-size: 13px; }
+  .evidencePanel, .review { grid-template-columns: 1fr; gap: 24px; padding: 22px; }
+  .download { align-items: flex-start; flex-direction: column; gap: 15px; padding: 20px; }
+}
