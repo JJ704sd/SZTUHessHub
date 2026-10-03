@@ -4,6 +4,7 @@ import { getMajorsPageModel } from '@/lib/content';
 import { siteConfig } from '@/lib/site-config';
 import { ArrowLink, Badge, DualLensCard, FoundationTable, MajorProfileCard, PageIntro, SectionHeading, SourceLine } from '@/components/site';
 import { TrustLine } from '@/components/content/trust-line';
+import { CurriculumNavigator } from '@/components/content/curriculum-navigator';
 
 export const metadata: Metadata = {
   title: '学院与专业',
@@ -19,6 +20,8 @@ export default function MajorsPage() {
       <PageIntro eyebrow={`两个专业 · ${siteConfig.currentCohort} 级课程依据`} title="两个专业每天会处理什么问题？" description="它们都面对生命健康问题，也共享工程基础。真正值得比较的，是更常从哪一侧拆解任务、会做出什么，以及怎样在同一个项目里交接。"><Link className="button button-primary" href="/majors/compare">看同一道题怎么分工 <span aria-hidden="true">→</span></Link><Link className="button button-secondary" href="/majors/faq">先看常见问题</Link></PageIntro>
 
       <section className="section-quiet section-first"><div className="card-grid card-grid-2">{model.majors.map((major) => <MajorProfileCard key={major.id} major={major} />)}</div></section>
+
+      <CurriculumNavigator majors={model.majors} />
 
       <section className="section-quiet section-spaced"><SectionHeading eyebrow="共同底座" title="差异是侧重，不是“纯软件 / 纯硬件”的二选一" description={`先看两份 ${siteConfig.currentCohort} 级培养方案共同支撑的工程基础，再打开各自的课程 DNA。`} /><FoundationTable majors={model.majors} /><TrustLine label="共同底座事实" factStatus={model.claims.sharedFoundation.status} href={model.claims.sharedFoundation.evidenceHref} /></section>
 

@@ -1,0 +1,27 @@
+.navigator { padding: 28px 0; scroll-margin-top: 90px; }
+.heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+.heading h2 { margin: 0; font-size: clamp(24px, 3vw, 34px); letter-spacing: -.04em; }
+.navigator a { color: var(--color-brand); font-weight: 700; min-height: 44px; display: inline-flex; align-items: center; }
+.note { color: var(--color-text-secondary); font-size: 13px; max-width: 780px; margin: 12px 0 20px; }
+.tracks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.track { min-width: 0; border: 1px solid var(--color-border); border-radius: 18px; overflow: hidden; background: var(--color-surface-raised); }
+.track header { padding: 20px 22px; background: var(--color-surface-tint); border-top: 3px solid var(--color-brand); }
+.track:nth-child(2) header { background: var(--color-accent-soft); border-color: var(--color-accent); }
+.track h3 { font-size: 22px; margin: 6px 0; }
+.track p { margin: 4px 0; color: var(--color-text-secondary); font-size: 14px; }
+.track header > p:first-child { font-size: 12px; letter-spacing: .06em; }
+.stages { list-style: none; padding: 6px 22px; margin: 0; }
+.stages li { display: grid; grid-template-columns: 32px 1fr; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--color-border); }
+.stages li:last-child { border-bottom: 0; }
+.stages span { color: var(--color-brand); font-size: 13px; font-weight: 750; padding-top: 3px; }
+.track h4 { margin: 0 0 6px; font-size: 15px; }
+.track details { border-top: 1px solid var(--color-border); padding: 0 22px; }
+.track summary { padding: 15px 0; cursor: pointer; font-size: 14px; font-weight: 700; min-height: 44px; }
+.courses > div { padding: 12px 0; border-top: 1px solid var(--color-border); }
+.track ul { padding-left: 20px; color: var(--color-text-secondary); font-size: 14px; }
+.track li { margin-bottom: 10px; }
+.track footer, .overview { padding: 14px 22px; }
+.track footer { display: flex; flex-wrap: wrap; gap: 20px; border-top: 1px solid var(--color-border); }
+.next { margin-top: 20px; padding: 16px 22px; background: var(--color-surface-subtle); border-radius: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
+.next span { margin-right: auto; font-weight: 700; }
+@media (max-width: 760px) { .tracks { grid-template-columns: 1fr; gap: 14px; } .heading { display: block; } .track header, .overview { padding: 16px 18px; } .navigator { padding: 22px 0; } }
